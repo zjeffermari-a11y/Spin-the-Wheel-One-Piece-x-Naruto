@@ -264,8 +264,20 @@ function App() {
         // Calculate final stats using the original formula
         const chrk = ((getVal('jutsu_nin') + getVal('jutsu_gen') + getVal('jutsu_sen')) / 3);
         const abl = Math.max(getVal('df'), getVal('dojutsu'), getVal('jutsu_kg'), getVal('jutsu_kt'));
-        const hax = ((getVal('df') > 90 ? 20 : 0) + (getVal('dojutsu') > 90 ? 20 : 0) + (getVal('jutsu_kg') > 90 ? 15 : 0) + (getVal('jutsu_kt') > 90 ? 15 : 0));
-
+        let baseHax = 0;
+        for (const key in finalBuild) {
+            const item = finalBuild[key];
+            if (!item || item.name === 'None') continue;
+            
+            if (item.tag === 'hax') {
+                baseHax += 30;
+            } else if (item.val >= 100) {
+                baseHax += 20;
+            } else if (item.val >= 95) {
+                baseHax += 10;
+            }
+        }
+        const hax = baseHax;
         const finalStats = {
             str: getVal('str') + (finalBuild.race?.baseStats ? (finalBuild.race.baseStats.str - 50) * 0.5 : 0) + synergyStats.str,
             spd: getVal('spd') + (finalBuild.race?.baseStats ? (finalBuild.race.baseStats.spd - 50) * 0.5 : 0) + (getVal('jutsu_tai') * 0.2) + synergyStats.spd,
