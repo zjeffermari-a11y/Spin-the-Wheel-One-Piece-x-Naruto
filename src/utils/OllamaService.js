@@ -1,7 +1,35 @@
 export class OllamaService {
     constructor() {
-        this.model = 'llama-3.1-70b-versatile'; // Groq's current active 70B model
+        this.model = 'llama-3.1-8b-instant'; // Safe fallback
         this.apiKey = import.meta.env.VITE_GROQ_API_KEY || localStorage.getItem('spin_wheel_groq_api_key') || '';
+        this.bestModelPromise = this.fetchBestAvailableModel();
+    }
+
+    async fetchBestAvailableModel() {
+        if (!this.apiKey) return;
+        try {
+            const response = await fetch('https://api.groq.com/openai/v1/models', {
+                headers: {
+                    'Authorization': `Bearer ${this.apiKey}`
+                }
+            });
+            if (response.ok) {
+                const data = await response.json();
+                const models = data.data.map(m => m.id);
+                // Try to find the best 70B model first, then fallback to 8B
+                const best70b = models.find(m => m.includes('70b') && !m.includes('tool-use') && !m.includes('guard'));
+                const best8b = models.find(m => m.includes('8b') && !m.includes('tool-use') && !m.includes('guard'));
+                
+                if (best70b) {
+                    this.model = best70b;
+                } else if (best8b) {
+                    this.model = best8b;
+                }
+                console.log('Dynamically selected Groq model:', this.model);
+            }
+        } catch (error) {
+            console.error('Failed to fetch Groq models, using fallback:', error);
+        }
     }
 
     setApiKey(key) {
@@ -9,7 +37,9 @@ export class OllamaService {
         localStorage.setItem('spin_wheel_groq_api_key', key);
     }
 
-    async generateContent(prompt) {
+    async generateContent(prompt, systemPrompt = "You are a helpful assistant.") {
+        await this.bestModelPromise; // Wait for the best model to be determined
+
         if (!this.apiKey) {
             console.error("No Groq API Key found.");
             return null;
