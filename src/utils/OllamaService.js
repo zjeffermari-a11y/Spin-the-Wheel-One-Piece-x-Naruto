@@ -104,10 +104,12 @@ export class OllamaService {
         const randomLetter = String.fromCharCode(65 + Math.floor(Math.random() * 26));
         const vesselGenderForPrompt = buildSummary.includes('Gender: female') ? 'FEMALE' : 'MALE';
         const pronouns = vesselGenderForPrompt === 'FEMALE' ? 'she/her/hers' : 'he/him/his';
+        const forbiddenPronouns = vesselGenderForPrompt === 'FEMALE' ? 'he/him/his' : 'she/her/hers';
         const prompt = `
             You are an expert anime lore writer for a crossover universe that merges One Piece and Naruto/Boruto into a single world.
             
-            ⚠️ CRITICAL — CHARACTER GENDER: This character is ${vesselGenderForPrompt}. You MUST use ${pronouns} pronouns throughout the ENTIRE biography. Using wrong pronouns is a CRITICAL ERROR. Double-check every pronoun before finalizing.
+            ⚠️ CRITICAL — CHARACTER GENDER: This character is ${vesselGenderForPrompt}. You MUST use ${pronouns} pronouns throughout the ENTIRE biography. 
+            NEVER use gender-neutral (they/them) pronouns. NEVER use ${forbiddenPronouns}. If you use the wrong pronouns, the entire system will crash. Check every single sentence.
             
             WORLD CONTEXT:
             - This universe contains factions from both series: Pirates, Marines, Shinobi, Akatsuki, Kara (Boruto's villain organization that uses scientific ninja tools and Otsutsuki power), Tenryuubito (the World Nobles/Celestial Dragons who rule from Mary Geoise), Gorosei (The Five Elders — the highest authority in the World Government, wielding ancient powers), Knight of God (Holy Knights who serve as elite enforcers for the Tenryuubito), Ōtsutsuki Clan (godlike alien beings who harvest worlds), and Revolutionary Army.
