@@ -1,6 +1,6 @@
 export class OllamaService {
     constructor() {
-        this.model = 'llama3-70b-8192'; // Most stable Groq Llama 3 70B model ID
+        this.model = 'llama-3.1-70b-versatile'; // Groq's current active 70B model
         this.apiKey = import.meta.env.VITE_GROQ_API_KEY || localStorage.getItem('spin_wheel_groq_api_key') || '';
     }
 
