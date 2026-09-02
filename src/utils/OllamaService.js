@@ -1,44 +1,47 @@
 export class OllamaService {
     constructor() {
-        const defaultUrl = `http://${window.location.hostname}:11434`;
-        this.model = localStorage.getItem('spin_wheel_ollama_model') || 'llama3';
-        this.url = localStorage.getItem('spin_wheel_ollama_url') || defaultUrl;
+        this.model = 'llama-3.3-70b-versatile';
+        this.apiKey = import.meta.env.VITE_GROQ_API_KEY || localStorage.getItem('spin_wheel_groq_api_key') || '';
     }
 
-    setModel(modelName, url) {
-        const defaultUrl = `http://${window.location.hostname}:11434`;
-        this.model = modelName || 'llama3';
-        this.url = url || defaultUrl;
-        localStorage.setItem('spin_wheel_ollama_model', this.model);
-        localStorage.setItem('spin_wheel_ollama_url', this.url);
+    setApiKey(key) {
+        this.apiKey = key;
+        localStorage.setItem('spin_wheel_groq_api_key', key);
     }
 
     async generateContent(prompt) {
+        if (!this.apiKey) {
+            console.error("No Groq API Key found.");
+            return null;
+        }
+
         const payload = {
             model: this.model,
-            prompt: prompt,
-            stream: false,
-            format: "json"
+            messages: [{ role: "user", content: prompt }],
+            temperature: 0.7,
+            response_format: { type: "json_object" }
         };
 
         try {
-            const response = await fetch(`${this.url}/api/generate`, {
+            const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: { 
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${this.apiKey}`
+                },
                 body: JSON.stringify(payload)
             });
 
             if (!response.ok) {
-                throw new Error(`Ollama API failed: ${response.statusText}`);
+                const errText = await response.text();
+                throw new Error(`Groq API failed: ${response.status} - ${errText}`);
             }
 
             const data = await response.json();
-            let textContent = data.response;
-            if (textContent.startsWith('```json')) textContent = textContent.replace(/^```json\n/, '').replace(/\n```$/, '');
-            else if (textContent.startsWith('```')) textContent = textContent.replace(/^```\n/, '').replace(/\n```$/, '');
+            const textContent = data.choices[0].message.content;
             return JSON.parse(textContent);
         } catch (error) {
-            console.error("Ollama Generation Error:", error);
+            console.error("Groq Generation Error:", error);
             return null; // Return null gracefully on failure
         }
     }

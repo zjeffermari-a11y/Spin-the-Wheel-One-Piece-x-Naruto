@@ -3,20 +3,18 @@ import { Settings, X } from 'lucide-react';
 import { OllamaService } from '../utils/OllamaService';
 
 export default function SettingsModal({ isOpen, onClose }) {
-    const [model, setModel] = useState('llama3');
-    const [url, setUrl] = useState('http://127.0.0.1:11434');
+    const [apiKey, setApiKey] = useState('');
 
     useEffect(() => {
         if (isOpen) {
             const ollamaService = new OllamaService();
-            setModel(ollamaService.model);
-            setUrl(ollamaService.url);
+            setApiKey(ollamaService.apiKey || '');
         }
     }, [isOpen]);
 
     const handleSave = () => {
         const ollamaService = new OllamaService();
-        ollamaService.setModel(model.trim(), url.trim());
+        ollamaService.setApiKey(apiKey.trim());
         onClose();
     };
 
@@ -30,29 +28,22 @@ export default function SettingsModal({ isOpen, onClose }) {
                 </button>
                 
                 <h3 className="text-2xl font-bold mb-6 text-white flex items-center gap-2">
-                    <Settings className="text-indigo-500" /> Settings
+                    <Settings className="text-indigo-500" /> API Settings
                 </h3>
 
                 <div className="space-y-4">
                     <div>
-                        <label className="block text-sm font-bold text-gray-400 mb-1">Ollama Model</label>
+                        <label className="block text-sm font-bold text-gray-400 mb-1">Groq API Key (For Lore Generation)</label>
                         <input 
-                            type="text" 
-                            value={model} 
-                            onChange={(e) => setModel(e.target.value)} 
+                            type="password" 
+                            value={apiKey} 
+                            onChange={(e) => setApiKey(e.target.value)} 
                             className="w-full bg-[#1a1a1a] border border-[#333] rounded-lg px-4 py-2 text-white focus:outline-none focus:border-indigo-500"
-                            placeholder="e.g. llama3"
+                            placeholder="gsk_..."
                         />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-bold text-gray-400 mb-1">Ollama API URL</label>
-                        <input 
-                            type="text" 
-                            value={url} 
-                            onChange={(e) => setUrl(e.target.value)} 
-                            className="w-full bg-[#1a1a1a] border border-[#333] rounded-lg px-4 py-2 text-white focus:outline-none focus:border-indigo-500"
-                            placeholder="http://127.0.0.1:11434"
-                        />
+                        <p className="text-xs text-gray-500 mt-2">
+                            To generate lore on the web, you need a free API key from <a href="https://console.groq.com" target="_blank" rel="noreferrer" className="text-indigo-400 hover:underline">Groq</a>.
+                        </p>
                     </div>
                 </div>
 
