@@ -16,15 +16,29 @@ export class OllamaService {
             if (response.ok) {
                 const data = await response.json();
                 const models = data.data.map(m => m.id);
-                // Try to find the best 70B model first, then fallback to 8B
-                const best70b = models.find(m => m.includes('70b') && !m.includes('tool-use') && !m.includes('guard'));
-                const best8b = models.find(m => m.includes('8b') && !m.includes('tool-use') && !m.includes('guard'));
                 
-                if (best70b) {
-                    this.model = best70b;
-                } else if (best8b) {
-                    this.model = best8b;
+                // Exclude audio and specialized models
+                const validModels = models.filter(m => 
+                    !m.includes('whisper') && 
+                    !m.includes('guard') && 
+                    !m.includes('tool-use')
+                );
+
+                // Priority list based on 2026 Groq availability
+                const priority = ['120b', '70b', '27b', '20b', '8b'];
+                let selected = null;
+
+                for (const p of priority) {
+                    selected = validModels.find(m => m.includes(p));
+                    if (selected) break;
                 }
+                
+                if (selected) {
+                    this.model = selected;
+                } else if (validModels.length > 0) {
+                    this.model = validModels[0];
+                }
+                
                 console.log('Dynamically selected Groq model:', this.model);
             }
         } catch (error) {
