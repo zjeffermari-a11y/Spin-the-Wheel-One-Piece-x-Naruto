@@ -1,0 +1,71 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    background-color: #0a0a0a;
+    color: #f3f4f6; /* text-gray-100 */
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+  }
+}
+
+:root {
+  --rarity-common: #808080;
+  --rarity-uncommon: #2e8b57;
+  --rarity-rare: #4169e1;
+  --rarity-epic: #9370db;
+  --rarity-legend: #ffd700;
+  --rarity-mythic: #ff2222;
+}
+
+.wheel-container::after {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-top: 25px solid #ff3333;
+  z-index: 10;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+}
+
+.radar-container {
+  background: radial-gradient(circle at center, rgba(30,30,30,0.8) 0%, rgba(10,10,10,0.9) 100%);
+}
+
+.stat-bar-fill {
+  background: linear-gradient(90deg, #4f46e5 0%, #06b6d4 100%);
+  box-shadow: 0 0 10px rgba(6, 182, 212, 0.5);
+  transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.rarity-Common { border-color: var(--rarity-common); }
+.rarity-Uncommon { border-color: var(--rarity-uncommon); box-shadow: 0 0 10px rgba(46,139,87,0.2); }
+.rarity-Rare { border-color: var(--rarity-rare); box-shadow: 0 0 15px rgba(65,105,225,0.3); }
+.rarity-Epic { border-color: var(--rarity-epic); box-shadow: 0 0 20px rgba(147,112,219,0.4); }
+.rarity-Legend { border-color: var(--rarity-legend); box-shadow: 0 0 25px rgba(255,215,0,0.5); }
+.rarity-Mythic { border-color: var(--rarity-mythic); box-shadow: 0 0 35px rgba(255,34,34,0.7); animation: mythicPulse 2s infinite; }
+
+.res-Common { color: var(--rarity-common); }
+.res-Uncommon { color: var(--rarity-uncommon); text-shadow: 0 0 10px rgba(46,139,87,0.5); }
+.res-Rare { color: var(--rarity-rare); text-shadow: 0 0 15px rgba(65,105,225,0.6); }
+.res-Epic { color: var(--rarity-epic); text-shadow: 0 0 20px rgba(147,112,219,0.7); }
+.res-Legend { color: var(--rarity-legend); text-shadow: 0 0 25px rgba(255,215,0,0.8); }
+.res-Mythic { color: var(--rarity-mythic); text-shadow: 0 0 35px rgba(255,34,34,1); animation: textMythicPulse 2s infinite; }
+
+@keyframes mythicPulse {
+  0% { box-shadow: 0 0 20px rgba(255,34,34,0.5); }
+  50% { box-shadow: 0 0 40px rgba(255,34,34,0.9); }
+  100% { box-shadow: 0 0 20px rgba(255,34,34,0.5); }
+}
+
+@keyframes textMythicPulse {
+  0% { text-shadow: 0 0 20px rgba(255,34,34,0.8); }
+  50% { text-shadow: 0 0 40px rgba(255,34,34,1); }
+  100% { text-shadow: 0 0 20px rgba(255,34,34,0.8); }
+}

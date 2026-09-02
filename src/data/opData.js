@@ -1,0 +1,103 @@
+export const opData = [
+  { "id": 1, "name": "Monkey D. Luffy", "crew": "Straw Hat", "bounty": "3,000,000,000", "image_keyword": "luffy", "rarity": "L", "val": 100, "gender": "M", "haki": ["obs", "arm", "conq"] },
+  { "id": 2, "name": "Roronoa Zoro", "crew": "Straw Hat", "bounty": "1,111,000,000", "image_keyword": "zoro", "rarity": "E", "val": 95, "gender": "M", "haki": ["obs", "arm", "conq"] },
+  { "id": 3, "name": "Vinsmoke Sanji", "crew": "Straw Hat", "bounty": "1,032,000,000", "image_keyword": "sanji", "rarity": "E", "val": 95, "gender": "M", "haki": ["obs", "arm"] },
+  { "id": 4, "name": "Nami", "crew": "Straw Hat", "bounty": "366,000,000", "image_keyword": "nami", "rarity": "C", "val": 50, "gender": "F", "haki": [] },
+  { "id": 5, "name": "Tony Tony Chopper", "crew": "Straw Hat", "bounty": "1,000", "image_keyword": "chopper", "rarity": "U", "val": 65, "gender": "M", "haki": [] },
+  { "id": 6, "name": "Nico Robin", "crew": "Straw Hat", "bounty": "930,000,000", "image_keyword": "robin", "rarity": "R", "val": 80, "gender": "F", "haki": [] },
+  { "id": 7, "name": "Trafalgar D. Water Law", "crew": "Heart Pirates", "bounty": "3,000,000,000", "image_keyword": "law", "rarity": "E", "val": 95, "gender": "M", "haki": ["obs", "arm"] },
+  { "id": 8, "name": "Eustass Kid", "crew": "Kid Pirates", "bounty": "3,000,000,000", "image_keyword": "kid", "rarity": "E", "val": 95, "gender": "M", "haki": ["obs", "arm", "conq"] },
+  { "id": 9, "name": "Shanks", "crew": "Red Hair", "bounty": "4,048,900,000", "image_keyword": "shanks", "rarity": "L", "val": 100, "tag": "future_sight infusion", "gender": "M", "haki": ["obs", "arm", "conq"] },
+  { "id": 10, "name": "Gol D. Roger", "crew": "Roger Pirates", "bounty": "5,564,800,000", "image_keyword": "roger", "rarity": "L", "val": 100, "tag": "infusion", "gender": "M", "haki": ["obs", "arm", "conq"] },
+  { "id": 11, "name": "Portgas D. Ace", "crew": "Whitebeard", "bounty": "550,000,000", "image_keyword": "ace", "rarity": "R", "val": 85, "gender": "M", "haki": ["obs", "arm", "conq"] },
+  { "id": 12, "name": "Sabo", "crew": "Revolutionary Army", "bounty": "602,000,000", "image_keyword": "sabo", "rarity": "E", "val": 90, "gender": "M", "haki": ["obs", "arm"] },
+  { "id": 13, "name": "Buggy", "crew": "Cross Guild", "bounty": "3,189,000,000", "image_keyword": "buggy", "rarity": "C", "val": 40, "gender": "M", "haki": [] },
+  { "id": 14, "name": "Dracule Mihawk", "crew": "Cross Guild", "bounty": "3,590,000,000", "image_keyword": "mihawk", "rarity": "L", "val": 100, "gender": "M", "haki": ["obs", "arm"] },
+  { "id": 15, "name": "Yamato", "crew": "Wano Country", "bounty": "0", "image_keyword": "yamato", "rarity": "E", "val": 95, "gender": "F", "haki": ["obs", "arm", "conq"] },
+  { "id": 16, "name": "Boa Hancock", "crew": "Kuja Pirates", "bounty": "1,659,000,000", "image_keyword": "hancock", "rarity": "E", "val": 90, "gender": "F", "haki": ["obs", "arm", "conq"] },
+  { "id": 17, "name": "Donquixote Doflamingo", "crew": "Donquixote Pirates", "bounty": "340,000,000", "image_keyword": "doflamingo", "rarity": "R", "val": 85, "gender": "M", "haki": ["obs", "arm", "conq"] },
+  { "id": 18, "name": "Charlotte Katakuri", "crew": "Big Mom Pirates", "bounty": "1,057,000,000", "image_keyword": "katakuri", "rarity": "E", "val": 95, "tag": "future_sight", "gender": "M", "haki": ["obs", "arm", "conq"] },
+  { "id": 19, "name": "Crocodile", "crew": "Cross Guild", "bounty": "1,965,000,000", "image_keyword": "crocodile", "rarity": "R", "val": 85, "gender": "M", "haki": [] },
+  { "id": 20, "name": "Jinbe", "crew": "Straw Hat", "bounty": "1,100,000,000", "image_keyword": "jinbe", "rarity": "R", "val": 88, "gender": "M", "haki": ["obs", "arm"] },
+  { "id": 21, "name": "Usopp", "crew": "Straw Hat", "bounty": "500,000,000", "image_keyword": "usopp", "rarity": "R", "val": 75, "gender": "M", "haki": ["obs"] },
+  { "id": 22, "name": "Franky", "crew": "Straw Hat", "bounty": "394,000,000", "image_keyword": "franky", "rarity": "R", "val": 80, "gender": "M", "haki": [] },
+  { "id": 23, "name": "Brook", "crew": "Straw Hat", "bounty": "383,000,000", "image_keyword": "brook", "rarity": "R", "val": 80, "gender": "M", "haki": [] },
+  { "id": 24, "name": "Monkey D. Garp", "crew": "Marines", "bounty": "0", "image_keyword": "garp", "rarity": "L", "val": 100, "tag": "infusion", "gender": "M", "haki": ["obs", "arm", "conq"] },
+  { "id": 25, "name": "Monkey D. Dragon", "crew": "Revolutionary Army", "bounty": "0", "image_keyword": "dragon", "rarity": "L", "val": 100, "gender": "M", "haki": ["obs", "arm", "conq"] },
+  { "id": 26, "name": "Marshall D. Teach", "crew": "Blackbeard Pirates", "bounty": "3,996,000,000", "image_keyword": "teach", "rarity": "L", "val": 100, "gender": "M", "haki": ["obs", "arm"] },
+  { "id": 27, "name": "Edward Newgate", "crew": "Whitebeard Pirates", "bounty": "5,046,000,000", "image_keyword": "whitebeard", "rarity": "L", "val": 100, "tag": "infusion", "gender": "M", "haki": ["obs", "arm", "conq"] },
+  { "id": 28, "name": "Kaido", "crew": "Beast Pirates", "bounty": "4,611,100,000", "image_keyword": "kaido", "rarity": "L", "val": 100, "tag": "infusion", "gender": "M", "haki": ["obs", "arm", "conq"] },
+  { "id": 29, "name": "Charlotte Linlin", "crew": "Big Mom Pirates", "bounty": "4,388,000,000", "image_keyword": "bigmom", "rarity": "L", "val": 100, "tag": "infusion", "gender": "F", "haki": ["obs", "arm", "conq"] },
+  { "id": 30, "name": "Nefertari Vivi", "crew": "Alabasta", "bounty": "0", "image_keyword": "vivi", "rarity": "C", "val": 20, "gender": "F", "haki": [] },
+  { "id": 31, "name": "Imu", "crew": "World Government", "bounty": "0", "image_keyword": "imu", "rarity": "M", "val": 105, "tag": "hax", "gender": "F", "haki": ["obs", "arm", "conq"] },
+  { "id": 32, "name": "Joyboy", "crew": "Ancient Kingdom", "bounty": "0", "image_keyword": "joyboy", "rarity": "M", "val": 105, "tag": "infusion", "gender": "M", "haki": ["obs", "arm", "conq"] },
+  { "id": 33, "name": "Figarland Garling", "crew": "Holy Knights", "bounty": "0", "image_keyword": "garling", "rarity": "L", "val": 100, "gender": "M", "haki": ["obs", "arm", "conq"] }
+];
+
+/* ==========================================
+   DEVIL FRUIT DATABASE
+   Canonical One Piece devil fruits categorized by type.
+   Types: paramecia, logia, zoan, mythical, ancient
+========================================== */
+const devilFruitDB = [
+  // ---- PARAMECIA ----
+  { name: "Gomu Gomu (Base)",     type: "paramecia", rarity: "U", val: 65,  tag: "rubber" },
+  { name: "Bara Bara",            type: "paramecia", rarity: "C", val: 50,  tag: "split" },
+  { name: "Sube Sube",            type: "paramecia", rarity: "C", val: 45,  tag: "smooth" },
+  { name: "Bomu Bomu",            type: "paramecia", rarity: "C", val: 50,  tag: "bomb" },
+  { name: "Doru Doru",            type: "paramecia", rarity: "U", val: 60,  tag: "wax" },
+  { name: "Hana Hana",            type: "paramecia", rarity: "U", val: 70,  tag: "limbs" },
+  { name: "Doku Doku",            type: "paramecia", rarity: "R", val: 82,  tag: "poison" },
+  { name: "Nikyu Nikyu",          type: "paramecia", rarity: "R", val: 85,  tag: "repel" },
+  { name: "Mochi Mochi",          type: "paramecia", rarity: "R", val: 88,  tag: "mochi" },
+  { name: "Ito Ito",              type: "paramecia", rarity: "R", val: 85,  tag: "string" },
+  { name: "Jiki Jiki",            type: "paramecia", rarity: "E", val: 90,  tag: "magnet" },
+  { name: "Ope Ope",              type: "paramecia", rarity: "E", val: 95,  tag: "surgical space manipulation room" },
+  { name: "Zushi Zushi",          type: "paramecia", rarity: "E", val: 92,  tag: "gravity manipulation" },
+  { name: "Gura Gura",            type: "paramecia", rarity: "L", val: 100, tag: "creating massive earthquakes and tremors" },
+  { name: "Hobi Hobi",            type: "paramecia", rarity: "L", val: 98,  tag: "turning people into toys and erasing memories" },
+  { name: "Soru Soru",            type: "paramecia", rarity: "L", val: 98,  tag: "manipulate souls and lifespan" },
+  { name: "Horo Horo",            type: "paramecia", rarity: "R", val: 82,  tag: "create ghosts that induce negative emotion" },
+  { name: "Mero Mero",            type: "paramecia", rarity: "E", val: 92,  tag: "turn infatuated enemies to stone" },
+
+  // ---- LOGIA ----
+  { name: "Moku Moku",            type: "logia",     rarity: "C", val: 55,  tag: "smoke" },
+  { name: "Suna Suna",            type: "logia",     rarity: "U", val: 75,  tag: "sand" },
+  { name: "Numa Numa",            type: "logia",     rarity: "U", val: 65,  tag: "swamp" },
+  { name: "Yuki Yuki",            type: "logia",     rarity: "U", val: 70,  tag: "ice" },
+  { name: "Mera Mera",            type: "logia",     rarity: "R", val: 85,  tag: "fire manipulation" },
+  { name: "Hie Hie",              type: "logia",     rarity: "R", val: 88,  tag: "ice and freezing" },
+  { name: "Goro Goro",            type: "logia",     rarity: "E", val: 92,  tag: "lightning and electricity" },
+  { name: "Pika Pika",            type: "logia",     rarity: "E", val: 94,  tag: "light manipulation and speed" },
+  { name: "Yami Yami",            type: "logia",     rarity: "E", val: 96,  tag: "darkness and gravity that nullifies other devil fruits" },
+  { name: "Magu Magu",            type: "logia",     rarity: "L", val: 100, tag: "magma and volcanic power" },
+
+  // ---- ZOAN (Standard) ----
+  { name: "Ushi Ushi: Bison",     type: "zoan",      rarity: "C", val: 50,  tag: "beast" },
+  { name: "Inu Inu: Wolf",        type: "zoan",      rarity: "C", val: 55,  tag: "beast" },
+  { name: "Neko Neko: Leopard",   type: "zoan",      rarity: "U", val: 68,  tag: "beast" },
+  { name: "Ushi Ushi: Giraffe",   type: "zoan",      rarity: "U", val: 65,  tag: "beast" },
+  { name: "Hebi Hebi: Anaconda",  type: "zoan",      rarity: "U", val: 62,  tag: "beast" },
+  { name: "Sara Sara: Axolotl",   type: "zoan",      rarity: "R", val: 78,  tag: "beast" },
+  { name: "Mogu Mogu: Mole",      type: "zoan",      rarity: "C", val: 48,  tag: "beast" },
+  { name: "Inu Inu: Jackal",      type: "zoan",      rarity: "U", val: 70,  tag: "beast" },
+
+  // ---- ANCIENT ZOAN ----
+  { name: "Ryu Ryu: Allosaurus",     type: "ancient", rarity: "R", val: 82, tag: "dino" },
+  { name: "Ryu Ryu: Brachiosaurus",  type: "ancient", rarity: "R", val: 80, tag: "dino" },
+  { name: "Ryu Ryu: Pteranodon",     type: "ancient", rarity: "R", val: 84, tag: "dino" },
+  { name: "Ryu Ryu: Spinosaurus",    type: "ancient", rarity: "E", val: 88, tag: "dino" },
+  { name: "Ryu Ryu: Triceratops",    type: "ancient", rarity: "R", val: 82, tag: "dino" },
+  { name: "Zou Zou: Mammoth",        type: "ancient", rarity: "E", val: 90, tag: "dino" },
+  { name: "Kumo Kumo: Rosamygale",   type: "ancient", rarity: "E", val: 86, tag: "dino" },
+
+  // ---- MYTHICAL ZOAN ----
+  { name: "Hito Hito: Nika",            type: "mythical", rarity: "L", val: 100, tag: "rubber body and cartoon imagination reality warping" },
+  { name: "Tori Tori: Phoenix",          type: "mythical", rarity: "L", val: 98,  tag: "blue flames of healing and regeneration" },
+  { name: "Uo Uo: Azure Dragon",         type: "mythical", rarity: "L", val: 100, tag: "massive dragon transformation with elemental breath" },
+  { name: "Hito Hito: Daibutsu",         type: "mythical", rarity: "E", val: 92,  tag: "giant golden buddha with shockwaves" },
+  { name: "Inu Inu: Okuchi no Makami",   type: "mythical", rarity: "E", val: 94,  tag: "legendary wolf with freezing breath" },
+  { name: "Hebi Hebi: Yamata no Orochi", type: "mythical", rarity: "R", val: 78,  tag: "beast" },
+  { name: "Hito Hito: Onyudo",           type: "mythical", rarity: "R", val: 80,  tag: "beast" },
+  { name: "Tori Tori: Nue",              type: "mythical", rarity: "E", val: 88,  tag: "beast" }
+];
