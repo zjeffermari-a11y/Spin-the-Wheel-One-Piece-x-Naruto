@@ -503,7 +503,7 @@ function App() {
                                     {isSaved ? 'Legend Saved' : 'Save Legend'}
                                 </button>
                                 <button
-                                    onClick={() => setScreen('landing')}
+                                    onClick={startCreation}
                                     className="px-8 py-3 bg-[#222] hover:bg-[#333] border border-[#444] rounded-full font-bold transition-all shadow-lg uppercase tracking-widest text-sm"
                                 >
                                     Create Another Legend

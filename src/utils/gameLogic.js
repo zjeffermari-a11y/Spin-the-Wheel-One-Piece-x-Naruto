@@ -34,6 +34,9 @@ export function calculateSynergies(build) {
     if (vessel === 'Toji Fushiguro' && trait === 'Heavenly Restriction') { syns.push({ name: '🔪 SORCERER KILLER', desc: 'The ultimate anti-magic physical build.' }); bonuses.str += 20; bonuses.spd += 20; bonuses.abl -= 20; bonuses.hax += 10; }
     if (trait === 'Immortality' && build.dur?.val >= 90) { syns.push({ name: '🛡️ ABSOLUTE DEFENSE', desc: 'Immortal and naturally impenetrable.' }); bonuses.dur += 25; bonuses.hax += 15; }
     if (trait === 'Six Paths Body' && vessel === 'Madara Uchiha') { syns.push({ name: '👻 GHOST OF THE UCHIHA', desc: "Madara's body pushed to the absolute pinnacle." }); bonuses.chrk += 15; bonuses.hax += 10; bonuses.overall += 10; }
+    if (style === 'Sniper' && (vessel === 'Usopp' || vessel === 'Yasopp' || vessel === 'Van Augur')) { syns.push({ name: '🎯 DEADEYE LEGEND', desc: 'A generational sniper vessel wielding pinpoint marksmanship.' }); bonuses.iq += 15; bonuses.spd += 10; bonuses.hax += 5; }
+    if (style === 'Sniper' && build.weapon?.tag === 'sniper') { syns.push({ name: '🏹 APEX MARKSMAN', desc: 'Dedicated sniper discipline paired with a specialized ranged weapon.' }); bonuses.iq += 10; bonuses.spd += 10; bonuses.abl += 10; }
+    if (style === 'Sniper' && build.haki_obs?.val >= 80) { syns.push({ name: '🔭 HORIZON SIGHT', desc: 'Observation Haki allows sniping across horizons without missing.' }); bonuses.haki += 15; bonuses.iq += 10; }
 
     return { list: syns, bonuses };
 }

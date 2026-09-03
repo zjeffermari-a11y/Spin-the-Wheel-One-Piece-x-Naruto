@@ -32,5 +32,8 @@ export const narutoData = [
   { "id": 31, "name": "Eida", "clan": "Unknown", "rank": "Unknown", "village": "Hidden Leaf", "element": "None", "rarity": "L", "val": 100, "tag": "future_sight", "gender": "F", "jutsu": [] },
   { "id": 32, "name": "Kaguya Otsutsuki", "clan": "Otsutsuki", "rank": "Progenitor", "village": "Unknown", "element": "All Five", "rarity": "M", "val": 105, "tag": "hax", "gender": "F", "jutsu": ["nin", "tai", "gen"] },
   { "id": 33, "name": "Hagoromo Otsutsuki", "clan": "Otsutsuki", "rank": "Sage of Six Paths", "village": "Unknown", "element": "All Five", "rarity": "M", "val": 105, "tag": "hax", "gender": "M", "jutsu": ["nin", "tai", "sen"] },
-  { "id": 34, "name": "Momoshiki Otsutsuki", "clan": "Otsutsuki", "rank": "Unknown", "village": "Unknown", "element": "All Five", "rarity": "M", "val": 105, "gender": "M", "jutsu": ["nin", "tai"] }
+  { "id": 34, "name": "Momoshiki Otsutsuki", "clan": "Otsutsuki", "rank": "Unknown", "village": "Unknown", "element": "All Five", "rarity": "M", "val": 105, "gender": "M", "jutsu": ["nin", "tai"] },
+  { "id": 35, "name": "Kidomaru", "clan": "Unknown", "rank": "Sound Four", "village": "Hidden Sound", "element": "None", "rarity": "R", "val": 82, "tag": "sniper", "gender": "M", "jutsu": ["nin", "tai", "kg"] },
+  { "id": 36, "name": "Tenten", "clan": "Unknown", "rank": "Jonin", "village": "Hidden Leaf", "element": "None", "rarity": "R", "val": 78, "tag": "sniper", "gender": "F", "jutsu": ["nin", "tai"] },
+  { "id": 37, "name": "Deidara", "clan": "Unknown", "rank": "Akatsuki", "village": "Hidden Stone", "element": "Explosion", "rarity": "E", "val": 90, "tag": "sniper", "gender": "M", "jutsu": ["nin", "kg"] }
 ];
