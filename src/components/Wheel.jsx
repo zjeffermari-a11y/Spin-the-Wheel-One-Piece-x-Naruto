@@ -102,9 +102,27 @@ const Wheel = forwardRef(({ options }, ref) => {
             const startRot = rotationRef.current;
             const easeOut = t => 1 - (--t) * t * t * t;
 
+            let isFinished = false;
+            let rafId = null;
+            let timeoutId = null;
+
+            const finish = () => {
+                if (isFinished) return;
+                isFinished = true;
+                if (rafId) cancelAnimationFrame(rafId);
+                if (timeoutId) clearTimeout(timeoutId);
+                rotationRef.current = totalRotation;
+                draw(ctx, canvas);
+                if (callback) callback();
+            };
+
             const animate = (time) => {
+                if (isFinished) return;
                 let elapsed = time - startTime;
-                if (elapsed > durationMs) elapsed = durationMs;
+                if (elapsed >= durationMs) {
+                    finish();
+                    return;
+                }
                 
                 let progress = elapsed / durationMs;
                 let eased = easeOut(progress);
@@ -112,13 +130,16 @@ const Wheel = forwardRef(({ options }, ref) => {
                 rotationRef.current = startRot + (totalRotation - startRot) * eased;
                 draw(ctx, canvas);
                 
-                if (progress < 1) {
-                    requestAnimationFrame(animate);
-                } else {
-                    if (callback) callback();
-                }
+                rafId = requestAnimationFrame(animate);
             };
-            requestAnimationFrame(animate);
+
+            rafId = requestAnimationFrame(animate);
+
+            // Safety timeout: browsers throttle or freeze requestAnimationFrame in background tabs.
+            // This timeout guarantees the spin finishes and continues progression even when the tab is hidden.
+            timeoutId = setTimeout(() => {
+                finish();
+            }, durationMs + 50);
         }
     }));
 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Settings, X } from 'lucide-react';
 import { OllamaService } from '../utils/OllamaService';
+import { supabase } from '../utils/supabaseClient';
 
 export default function SettingsModal({ isOpen, onClose }) {
     const [apiKey, setApiKey] = useState('');
@@ -12,9 +13,22 @@ export default function SettingsModal({ isOpen, onClose }) {
         }
     }, [isOpen]);
 
-    const handleSave = () => {
+    const handleSave = async () => {
+        const clean = apiKey.trim();
         const ollamaService = new OllamaService();
-        ollamaService.setApiKey(apiKey.trim());
+        ollamaService.setApiKey(clean);
+
+        try {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (user) {
+                await supabase.auth.updateUser({
+                    data: { groq_api_key: clean }
+                });
+            }
+        } catch (e) {
+            console.warn('Could not sync key to Supabase user metadata:', e);
+        }
+
         onClose();
     };
 

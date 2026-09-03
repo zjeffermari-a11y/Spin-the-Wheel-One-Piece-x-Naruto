@@ -109,6 +109,20 @@ export const durabilityTiers = [
     { name: 'Absolute', rarity: 'M', val: 105, tag: 'hax' }
 ];
 
+export const combatTiers = [
+    { name: 'Untrained', rarity: 'C', val: 10 },
+    { name: 'Novice', rarity: 'C', val: 25 },
+    { name: 'Competent', rarity: 'C', val: 45 },
+    { name: 'Skilled', rarity: 'U', val: 60 },
+    { name: 'Expert', rarity: 'U', val: 72 },
+    { name: 'Veteran', rarity: 'R', val: 80 },
+    { name: 'Elite', rarity: 'R', val: 88 },
+    { name: 'Master', rarity: 'E', val: 94 },
+    { name: 'Grandmaster', rarity: 'E', val: 98 },
+    { name: 'Legendary', rarity: 'L', val: 100, tag: 'hax' },
+    { name: 'Absolute', rarity: 'M', val: 105, tag: 'hax' }
+];
+
 export const chakraTiers = [
     { name: 'Civilian', rarity: 'C', val: 10 },
     { name: 'Genin Level', rarity: 'C', val: 30 },
@@ -130,7 +144,7 @@ export const CATEGORIES = [
     { id: 'str', name: 'Strength Benchmark', desc: 'Raw physical power tier', options: strengthTiers },
     { id: 'spd', name: 'Speed Benchmark', desc: 'Movement and reaction tier', options: speedTiers },
     { id: 'dur', name: 'Durability Benchmark', desc: 'Endurance and toughness tier', options: durabilityTiers },
-    { id: 'combat', name: 'Combat Mastery', desc: 'Overall fighting capability', options: powerTiers },
+    { id: 'combat', name: 'Combat Mastery', desc: 'Overall fighting capability', options: combatTiers },
     { id: 'iq', name: 'Battle IQ', desc: 'Tactical thinking and adaptability', options: [] },
     { id: 'chakra_cap', name: 'Chakra Reserves', desc: 'Total chakra pool', options: chakraTiers },
     { id: 'df_type', name: 'Devil Fruit Type', desc: 'What class of Devil Fruit did fate choose?', options: [{ name: 'None', rarity: 'C', val: 0, tag: 'none' }, { name: 'Paramecia', rarity: 'U', val: 70 }, { name: 'Logia', rarity: 'E', val: 90 }, { name: 'Zoan', rarity: 'U', val: 70 }, { name: 'Ancient Zoan', rarity: 'L', val: 82 }, { name: 'Mythical Zoan', rarity: 'M', val: 95 }] },

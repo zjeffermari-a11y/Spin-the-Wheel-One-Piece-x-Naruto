@@ -72,13 +72,21 @@ function App() {
 
     React.useEffect(() => {
         // Check current session
+        const syncUserKey = (session) => {
+            const u = session?.user || null;
+            setUser(u);
+            if (u?.user_metadata?.groq_api_key) {
+                localStorage.setItem('spin_wheel_groq_api_key', u.user_metadata.groq_api_key);
+            }
+        };
+
         supabase.auth.getSession().then(({ data: { session } }) => {
-            setUser(session?.user || null);
+            syncUserKey(session);
         });
 
         // Listen for auth changes
         const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-            setUser(session?.user || null);
+            syncUserKey(session);
         });
 
         return () => subscription.unsubscribe();

@@ -1,7 +1,9 @@
+const FALLBACK_MODELS = ['openai/gpt-oss-120b', 'openai/gpt-oss-20b', 'qwen/qwen3.6-27b', 'qwen/qwen3.8-27b'];
+
 export class OllamaService {
     constructor() {
-        this.model = 'llama-3.1-8b-instant'; // Safe fallback
-        this.apiKey = import.meta.env.VITE_GROQ_API_KEY || localStorage.getItem('spin_wheel_groq_api_key') || '';
+        this.model = 'openai/gpt-oss-120b'; // Reliable 2026 free developer model
+        this.apiKey = (import.meta.env.VITE_GROQ_API_KEY || localStorage.getItem('spin_wheel_groq_api_key') || '').trim();
         this.bestModelPromise = this.fetchBestAvailableModel();
     }
 
@@ -47,8 +49,10 @@ export class OllamaService {
     }
 
     setApiKey(key) {
-        this.apiKey = key;
-        localStorage.setItem('spin_wheel_groq_api_key', key);
+        const cleanKey = (key || '').trim();
+        this.apiKey = cleanKey;
+        localStorage.setItem('spin_wheel_groq_api_key', cleanKey);
+        this.bestModelPromise = this.fetchBestAvailableModel();
     }
 
     async generateContent(prompt, systemPrompt = "You are a helpful assistant.") {
@@ -59,35 +63,47 @@ export class OllamaService {
             return null;
         }
 
-        const payload = {
-            model: this.model,
-            messages: [{ role: "user", content: prompt }],
-            temperature: 0.7,
-            response_format: { type: "json_object" }
-        };
+        // Try candidate model first, then fallback to other active models if an error occurs
+        const modelsToTry = [
+            this.model,
+            ...FALLBACK_MODELS.filter(m => m !== this.model)
+        ];
 
-        try {
-            const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-                method: "POST",
-                headers: { 
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${this.apiKey}`
-                },
-                body: JSON.stringify(payload)
-            });
+        for (const candidateModel of modelsToTry) {
+            const payload = {
+                model: candidateModel,
+                messages: [{ role: "user", content: prompt }],
+                temperature: 0.7,
+                response_format: { type: "json_object" }
+            };
 
-            if (!response.ok) {
-                const errText = await response.text();
-                throw new Error(`Groq API failed: ${response.status} - ${errText}`);
+            try {
+                const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+                    method: "POST",
+                    headers: { 
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${this.apiKey}`
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    const errText = await response.text();
+                    console.warn(`Groq model ${candidateModel} failed (${response.status}): ${errText}. Retrying next model...`);
+                    continue; // Try next fallback model
+                }
+
+                const data = await response.json();
+                const textContent = data.choices[0].message.content;
+                this.model = candidateModel; // Lock in the working model
+                return JSON.parse(textContent);
+            } catch (error) {
+                console.warn(`Groq request error on model ${candidateModel}:`, error);
             }
-
-            const data = await response.json();
-            const textContent = data.choices[0].message.content;
-            return JSON.parse(textContent);
-        } catch (error) {
-            console.error("Groq Generation Error:", error);
-            return null; // Return null gracefully on failure
         }
+
+        console.error("All Groq models failed to generate content.");
+        return null;
     }
 
     async generateSynergies(build) {
