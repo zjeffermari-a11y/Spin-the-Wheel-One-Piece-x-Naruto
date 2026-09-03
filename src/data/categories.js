@@ -65,6 +65,50 @@ export const powerTiers = [
     { name: 'Boundless', rarity: 'L', val: 100 }
 ];
 
+export const strengthTiers = [
+    { name: 'Frail', rarity: 'C', val: 10 },
+    { name: 'Inferior', rarity: 'C', val: 25 },
+    { name: 'Normal', rarity: 'C', val: 40 },
+    { name: 'Enhanced', rarity: 'U', val: 55 },
+    { name: 'Superhuman', rarity: 'U', val: 68 },
+    { name: 'Cataclysmic', rarity: 'R', val: 78 },
+    { name: 'Continental', rarity: 'R', val: 85 },
+    { name: 'Cosmic', rarity: 'E', val: 90 },
+    { name: 'Planetary', rarity: 'E', val: 94 },
+    { name: 'Universal', rarity: 'L', val: 98 },
+    { name: 'Multiversal', rarity: 'L', val: 100, tag: 'hax' },
+    { name: 'Transcendent', rarity: 'M', val: 103, tag: 'hax' },
+    { name: 'Absolute', rarity: 'M', val: 105, tag: 'hax' }
+];
+
+export const speedTiers = [
+    { name: 'Slow', rarity: 'C', val: 15 },
+    { name: 'Athletic', rarity: 'C', val: 35 },
+    { name: 'Supersonic', rarity: 'U', val: 55 },
+    { name: 'Hypersonic', rarity: 'U', val: 70 },
+    { name: 'Relativistic', rarity: 'R', val: 80 },
+    { name: 'Lightspeed', rarity: 'R', val: 88 },
+    { name: 'FTL', rarity: 'E', val: 94 },
+    { name: 'MFTL', rarity: 'E', val: 98 },
+    { name: 'Infinite', rarity: 'L', val: 100, tag: 'hax' },
+    { name: 'Immeasurable', rarity: 'M', val: 103, tag: 'hax' },
+    { name: 'Irrelevant', rarity: 'M', val: 105, tag: 'hax' }
+];
+
+export const durabilityTiers = [
+    { name: 'Frail', rarity: 'C', val: 15 },
+    { name: 'Human', rarity: 'C', val: 35 },
+    { name: 'Enhanced', rarity: 'U', val: 55 },
+    { name: 'Superhuman', rarity: 'U', val: 70 },
+    { name: 'City', rarity: 'R', val: 78 },
+    { name: 'Continental', rarity: 'R', val: 85 },
+    { name: 'Planetary', rarity: 'E', val: 92 },
+    { name: 'Universal', rarity: 'L', val: 98 },
+    { name: 'Multiversal', rarity: 'L', val: 100, tag: 'hax' },
+    { name: 'Transcendent', rarity: 'M', val: 103, tag: 'hax' },
+    { name: 'Absolute', rarity: 'M', val: 105, tag: 'hax' }
+];
+
 export const chakraTiers = [
     { name: 'Civilian', rarity: 'C', val: 10 },
     { name: 'Genin Level', rarity: 'C', val: 30 },
@@ -83,9 +127,9 @@ export const CATEGORIES = [
     { id: 'vessel', name: 'Physical Vessel', desc: 'Whose base physical body do you possess?', options: [] },
     { id: 'trait', name: 'Special Trait', desc: 'Physiological modifications or lineages', options: [{ name: 'None', rarity: 'C', val: 0 }, { name: 'D. Clan Will', rarity: 'U', val: 50 }, { name: 'Voice of All Things', rarity: 'R', val: 75 }, { name: 'Jinchūriki', rarity: 'C', val: 95, tag: 'jinchuriki' }, { name: 'Cyborg', rarity: 'U', val: 65 }, { name: 'Germa 66 Enhancements', rarity: 'R', val: 80 }, { name: 'Curse Mark', rarity: 'U', val: 70 }, { name: 'Hashirama Cells', rarity: 'E', val: 90 }] },
     { id: 'jinchuriki_beast', name: 'Tailed Beast', desc: 'Which Tailed Beast resides within you?', options: [], isDynamic: true, parentCatId: 'trait' },
-    { id: 'str', name: 'Strength Benchmark', desc: 'Raw physical power tier', options: powerTiers },
-    { id: 'spd', name: 'Speed Benchmark', desc: 'Movement and reaction tier', options: powerTiers },
-    { id: 'dur', name: 'Durability Benchmark', desc: 'Endurance and toughness tier', options: powerTiers },
+    { id: 'str', name: 'Strength Benchmark', desc: 'Raw physical power tier', options: strengthTiers },
+    { id: 'spd', name: 'Speed Benchmark', desc: 'Movement and reaction tier', options: speedTiers },
+    { id: 'dur', name: 'Durability Benchmark', desc: 'Endurance and toughness tier', options: durabilityTiers },
     { id: 'combat', name: 'Combat Mastery', desc: 'Overall fighting capability', options: powerTiers },
     { id: 'iq', name: 'Battle IQ', desc: 'Tactical thinking and adaptability', options: [] },
     { id: 'chakra_cap', name: 'Chakra Reserves', desc: 'Total chakra pool', options: chakraTiers },
