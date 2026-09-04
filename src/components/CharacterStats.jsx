@@ -1,5 +1,4 @@
 import React from 'react';
-import RadarChart from './RadarChart';
 
 const STAT_LABELS = {
     str: 'STR',
@@ -15,14 +14,9 @@ export default function CharacterStats({ stats, title = "Base Stats" }) {
     if (!stats) return null;
 
     return (
-        <div className="bg-[#1a1a1a] p-4 rounded-xl shadow-lg border border-[#2a2a2a] flex flex-col">
-            <h4 className="text-xl font-bold mb-2 text-[#e0e0e0] border-b border-[#333] pb-2">{title}</h4>
-            
-            <div className="w-full flex justify-center py-2">
-                <RadarChart stats={stats} size={220} />
-            </div>
-
-            <div className="space-y-3 mt-4">
+        <div className="bg-[#1a1a1a] p-4 rounded-xl shadow-lg border border-[#2a2a2a]">
+            <h4 className="text-xl font-bold mb-4 text-[#e0e0e0] border-b border-[#333] pb-2">{title}</h4>
+            <div className="space-y-3">
                 {Object.entries(stats).map(([key, rawValue]) => {
                     const value = Number.isFinite(rawValue) ? rawValue : 0;
                     const label = STAT_LABELS[key] || key.toUpperCase();
