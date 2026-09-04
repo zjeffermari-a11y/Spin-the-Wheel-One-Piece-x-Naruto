@@ -1,15 +1,28 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import CharacterStats from './CharacterStats';
-import { Download } from 'lucide-react';
+import { Download, FileText, Image as ImageIcon, ChevronDown } from 'lucide-react';
 import { RARITY } from '../data/rarity';
+import { WantedPoster, BingoBook } from './ExportPosters';
 
 export default function CharacterCard({ build, stats, overall, bounty, lore, synergies, tier }) {
     const cardRef = useRef(null);
+    const wantedRef = useRef(null);
+    const bingoRef = useRef(null);
+    const [isExportMenuOpen, setIsExportMenuOpen] = useState(false);
 
-    const handleDownload = async () => {
-        if (!cardRef.current) return;
+    const handleDownload = async (targetRef, filename, bgColor) => {
+        if (!targetRef.current) return;
         const currentScroll = window.scrollY;
-        const card = cardRef.current;
+        const card = targetRef.current;
+
+        // Briefly make it visible to html-to-image
+        const originalStyle = card.style.cssText;
+        card.style.position = 'absolute';
+        card.style.left = '0';
+        card.style.top = '0';
+        card.style.zIndex = '-1000';
+        card.style.opacity = '1';
+        card.style.pointerEvents = 'none';
 
         try {
             const { toPng } = await import('html-to-image');
@@ -17,7 +30,7 @@ export default function CharacterCard({ build, stats, overall, bounty, lore, syn
 
             const dataUrl = await toPng(card, {
                 quality: 0.95,
-                backgroundColor: '#111',
+                backgroundColor: bgColor,
                 pixelRatio: 2
             });
 
@@ -28,11 +41,14 @@ export default function CharacterCard({ build, stats, overall, bounty, lore, syn
             });
 
             pdf.addImage(dataUrl, 'PNG', 0, 0, card.offsetWidth, card.offsetHeight);
-            pdf.save(`${lore?.name || 'Legend'}.pdf`);
-            window.scrollTo(0, currentScroll);
+            pdf.save(filename);
         } catch (error) {
             console.error('Failed to generate PDF:', error);
             alert('PDF generation failed. Please try again.');
+        } finally {
+            card.style.cssText = originalStyle;
+            window.scrollTo(0, currentScroll);
+            setIsExportMenuOpen(false);
         }
     };
 
@@ -43,14 +59,38 @@ export default function CharacterCard({ build, stats, overall, bounty, lore, syn
 
     return (
         <div className="w-full max-w-4xl mx-auto flex flex-col gap-4">
-            <div className="flex justify-end">
+            <div className="flex justify-end relative">
                 <button 
-                    onClick={handleDownload}
+                    onClick={() => setIsExportMenuOpen(!isExportMenuOpen)}
                     className="flex items-center gap-2 px-4 py-2 bg-[#4f46e5] hover:bg-[#4338ca] text-white rounded-lg transition-colors font-bold shadow-lg"
                 >
                     <Download size={18} />
-                    Download PDF
+                    Export
+                    <ChevronDown size={18} className={`transition-transform ${isExportMenuOpen ? 'rotate-180' : ''}`} />
                 </button>
+                
+                {isExportMenuOpen && (
+                    <div className="absolute top-full mt-2 right-0 bg-[#1a1a1a] border border-[#333] rounded-lg shadow-xl overflow-hidden z-50 w-48">
+                        <button 
+                            onClick={() => handleDownload(cardRef, `${lore?.name || 'Legend'}_Card.pdf`, '#111')}
+                            className="w-full text-left px-4 py-3 hover:bg-[#2a2a2a] flex items-center gap-2 text-sm font-bold transition-colors"
+                        >
+                            <FileText size={16} className="text-gray-400" /> Standard Card
+                        </button>
+                        <button 
+                            onClick={() => handleDownload(wantedRef, `${lore?.name || 'Legend'}_Wanted.pdf`, '#f4e4bc')}
+                            className="w-full text-left px-4 py-3 hover:bg-[#2a2a2a] flex items-center gap-2 text-sm font-bold transition-colors"
+                        >
+                            <ImageIcon size={16} className="text-yellow-600" /> Wanted Poster
+                        </button>
+                        <button 
+                            onClick={() => handleDownload(bingoRef, `${lore?.name || 'Legend'}_BingoBook.pdf`, '#111')}
+                            className="w-full text-left px-4 py-3 hover:bg-[#2a2a2a] flex items-center gap-2 text-sm font-bold transition-colors"
+                        >
+                            <ImageIcon size={16} className="text-red-500" /> Bingo Book
+                        </button>
+                    </div>
+                )}
             </div>
             
             <div ref={cardRef} className="bg-[#111] rounded-2xl shadow-[0_0_50px_rgba(0,0,0,0.8)] overflow-hidden border border-[#333]">
@@ -157,6 +197,12 @@ export default function CharacterCard({ build, stats, overall, bounty, lore, syn
                         )}
                     </div>
                 </div>
+            </div>
+
+            {/* Hidden export templates */}
+            <div className="overflow-hidden h-0 w-0 absolute opacity-0 pointer-events-none">
+                <WantedPoster ref={wantedRef} build={build} stats={stats} overall={overall} bounty={bounty} lore={lore} />
+                <BingoBook ref={bingoRef} build={build} stats={stats} overall={overall} tier={tier} lore={lore} />
             </div>
         </div>
     );

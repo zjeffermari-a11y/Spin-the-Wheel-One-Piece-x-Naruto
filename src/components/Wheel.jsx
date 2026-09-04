@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useImperativeHandle, forwardRef } from 'react';
 import { RARITY } from '../data/rarity';
 
-const Wheel = forwardRef(({ options }, ref) => {
+const Wheel = forwardRef(({ options, onTick }, ref) => {
     const canvasRef = useRef(null);
     const rotationRef = useRef(0);
 
@@ -127,7 +127,23 @@ const Wheel = forwardRef(({ options }, ref) => {
                 let progress = elapsed / durationMs;
                 let eased = easeOut(progress);
                 
+                let prevRot = rotationRef.current;
                 rotationRef.current = startRot + (totalRotation - startRot) * eased;
+                
+                // Trigger tick sound if a segment boundary is crossed
+                const arc = (Math.PI * 2) / options.length;
+                // We want to know if the rotation has crossed a multiple of `arc` relative to the top pointer
+                // The pointer is at -Math.PI / 2
+                const prevTopAngle = (-Math.PI / 2 - prevRot + Math.PI * 10) % (Math.PI * 2);
+                const newTopAngle = (-Math.PI / 2 - rotationRef.current + Math.PI * 10) % (Math.PI * 2);
+                
+                const prevSegment = Math.floor(prevTopAngle / arc);
+                const newSegment = Math.floor(newTopAngle / arc);
+                
+                if (prevSegment !== newSegment) {
+                    if (onTick) onTick();
+                }
+                
                 draw(ctx, canvas);
                 
                 rafId = requestAnimationFrame(animate);

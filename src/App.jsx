@@ -12,6 +12,7 @@ import { Settings, Users, User, LogOut } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import AuthModal from './components/AuthModal';
 import { supabase } from './utils/supabaseClient';
+import { useAudio } from './hooks/useAudio';
 
 function shuffleArray(array) {
     const a = [...array];
@@ -63,6 +64,8 @@ function App() {
 
     const [isSpinning, setIsSpinning] = useState(false);
     const [currentOutcome, setCurrentOutcome] = useState(null);
+
+    const { playTick, playLock, playEpic } = useAudio();
 
     const wheelRef = useRef(null);
     const autoSpinRef = useRef(false);
@@ -229,6 +232,12 @@ function App() {
             wheelRef.current.spinTo(targetIndex, duration, () => {
                 // Show result overlay
                 setCurrentOutcome(outcome);
+                
+                if (['E', 'L', 'M'].includes(outcome.rarity)) {
+                    playEpic();
+                } else {
+                    playLock();
+                }
 
                 // Lock the outcome into the build
                 const newBuild = { ...currentBuild, [currentCategory.id]: outcome };
@@ -431,7 +440,7 @@ function App() {
                                     {/* Spin Pointer */}
                                     <div className="absolute top-[-20px] left-1/2 -translate-x-1/2 z-20 w-0 h-0 border-l-[15px] border-l-transparent border-r-[15px] border-r-transparent border-t-[30px] border-t-white drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]" />
 
-                                    <Wheel ref={wheelRef} options={categories[catIndex].options} />
+                                    <Wheel ref={wheelRef} options={categories[catIndex].options} onTick={playTick} />
                                 </div>
 
                                 <div className="flex gap-4 mt-8 z-10 w-full max-w-sm">
@@ -455,11 +464,18 @@ function App() {
                                     {currentOutcome && (
                                         <motion.div
                                             initial={{ opacity: 0, y: 50, scale: 0.5 }}
-                                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                                            animate={{ opacity: 1, y: 0, scale: 1, x: ['E', 'L', 'M'].includes(currentOutcome.rarity) ? [-10, 10, -10, 10, 0] : 0 }}
+                                            transition={{ duration: 0.3 }}
                                             exit={{ opacity: 0, y: -50, scale: 0.5 }}
                                             className="absolute inset-0 flex items-center justify-center bg-black/80 backdrop-blur-md z-30"
                                         >
-                                            <div className="text-center p-8">
+                                            <div 
+                                                className="text-center p-8 rounded-2xl border-2 shadow-[0_0_50px_rgba(255,255,255,0.2)]"
+                                                style={{ 
+                                                    borderColor: RARITY[currentOutcome.rarity]?.color || '#333',
+                                                    boxShadow: `0 0 50px ${RARITY[currentOutcome.rarity]?.color || '#ffffff'}40`
+                                                }}
+                                            >
                                                 <div className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-2">Acquired</div>
                                                 <div className="text-5xl font-black text-white drop-shadow-[0_0_20px_rgba(255,255,255,0.5)]">
                                                     {currentOutcome.name}
