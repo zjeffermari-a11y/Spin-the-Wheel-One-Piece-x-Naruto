@@ -319,6 +319,13 @@ function App() {
             const ollama = new OllamaService();
             const bioData = await ollama.generateBio(finalBuild, finalStats, calcTier.name, formatBountyStr(calcBounty, calcTier));
             setLore(bioData);
+            if (bioData && bioData.custom_synergy) {
+                setSynergies(prev => {
+                    const current = prev || [];
+                    if (current.some(s => s.name === bioData.custom_synergy.name)) return current;
+                    return [...current, bioData.custom_synergy];
+                });
+            }
         } catch (error) {
             console.error("Failed to generate lore via Ollama", error);
             setLore({ name: "Unknown Anomaly", epithet: "The Glitched", bio: "A tear in the fabric of the universe created this entity." });
