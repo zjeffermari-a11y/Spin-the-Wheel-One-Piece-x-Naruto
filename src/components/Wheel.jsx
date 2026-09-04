@@ -131,16 +131,11 @@ const Wheel = forwardRef(({ options, onTick }, ref) => {
                 rotationRef.current = startRot + (totalRotation - startRot) * eased;
                 
                 // Trigger tick sound if a segment boundary is crossed
-                const arc = (Math.PI * 2) / options.length;
-                // We want to know if the rotation has crossed a multiple of `arc` relative to the top pointer
-                // The pointer is at -Math.PI / 2
-                const prevTopAngle = (-Math.PI / 2 - prevRot + Math.PI * 10) % (Math.PI * 2);
-                const newTopAngle = (-Math.PI / 2 - rotationRef.current + Math.PI * 10) % (Math.PI * 2);
+                const segmentAngle = (Math.PI * 2) / options.length;
+                const prevSegmentCount = Math.floor(prevRot / segmentAngle);
+                const newSegmentCount = Math.floor(rotationRef.current / segmentAngle);
                 
-                const prevSegment = Math.floor(prevTopAngle / arc);
-                const newSegment = Math.floor(newTopAngle / arc);
-                
-                if (prevSegment !== newSegment) {
+                if (prevSegmentCount !== newSegmentCount) {
                     if (onTick) onTick();
                 }
                 

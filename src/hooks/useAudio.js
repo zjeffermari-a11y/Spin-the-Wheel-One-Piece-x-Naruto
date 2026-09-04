@@ -22,18 +22,18 @@ export function useAudio() {
         const osc = ctx.createOscillator();
         const gainNode = ctx.createGain();
 
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(800, ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(300, ctx.currentTime + 0.05);
+        // Short, crisp tick
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(1200, ctx.currentTime);
 
-        gainNode.gain.setValueAtTime(0.1, ctx.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.05);
+        gainNode.gain.setValueAtTime(0.5, ctx.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.02);
 
         osc.connect(gainNode);
         gainNode.connect(ctx.destination);
 
         osc.start();
-        osc.stop(ctx.currentTime + 0.05);
+        osc.stop(ctx.currentTime + 0.02);
     }, [initAudio]);
 
     const playLock = useCallback(() => {
@@ -43,18 +43,18 @@ export function useAudio() {
         const osc = ctx.createOscillator();
         const gainNode = ctx.createGain();
 
-        osc.type = 'square';
-        osc.frequency.setValueAtTime(150, ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(40, ctx.currentTime + 0.3);
+        // Pleasant chime/ding for locking in
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(880, ctx.currentTime); // A5
 
-        gainNode.gain.setValueAtTime(0.3, ctx.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+        gainNode.gain.setValueAtTime(0.4, ctx.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
 
         osc.connect(gainNode);
         gainNode.connect(ctx.destination);
 
         osc.start();
-        osc.stop(ctx.currentTime + 0.3);
+        osc.stop(ctx.currentTime + 0.4);
     }, [initAudio]);
 
     const playEpic = useCallback(() => {
