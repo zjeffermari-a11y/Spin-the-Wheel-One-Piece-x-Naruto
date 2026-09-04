@@ -34,7 +34,15 @@ export const opData = [
   { "id": 33, "name": "Figarland Garling", "crew": "Holy Knights", "bounty": "0", "image_keyword": "garling", "rarity": "L", "val": 100, "gender": "M", "haki": ["obs", "arm", "conq"] },
   { "id": 34, "name": "Yasopp", "crew": "Red Hair Pirates", "bounty": "850,000,000", "image_keyword": "yasopp", "rarity": "E", "val": 92, "tag": "sniper future_sight", "gender": "M", "haki": ["obs", "arm"] },
   { "id": 35, "name": "Van Augur", "crew": "Blackbeard Pirates", "bounty": "640,000,000", "image_keyword": "van_augur", "rarity": "E", "val": 90, "tag": "sniper hax", "gender": "M", "haki": ["obs", "arm"] },
-  { "id": 36, "name": "Benn Beckman", "crew": "Red Hair Pirates", "bounty": "1,260,000,000", "image_keyword": "beckman", "rarity": "L", "val": 98, "tag": "sniper infusion", "gender": "M", "haki": ["obs", "arm", "conq"] }
+  { "id": 36, "name": "Benn Beckman", "crew": "Red Hair Pirates", "bounty": "1,260,000,000", "image_keyword": "beckman", "rarity": "L", "val": 98, "tag": "sniper infusion", "gender": "M", "haki": ["obs", "arm", "conq"] },
+  { "id": 37, "name": "Rob Lucci", "crew": "CP0", "bounty": "0", "image_keyword": "lucci", "rarity": "E", "val": 95, "tag": "rokushiki awakened_zoan", "gender": "M", "haki": ["obs", "arm"] },
+  { "id": 38, "name": "Kaku", "crew": "CP0", "bounty": "0", "image_keyword": "kaku", "rarity": "R", "val": 86, "tag": "rokushiki swordsman", "gender": "M", "haki": ["obs", "arm"] },
+  { "id": 39, "name": "Stussy", "crew": "CP0", "bounty": "0", "image_keyword": "stussy", "rarity": "R", "val": 85, "tag": "rokushiki", "gender": "F", "haki": ["obs", "arm"] },
+  { "id": 40, "name": "Guernica", "crew": "CP0", "bounty": "0", "image_keyword": "guernica", "rarity": "R", "val": 88, "tag": "rokushiki", "gender": "M", "haki": ["obs", "arm"] },
+  { "id": 41, "name": "Jabra", "crew": "CP9", "bounty": "0", "image_keyword": "jabra", "rarity": "U", "val": 75, "tag": "rokushiki", "gender": "M", "haki": [] },
+  { "id": 42, "name": "Kalifa", "crew": "CP9", "bounty": "0", "image_keyword": "kalifa", "rarity": "U", "val": 72, "tag": "rokushiki", "gender": "F", "haki": [] },
+  { "id": 43, "name": "Blueno", "crew": "CP9", "bounty": "0", "image_keyword": "blueno", "rarity": "U", "val": 70, "tag": "rokushiki", "gender": "M", "haki": [] },
+  { "id": 44, "name": "Spandam", "crew": "CP9", "bounty": "0", "image_keyword": "spandam", "rarity": "C", "val": 15, "gender": "M", "haki": [] }
 ];
 
 /* ==========================================
@@ -62,6 +70,8 @@ const devilFruitDB = [
   { name: "Soru Soru",            type: "paramecia", rarity: "L", val: 98,  tag: "manipulate souls and lifespan" },
   { name: "Horo Horo",            type: "paramecia", rarity: "R", val: 82,  tag: "create ghosts that induce negative emotion" },
   { name: "Mero Mero",            type: "paramecia", rarity: "E", val: 92,  tag: "turn infatuated enemies to stone" },
+  { name: "Doa Doa",              type: "paramecia", rarity: "R", val: 82,  tag: "create doors anywhere including pocket dimensions" },
+  { name: "Awa Awa",              type: "paramecia", rarity: "U", val: 68,  tag: "soap and bubbles that wash away strength" },
 
   // ---- LOGIA ----
   { name: "Moku Moku",            type: "logia",     rarity: "C", val: 55,  tag: "smoke" },

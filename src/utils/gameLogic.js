@@ -14,6 +14,7 @@ export function calculateSynergies(build) {
     const traitTag = getTag('trait');
     const style = getVal('style');
     const ninTag = getTag('jutsu_nin');
+    const faction = getVal('faction');
 
     if (df !== 'None' && race === 'Fish-Man') { syns.push({ name: '🚫 CURSED FISH-MAN', desc: 'A Fish-Man that cannot swim. Tragic.' }); bonuses.dur -= 10; bonuses.overall -= 2; }
     if (dojutsu === 'Rinnegan' && getVal('jutsu_sen')) { syns.push({ name: '🌟 SIX PATHS', desc: 'Approaching godhood.' }); bonuses.overall += 15; }
@@ -37,6 +38,13 @@ export function calculateSynergies(build) {
     if (style === 'Sniper' && (vessel === 'Usopp' || vessel === 'Yasopp' || vessel === 'Van Augur')) { syns.push({ name: '🎯 DEADEYE LEGEND', desc: 'A generational sniper vessel wielding pinpoint marksmanship.' }); bonuses.iq += 15; bonuses.spd += 10; bonuses.hax += 5; }
     if (style === 'Sniper' && build.weapon?.tag === 'sniper') { syns.push({ name: '🏹 APEX MARKSMAN', desc: 'Dedicated sniper discipline paired with a specialized ranged weapon.' }); bonuses.iq += 10; bonuses.spd += 10; bonuses.abl += 10; }
     if (style === 'Sniper' && build.haki_obs?.val >= 80) { syns.push({ name: '🔭 HORIZON SIGHT', desc: 'Observation Haki allows sniping across horizons without missing.' }); bonuses.haki += 15; bonuses.iq += 10; }
+
+    // Cipher Pol (CP0 / CP9) synergies
+    if ((faction === 'CP9' || faction === 'CP0') && style === 'Rokushiki') { syns.push({ name: '🥋 SIX POWERS ASSASSIN', desc: 'Covert World Government operative weaponizing perfected Rokushiki martial arts.' }); bonuses.spd += 12; bonuses.iq += 10; bonuses.abl += 10; }
+    if (faction === 'CP0' && (build.haki_arm?.val >= 80 || build.haki_obs?.val >= 80)) { syns.push({ name: '🛡️ AEGIS ZERO ENFORCER', desc: 'Elite CP0 agent reinforcing Six Powers with master-grade Haki.' }); bonuses.dur += 12; bonuses.str += 10; bonuses.hax += 8; }
+    if (vessel === 'Rob Lucci' && (faction === 'CP0' || faction === 'CP9')) { syns.push({ name: '🐆 DARK JUSTICE', desc: "Embodying Rob Lucci's ruthless ideal of absolute, unsparing slaughter." }); bonuses.str += 15; bonuses.spd += 12; bonuses.hax += 10; bonuses.overall += 10; }
+    if (vessel === 'Stussy' && faction === 'CP0') { syns.push({ name: '💄 FATAL ESPIONAGE', desc: 'Deadly covert spy weaving seductive deception and pinpoint strikes.' }); bonuses.iq += 15; bonuses.spd += 10; bonuses.hax += 8; }
+    if (df === 'Doa Doa' && (faction === 'CP9' || faction === 'CP0' || faction === 'Anbu')) { syns.push({ name: '🚪 DIMENSIONAL INFILTRATOR', desc: 'Stealth operative stepping through door-dimensions unseen.' }); bonuses.iq += 12; bonuses.spd += 10; bonuses.hax += 12; }
 
     return { list: syns, bonuses };
 }

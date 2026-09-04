@@ -111,7 +111,7 @@ export class OllamaService {
         const prompt = `
             You are an expert anime lore writer for a crossover universe that merges One Piece and Naruto/Boruto into a single world.
             WORLD CONTEXT:
-            - This universe contains factions from both series: Pirates, Marines, Shinobi, Akatsuki, Kara (from Boruto), Tenryuubito (World Nobles/Celestial Dragons), Gorosei (The Five Elders who rule the World Government), Knight of God (Holy Knights who serve the Tenryuubito), Ōtsutsuki Clan, and Revolutionary Army.
+            - This universe contains factions from both series: Pirates, Marines, Shinobi, Akatsuki, Kara (from Boruto), Tenryuubito (World Nobles/Celestial Dragons), Gorosei (The Five Elders who rule the World Government), Knight of God (Holy Knights who serve the Tenryuubito), Cipher Pol (CP0 / CP9 — World Government covert assassins and intelligence agency), Ōtsutsuki Clan, and Revolutionary Army.
             - Characters like Boruto Uzumaki, Kawaki, Sarada Uchiha, Mitsuki, Isshiki Otsutsuki, and Eida exist from the Boruto era.
             - Joyboy is a legendary ancient figure, and Imu is the secret sovereign of the World Government.
             - "Yamato (One Piece)" is Kaido's child from Wano, while "Yamato (Naruto)" is the Wood-style Anbu captain.
@@ -119,7 +119,7 @@ export class OllamaService {
             Analyze this character build and invent 1 unique synergy that emerges from the combination of their abilities.
             IMPORTANT: Do not mention any benchmark character names (like Might Guy, Sakazuki, etc.) as if they are actual people. They are just power level references.
             POWER RULE: Base the synergy ONLY on the specific powers listed in the Build Info. Do not hallucinate random elemental powers.
-            FACTION RULE: If the character belongs to a faction, the synergy flavor should reflect that faction's identity (e.g., a Gorosei member might have authority-themed synergies, a Kara member might have scientific ninja tools themes, a Tenryuubito might have divine privilege themes).
+            FACTION RULE: If the character belongs to a faction, the synergy flavor should reflect that faction's identity (e.g., a Gorosei member might have authority-themed synergies, a Kara member might have scientific ninja tools themes, a Tenryuubito might have divine privilege themes, a CP0/CP9 operative might have covert assassination and Dark Justice themes).
             Character Build:
             ${buildSummary}
             Return ONLY a valid JSON object matching this exact schema, with no markdown formatting:
@@ -142,7 +142,7 @@ export class OllamaService {
             NEVER use gender-neutral (they/them) pronouns. NEVER use ${forbiddenPronouns}. If you use the wrong pronouns, the entire system will crash. Check every single sentence.
             
             WORLD CONTEXT:
-            - This universe contains factions from both series: Pirates, Marines, Shinobi, Akatsuki, Kara (Boruto's villain organization that uses scientific ninja tools and Otsutsuki power), Tenryuubito (the World Nobles/Celestial Dragons who rule from Mary Geoise), Gorosei (The Five Elders — the highest authority in the World Government, wielding ancient powers), Knight of God (Holy Knights who serve as elite enforcers for the Tenryuubito), Ōtsutsuki Clan (godlike alien beings who harvest worlds), and Revolutionary Army.
+            - This universe contains factions from both series: Pirates, Marines, Shinobi, Akatsuki, Kara (Boruto's villain organization that uses scientific ninja tools and Otsutsuki power), Tenryuubito (the World Nobles/Celestial Dragons who rule from Mary Geoise), Gorosei (The Five Elders — the highest authority in the World Government, wielding ancient powers), Knight of God (Holy Knights who serve as elite enforcers for the Tenryuubito), Cipher Pol (CP0 / CP9 — the secret intelligence and covert assassination branches of the World Government), Ōtsutsuki Clan (godlike alien beings who harvest worlds), and Revolutionary Army.
             - Boruto-era characters exist: Boruto Uzumaki (Naruto's son with Jougan and Karma), Kawaki (vessel of Isshiki with body modification powers), Sarada Uchiha (Sasuke's daughter, future Hokage candidate), Mitsuki (Orochimaru's synthetic son with Sage Transformation), Isshiki Otsutsuki (god-tier alien with Sukunahikona and Daikokuten), and Eida (has the power of Omniscience/All-Knowing — can see everything in the present and past).
             - Joyboy is the legendary warrior from the Void Century who first possessed the Nika power and opposed the World Government's ancestors. Imu is the immortal secret sovereign who sits on the Empty Throne.
             - "Yamato (One Piece)" is Kaido's child who ate the Inu Inu no Mi Model: Okuchi no Makami. "Yamato (Naruto)" is the Wood Release Anbu captain (codename Tenzo).
@@ -156,6 +156,7 @@ export class OllamaService {
             - A "Tenryuubito" is a World Noble born into extreme privilege and divine authority.
             - A "Gorosei" member is one of the Five Elders wielding ancient forbidden power.
             - A "Knight of God" is an elite holy enforcer serving the World Nobles.
+            - A "CP0" or "CP9" operative is an elite covert assassin or secret agent for the World Government (Cipher Pol), enforcing "Dark Justice", executing covert missions or protecting Celestial Dragons with deadly Rokushiki martial arts and absolute secrecy.
             - A "Kara" member uses scientific ninja tools and seeks Otsutsuki power.
             - An "Ōtsutsuki Clan" member is a godlike alien harvesting worlds for power.
             Build Info: ${buildSummary} | Tier: ${tier} | Bounty: ${bounty}
