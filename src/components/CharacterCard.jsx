@@ -1,10 +1,48 @@
 import React, { useRef } from 'react';
 import CharacterStats from './CharacterStats';
-import { Download } from 'lucide-react';
+import { Download, Copy } from 'lucide-react';
 import { RARITY } from '../data/rarity';
 
 export default function CharacterCard({ build, stats, overall, bounty, lore, synergies, tier }) {
     const cardRef = useRef(null);
+
+    const handleCopyMarkdown = () => {
+        const md = `# ${lore?.name || 'Unknown Legend'}
+*"${lore?.epithet || 'The Nameless'}"*
+
+**Tier:** ${tier?.name || 'Unknown Tier'}
+**Bounty:** ฿ ${bounty === -1 ? '??? (Unknown)' : bounty?.toLocaleString() || '0'}
+**Overall Power:** ${overall || 0}
+
+## Build Profile
+- **Race:** ${build.race?.name || 'None'}
+- **Origin:** ${build.origin?.name || 'None'}
+- **Physical Vessel:** ${build.vessel?.name || 'None'}
+- **Devil Fruit:** ${build.df?.name || 'None'}
+- **Dōjutsu:** ${build.dojutsu?.name || 'None'}
+- **Fighting Style:** ${build.style?.name || 'None'}
+- **Weapon:** ${build.weapon?.name || 'None'}
+- **Faction:** ${build.faction?.name || 'None'}
+
+## Lore
+${lore?.bio || ''}
+
+## Stats
+- **STR:** ${Math.round(stats?.str || 0)}
+- **SPD:** ${Math.round(stats?.spd || 0)}
+- **DUR:** ${Math.round(stats?.dur || 0)}
+- **IQ:** ${Math.round(stats?.iq || 0)}
+- **HAKI:** ${Math.round(stats?.haki || 0)}
+- **PWR:** ${Math.round(stats?.pwr || 0)}
+- **HAX:** ${Math.round(stats?.hax || 0)}
+`;
+        navigator.clipboard.writeText(md).then(() => {
+            alert('Character profile copied to clipboard as Markdown!');
+        }).catch(err => {
+            console.error('Failed to copy text: ', err);
+            alert('Failed to copy to clipboard.');
+        });
+    };
 
     const handleDownload = async () => {
         if (!cardRef.current) return;
@@ -54,7 +92,14 @@ export default function CharacterCard({ build, stats, overall, bounty, lore, syn
 
     return (
         <div className="w-full max-w-4xl mx-auto flex flex-col gap-4">
-            <div className="flex justify-end">
+            <div className="flex justify-end gap-3">
+                <button 
+                    onClick={handleCopyMarkdown}
+                    className="flex items-center gap-2 px-4 py-2 bg-[#222] hover:bg-[#333] border border-[#444] text-white rounded-lg transition-colors font-bold shadow-lg cursor-pointer"
+                >
+                    <Copy size={18} />
+                    Copy Markdown
+                </button>
                 <button 
                     onClick={handleDownload}
                     className="flex items-center gap-2 px-4 py-2 bg-[#4f46e5] hover:bg-[#4338ca] text-white rounded-lg transition-colors font-bold shadow-lg cursor-pointer"
@@ -75,7 +120,7 @@ export default function CharacterCard({ build, stats, overall, bounty, lore, syn
                             {tier?.name || 'Unknown Tier'}
                         </div>
                         <div className="text-2xl font-bold tracking-wider text-[#ffd700] flex items-center gap-2 drop-shadow-[0_0_10px_rgba(255,215,0,0.5)]">
-                            <span className="text-3xl">฿</span> {bounty?.toLocaleString() || '0'}
+                            <span className="text-3xl">฿</span> {bounty === -1 ? '??? (Unknown)' : bounty?.toLocaleString() || '0'}
                         </div>
                     </div>
                     
