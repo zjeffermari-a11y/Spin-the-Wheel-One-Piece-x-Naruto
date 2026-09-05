@@ -7,6 +7,10 @@ export default function CharacterCard({ build, stats, overall, bounty, lore, syn
     const cardRef = useRef(null);
 
     const handleCopyMarkdown = () => {
+        const synergiesMarkdown = synergies && synergies.length > 0 
+            ? synergies.map(syn => `- **${syn.name}**: ${syn.desc || syn.synergy_desc}`).join('\n')
+            : 'None';
+
         const md = `# ${lore?.name || 'Unknown Legend'}
 *"${lore?.epithet || 'The Nameless'}"*
 
@@ -23,6 +27,9 @@ export default function CharacterCard({ build, stats, overall, bounty, lore, syn
 - **Fighting Style:** ${build.style?.name || 'None'}
 - **Weapon:** ${build.weapon?.name || 'None'}
 - **Faction:** ${build.faction?.name || 'None'}
+
+## Active Synergies
+${synergiesMarkdown}
 
 ## Lore
 ${lore?.bio || ''}
