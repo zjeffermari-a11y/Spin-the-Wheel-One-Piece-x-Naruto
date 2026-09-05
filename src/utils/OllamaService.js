@@ -273,7 +273,7 @@ Create a wise, precise, and legendary anime biography and an AI-crafted custom s
 =======================================================
 ⚠️ CRITICAL PRONOUN & ZOAN MANDATE:
 - Character Biological Gender: ${vesselGenderForPrompt}. You MUST use ONLY ${pronouns} throughout the ENTIRE backstory. NEVER use gender-neutral (they/them) pronouns or ${forbiddenPronouns}.
-- IF their Devil Fruit Class is Zoan, Ancient Zoan, or Mythical Zoan: You MUST explicitly use the exact phrases "Hybrid Form" and "Full-Zoan Form" in their abilities and lore. (Exception: Hito Hito, Model: Nika uses a white uniform and white vapor cloud instead).
+- IF their Devil Fruit Class is Zoan, Ancient Zoan, or Mythical Zoan: You MUST explicitly describe their physical beast appearances/transformations when referencing their "Hybrid Form" and "Full-Zoan Form" in their abilities and lore. (Exception: Hito Hito, Model: Nika uses a white uniform and white vapor cloud instead).
 =======================================================
 
 CHARACTER DOSSIER:
@@ -301,7 +301,7 @@ WRITING MANDATES:
 
 4. 3-4 SENTENCE BACKSTORY FORMAT:
    - Sentence 1: Origin, lineage/vessel legacy, and faction allegiance.
-   - Sentence 2: The awakening of their rare powers (how their Devil Fruit, Dōjutsu, Haki, or Jutsu fused). (IF ZOAN: Mention their Hybrid or Full-Zoan Form here).
+   - Sentence 2: The awakening of their rare powers (how their Devil Fruit, Dōjutsu, Haki, or Jutsu fused). (IF ZOAN: Mention their Hybrid or Full-Zoan visual transformation here).
    - Sentence 3: Their signature tactical combat doctrine and how they exploit their hax/stats.
    - Sentence 4: Their dread reputation and current standing in the world (feared by the Marines, Five Kage, or Celestial Dragons).
 
@@ -310,7 +310,7 @@ WRITING MANDATES:
 
 6. SIGNATURE ABILITIES:
    - Create 2-3 unique signature moves/techniques/hax for this character, synergizing their build components.
-   - IF ZOAN: At least one signature ability MUST explicitly be a "Hybrid Form" attack, and one MUST explicitly be a "Full-Zoan Form" attack (Unless Nika fruit).
+   - IF ZOAN: At least one ability MUST be a "Hybrid Form" ability, and one MUST be a "Full-Zoan Form" ability (Unless Nika fruit). For BOTH forms, you MUST explicitly describe what their beast transformation visually looks like.
    - Give each move a creative name and a brief description of its combat effect.
 
 RETURN ONLY A VALID JSON OBJECT MATCHING THIS SCHEMA:
