@@ -302,6 +302,10 @@ WRITING MANDATES:
 5. CUSTOM SYNERGY:
    - Create 1 tailored custom synergy with a cool name, description, and stat bonuses (integers between 0 and 15) matching this build.
 
+6. SIGNATURE ABILITIES:
+   - Create 2-3 unique signature moves/techniques/hax for this character, synergizing their build components (Devil Fruit, Jutsu, Haki, Weapon, etc.).
+   - Give each move a creative name and a brief description of its combat effect.
+
 RETURN ONLY A VALID JSON OBJECT MATCHING THIS SCHEMA:
 {
     "name": "Their Unique Name",
@@ -311,7 +315,10 @@ RETURN ONLY A VALID JSON OBJECT MATCHING THIS SCHEMA:
         "name": "⚡ SYNERGY NAME",
         "desc": "How their distinct abilities combine into a unified combat technique.",
         "bonuses": { "str": 0, "spd": 0, "dur": 0, "iq": 0, "haki": 0, "pwr": 0, "hax": 0 }
-    }
+    },
+    "signature_abilities": [
+        { "name": "Abilty/Move Name", "desc": "Brief combat effect description" }
+    ]
 }
 `;
         return await this.generateContent(prompt, MASTER_LORE_SYSTEM_PROMPT);

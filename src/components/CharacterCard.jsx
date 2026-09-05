@@ -10,6 +10,10 @@ export default function CharacterCard({ build, stats, overall, bounty, lore, syn
         const synergiesMarkdown = synergies && synergies.length > 0 
             ? synergies.map(syn => `- **${syn.name}**: ${syn.desc || syn.synergy_desc}`).join('\n')
             : 'None';
+            
+        const signatureAbilitiesMarkdown = lore?.signature_abilities && lore.signature_abilities.length > 0
+            ? lore.signature_abilities.map(ability => `- **${ability.name}**: ${ability.desc}`).join('\n')
+            : 'None';
 
         const md = `# ${lore?.name || 'Unknown Legend'}
 *"${lore?.epithet || 'The Nameless'}"*
@@ -30,6 +34,9 @@ export default function CharacterCard({ build, stats, overall, bounty, lore, syn
 
 ## Active Synergies
 ${synergiesMarkdown}
+
+## Signature Abilities
+${signatureAbilitiesMarkdown}
 
 ## Lore
 ${lore?.bio || ''}
@@ -201,6 +208,27 @@ ${lore?.bio || ''}
                             </div>
                         ) : (
                             <div className="text-[#6b7280] italic">No active synergies found for this build.</div>
+                        )}
+                    </div>
+
+                    <div className="md:col-span-2 bg-[#1a1a1a] p-6 rounded-xl shadow-lg border border-[#2a2a2a]">
+                        <h4 className="text-xl font-bold mb-4 text-[#e0e0e0] border-b border-[#333] pb-2">Signature Abilities</h4>
+                        {!lore ? (
+                            <div className="text-[#818cf8] italic animate-pulse flex items-center gap-2">
+                                <div className="w-4 h-4 border-2 border-[#6366f1] border-t-transparent rounded-full animate-spin" />
+                                Forging signature moves...
+                            </div>
+                        ) : lore.signature_abilities && lore.signature_abilities.length > 0 ? (
+                            <div className="space-y-4">
+                                {lore.signature_abilities.map((ability, idx) => (
+                                    <div key={idx} className="bg-gradient-to-r from-red-900/30 to-orange-900/30 p-4 rounded-lg border border-[#ef4444]/20">
+                                        <div className="text-lg font-bold text-[#fca5a5] mb-1">{ability.name}</div>
+                                        <div className="text-sm text-[#d1d5db] italic">{ability.desc}</div>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="text-[#6b7280] italic">No signature abilities recorded.</div>
                         )}
                     </div>
 
