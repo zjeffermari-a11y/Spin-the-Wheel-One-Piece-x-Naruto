@@ -22,7 +22,7 @@ You possess encyclopedic mastery of anime worldbuilding, power scaling, battle p
 export class OllamaService {
     constructor() {
         this.model = 'openai/gpt-oss-120b';
-        this.apiKey = (import.meta.env.VITE_GROQ_API_KEY || localStorage.getItem('spin_wheel_groq_api_key') || '').trim();
+        this.apiKey = (localStorage.getItem('spin_wheel_groq_api_key') || import.meta.env.VITE_GROQ_API_KEY || '').trim();
         this.bestModelPromise = this.fetchBestAvailableModel();
     }
 
