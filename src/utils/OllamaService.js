@@ -104,7 +104,13 @@ You must respect the character's exact stat levels:
 - Revolutionary Army: Led by Monkey D. Dragon, seeking to dismantle the corrupt Celestial Dragon hierarchy.
 
 =======================================================
-5. NARRATIVE STYLE & GOLD STANDARD
+5. CANON CHARACTER VESSEL UPDATES (CRITICAL VISUALS)
+=======================================================
+- If the Physical Vessel is "Joyboy": He is an Ancient Giant from the Void Century. Visually, he is a massive fusion of Whitebeard (Edward Newgate) and Garp (Monkey D. Garp).
+- If the Physical Vessel is "Imu": DO NOT describe him as a hidden or faceless silhouette. Base appearance: MALE, tanned skin, long white hair, Lunarian-like features, ringed eyes, wearing a black cloak with the "Depths Covenant" symbol. He is Saint Nerona Imu, one of the 20 founders. Note that his Devil's Fruit allows escalating monstrous transformations (giant size, horns, black wings, a tail, blackened arms).
+
+=======================================================
+6. NARRATIVE STYLE & GOLD STANDARD
 =======================================================
 - Write with gravitas, depth, and vivid cinematic anime intensity.
 - Avoid generic tropes like "The Dark Shadow" or "Master of Shadows". Invent striking, poetic epithets fitting Eiichiro Oda or Masashi Kishimoto's creative style.
