@@ -29,7 +29,7 @@ export const opData = [
   { "id": 28, "name": "Kaido", "crew": "Beast Pirates", "bounty": "4,611,100,000", "image_keyword": "kaido", "rarity": "L", "val": 100, "tag": "infusion", "gender": "M", "haki": ["obs", "arm", "conq"] },
   { "id": 29, "name": "Charlotte Linlin", "crew": "Big Mom Pirates", "bounty": "4,388,000,000", "image_keyword": "bigmom", "rarity": "L", "val": 100, "tag": "infusion", "gender": "F", "haki": ["obs", "arm", "conq"] },
   { "id": 30, "name": "Nefertari Vivi", "crew": "Alabasta", "bounty": "0", "image_keyword": "vivi", "rarity": "C", "val": 20, "gender": "F", "haki": [] },
-  { "id": 31, "name": "Imu", "crew": "World Government", "bounty": "0", "image_keyword": "imu", "rarity": "M", "val": 105, "tag": "hax", "gender": "F", "haki": ["obs", "arm", "conq"] },
+  { "id": 31, "name": "Imu", "crew": "World Government", "bounty": "0", "image_keyword": "imu", "rarity": "M", "val": 105, "tag": "hax", "gender": "M", "haki": ["obs", "arm", "conq"] },
   { "id": 32, "name": "Joyboy", "crew": "Ancient Kingdom", "bounty": "0", "image_keyword": "joyboy", "rarity": "M", "val": 105, "tag": "infusion", "gender": "M", "haki": ["obs", "arm", "conq"] },
   { "id": 33, "name": "Figarland Garling", "crew": "Holy Knights", "bounty": "0", "image_keyword": "garling", "rarity": "L", "val": 100, "gender": "M", "haki": ["obs", "arm", "conq"] },
   { "id": 34, "name": "Yasopp", "crew": "Red Hair Pirates", "bounty": "850,000,000", "image_keyword": "yasopp", "rarity": "E", "val": 92, "tag": "sniper future_sight", "gender": "M", "haki": ["obs", "arm"] },
