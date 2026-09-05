@@ -254,6 +254,11 @@ Return ONLY a valid JSON object matching this schema, with no markdown formattin
         const pronouns = vesselGenderForPrompt === 'FEMALE' ? 'she/her/hers' : 'he/him/his';
         const forbiddenPronouns = vesselGenderForPrompt === 'FEMALE' ? 'he/him/his' : 'she/her/hers';
 
+        const epithetAdjectives = ['Bloodstained', 'Silent', 'Heavenly', 'Abyssal', 'Phantom', 'Iron', 'Crimson', 'Azure', 'Sovereign', 'Void', 'Divine', 'Fallen', 'Eternal', 'Calamity', 'Radiant', 'Twilight'];
+        const epithetNouns = ['Emperor', 'Ghost', 'Asura', 'Dragon', 'Inquisitor', 'Saint', 'Demon', 'Prophet', 'Shatterer', 'Monarch', 'Wraith', 'Seraph', 'Reaper', 'Vanguard', 'Tempest', 'Warlord'];
+        const randomAdj = epithetAdjectives[Math.floor(Math.random() * epithetAdjectives.length)];
+        const randomNoun = epithetNouns[Math.floor(Math.random() * epithetNouns.length)];
+
         const prompt = `
 Create a wise, precise, and legendary anime biography and an AI-crafted custom synergy for this generated character.
 
@@ -279,7 +284,7 @@ POWER SCALING & STAT AUDIT:
 WRITING MANDATES:
 1. NAME & EPITHET:
    - Invent a culturally authentic, memorable anime name (fitting Origin: ${build.origin?.name || 'Unknown'}, preferably starting with letter "${randomLetter}").
-   - Invent a canon-caliber, epic Epithet (e.g. "The God-Shatterer", "The Black Mist Inquisitor", "Sovereign of the Thousand Doors", "The Asura of Mariejois").
+   - Invent a canon-caliber, epic Epithet strictly unique to this character's exact powers and background (e.g. incorporating themes like "${randomAdj} ${randomNoun}", or creating something entirely original). DO NOT use generic or repeated titles like "The Asura of Mariejois" or "The God-Shatterer".
 
 2. STAT & HAX COMPREHENSION:
    - Reflect their highest stats vividly. If Strength is Planetary or Absolute, mention the atmospheric ruin of their blows. If Speed is FTL or Infinite, describe them appearing before their afterimage disperses. If they possess Dōjutsu or Devil Fruit hax (Rinnegan, Nika, Ope Ope, Truth-Seeking Orbs), explain how they deploy it in battle.
