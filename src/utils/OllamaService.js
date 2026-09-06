@@ -204,8 +204,9 @@ WRITING MANDATES:
    - Sentence 3: Their signature tactical combat doctrine and how they exploit their hax/stats.
    - Sentence 4: Their dread reputation and current standing in the world (feared by the Marines, Five Kage, or Celestial Dragons).
 
-5. CUSTOM SYNERGY:
-   - Create 1 tailored custom synergy with a cool name, description, and stat bonuses (integers between 0 and 15) matching this build.
+5. CUSTOM SYNERGY & MISMATCHES:
+   - Create 1 tailored custom synergy with a cool name, description, and stat bonuses (integers between 0 and 15).
+   - IMPORTANT: If their Weapon completely mismatches their Fighting Style (e.g., Weapon: "Sniper/Rifle" but Style: "Brawler" or "Swordsman"), you MUST embrace the irony! Invent a hilarious, highly creative, or brutal combat synergy (e.g., using a heavy sniper rifle as a blunt club, swinging a gun by the strap like a flail, or attaching chakra blades to the barrel). Make the mismatch their defining genius!
 
 6. SIGNATURE ABILITIES:
    - Create 2-3 unique signature moves/techniques/hax for this character, synergizing their build components.
