@@ -3,7 +3,7 @@ import CharacterStats from './CharacterStats';
 import { Download, Copy } from 'lucide-react';
 import { RARITY } from '../data/rarity';
 
-export default function CharacterCard({ build, stats, overall, bounty, lore, synergies, tier }) {
+export default function CharacterCard({ build, stats, overall, bounty, lore, synergies, tier, isGeneratingLore }) {
     const cardRef = useRef(null);
 
     const handleCopyMarkdown = () => {
@@ -106,21 +106,25 @@ ${lore?.bio || ''}
 
     return (
         <div className="w-full max-w-4xl mx-auto flex flex-col gap-4">
-            <div className="flex justify-end gap-3">
-                <button 
-                    onClick={handleCopyMarkdown}
-                    className="flex items-center gap-2 px-4 py-2 bg-[#222] hover:bg-[#333] border border-[#444] text-white rounded-lg transition-colors font-bold shadow-lg cursor-pointer"
-                >
-                    <Copy size={18} />
-                    Copy Markdown
-                </button>
-                <button 
-                    onClick={handleDownload}
-                    className="flex items-center gap-2 px-4 py-2 bg-[#4f46e5] hover:bg-[#4338ca] text-white rounded-lg transition-colors font-bold shadow-lg cursor-pointer"
-                >
-                    <Download size={18} />
-                    Download PDF
-                </button>
+            <div className="flex justify-end gap-3 min-h-[40px]">
+                {lore && (
+                    <>
+                        <button 
+                            onClick={handleCopyMarkdown}
+                            className="flex items-center gap-2 px-4 py-2 bg-[#222] hover:bg-[#333] border border-[#444] text-white rounded-lg transition-colors font-bold shadow-lg cursor-pointer"
+                        >
+                            <Copy size={18} />
+                            Copy Markdown
+                        </button>
+                        <button 
+                            onClick={handleDownload}
+                            className="flex items-center gap-2 px-4 py-2 bg-[#4f46e5] hover:bg-[#4338ca] text-white rounded-lg transition-colors font-bold shadow-lg cursor-pointer"
+                        >
+                            <Download size={18} />
+                            Download PDF
+                        </button>
+                    </>
+                )}
             </div>
             
             <div ref={cardRef} className="bg-[#111] rounded-2xl shadow-[0_0_50px_rgba(0,0,0,0.8)] overflow-hidden border border-[#333]">
@@ -213,7 +217,9 @@ ${lore?.bio || ''}
 
                     <div className="md:col-span-2 bg-[#1a1a1a] p-6 rounded-xl shadow-lg border border-[#2a2a2a]">
                         <h4 className="text-xl font-bold mb-4 text-[#e0e0e0] border-b border-[#333] pb-2">Signature Abilities</h4>
-                        {!lore ? (
+                        {!lore && !isGeneratingLore ? (
+                            <div className="text-[#6b7280] italic">Lore has not been generated yet. Click 'Generate Lore' to consult the ancient texts.</div>
+                        ) : !lore && isGeneratingLore ? (
                             <div className="text-[#818cf8] italic animate-pulse flex items-center gap-2">
                                 <div className="w-4 h-4 border-2 border-[#6366f1] border-t-transparent rounded-full animate-spin" />
                                 Forging signature moves...
@@ -234,7 +240,9 @@ ${lore?.bio || ''}
 
                     <div className="md:col-span-2 bg-[#1a1a1a] p-6 rounded-xl shadow-lg border border-[#2a2a2a]">
                         <h4 className="text-xl font-bold mb-4 text-[#e0e0e0] border-b border-[#333] pb-2">Lore & Legend</h4>
-                        {!lore ? (
+                        {!lore && !isGeneratingLore ? (
+                            <div className="text-[#6b7280] italic">Lore has not been generated yet. Click 'Generate Lore' to consult the ancient texts.</div>
+                        ) : !lore && isGeneratingLore ? (
                             <div className="text-[#818cf8] italic animate-pulse flex items-center gap-2">
                                 <div className="w-4 h-4 border-2 border-[#6366f1] border-t-transparent rounded-full animate-spin" />
                                 Consulting the ancient texts... (Generating lore)

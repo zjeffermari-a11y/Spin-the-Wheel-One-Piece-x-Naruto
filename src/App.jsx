@@ -62,6 +62,8 @@ function App() {
     const [user, setUser] = useState(null);
     const [isAuthOpen, setIsAuthOpen] = useState(false);
 
+    const [isGeneratingLore, setIsGeneratingLore] = useState(false);
+
     const [isSpinning, setIsSpinning] = useState(false);
     const [currentOutcome, setCurrentOutcome] = useState(null);
 
@@ -110,6 +112,7 @@ function App() {
         setLore(null);
         setSynergies([]);
         setIsSaved(false);
+        setIsGeneratingLore(false);
         autoSpinRef.current = false;
         setScreen('spinning');
     };
@@ -322,11 +325,13 @@ function App() {
 
         autoSpinRef.current = false;
         setScreen('result');
+    };
 
-        // Generate Lore async
+    const handleGenerateLore = async () => {
+        setIsGeneratingLore(true);
         try {
             const ollama = new OllamaService();
-            const bioData = await ollama.generateBio(finalBuild, finalStats, calcTier.name, formatBountyStr(calcBounty, calcTier));
+            const bioData = await ollama.generateBio(build, stats, tier.name, formatBountyStr(bounty, tier));
             setLore(bioData);
             if (bioData && bioData.custom_synergy) {
                 setSynergies(prev => {
@@ -338,6 +343,8 @@ function App() {
         } catch (error) {
             console.error("Failed to generate lore via Ollama", error);
             setLore({ name: "Unknown Anomaly", epithet: "The Glitched", bio: "A tear in the fabric of the universe created this entity." });
+        } finally {
+            setIsGeneratingLore(false);
         }
     };
 
@@ -523,21 +530,41 @@ function App() {
                                 tier={tier}
                                 lore={lore}
                                 synergies={synergies}
+                                isGeneratingLore={isGeneratingLore}
                             />
 
                             <div className="mt-8 flex justify-center gap-4">
-                                <button
-                                    onClick={handleSaveCharacter}
-                                    disabled={isSaved}
-                                    className="px-8 py-3 bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-800 disabled:text-gray-500 rounded-full font-bold transition-all shadow-lg uppercase tracking-widest text-sm"
-                                >
-                                    {isSaved ? 'Legend Saved' : 'Save Legend'}
-                                </button>
+                                {!lore && !isGeneratingLore && (
+                                    <button
+                                        onClick={handleGenerateLore}
+                                        className="px-8 py-3 bg-indigo-600 hover:bg-indigo-700 rounded-full font-bold transition-all shadow-lg uppercase tracking-widest text-sm"
+                                    >
+                                        Generate Lore
+                                    </button>
+                                )}
+                                {isGeneratingLore && (
+                                    <button
+                                        disabled
+                                        className="px-8 py-3 bg-indigo-800 text-indigo-300 rounded-full font-bold transition-all shadow-lg uppercase tracking-widest text-sm flex items-center gap-2"
+                                    >
+                                        <div className="w-4 h-4 border-2 border-indigo-400 border-t-transparent rounded-full animate-spin" />
+                                        Generating...
+                                    </button>
+                                )}
+                                {lore && (
+                                    <button
+                                        onClick={handleSaveCharacter}
+                                        disabled={isSaved}
+                                        className="px-8 py-3 bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-800 disabled:text-gray-500 rounded-full font-bold transition-all shadow-lg uppercase tracking-widest text-sm"
+                                    >
+                                        {isSaved ? 'Legend Saved' : 'Save Legend'}
+                                    </button>
+                                )}
                                 <button
                                     onClick={startCreation}
                                     className="px-8 py-3 bg-[#222] hover:bg-[#333] border border-[#444] rounded-full font-bold transition-all shadow-lg uppercase tracking-widest text-sm"
                                 >
-                                    Create Another Legend
+                                    {lore ? 'Create Another Legend' : 'Discard & Re-Spin'}
                                 </button>
                             </div>
                         </motion.div>
