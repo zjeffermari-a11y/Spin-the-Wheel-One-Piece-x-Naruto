@@ -63,6 +63,7 @@ function App() {
     const [isAuthOpen, setIsAuthOpen] = useState(false);
 
     const [isGeneratingLore, setIsGeneratingLore] = useState(false);
+    const [spinComplete, setSpinComplete] = useState(false);
 
     const [isSpinning, setIsSpinning] = useState(false);
     const [currentOutcome, setCurrentOutcome] = useState(null);
@@ -113,6 +114,7 @@ function App() {
         setSynergies([]);
         setIsSaved(false);
         setIsGeneratingLore(false);
+        setSpinComplete(false);
         autoSpinRef.current = false;
         setScreen('spinning');
     };
@@ -203,12 +205,14 @@ function App() {
     const advanceToCategory = useCallback((nextIdx, currentBuild, cats) => {
         if (nextIdx >= cats.length) {
             finishBuild(currentBuild);
+            setSpinComplete(true);
             return;
         }
 
         const resolvedIdx = resolveCategory(nextIdx, currentBuild, cats);
         if (resolvedIdx >= cats.length) {
             finishBuild(currentBuild);
+            setSpinComplete(true);
             return;
         }
 
@@ -324,7 +328,6 @@ function App() {
         setBounty(calcBounty);
 
         autoSpinRef.current = false;
-        setScreen('result');
     };
 
     const handleGenerateLore = async () => {
@@ -346,6 +349,11 @@ function App() {
         } finally {
             setIsGeneratingLore(false);
         }
+    };
+
+    const handleGenerateLoreAndProceed = async () => {
+        await handleGenerateLore();
+        setScreen('result');
     };
 
     const getTier = (power) => {
@@ -439,9 +447,11 @@ function App() {
                                 <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-indigo-900/10 to-transparent pointer-events-none" />
 
                                 <h3 className="text-3xl font-black mb-2 text-white drop-shadow-md z-10 text-center uppercase tracking-wider">
-                                    {categories[catIndex].name}
+                                    {spinComplete ? "BUILD COMPLETE" : categories[catIndex].name}
                                 </h3>
-                                <p className="text-gray-400 mb-8 z-10 text-center">{catIndex + 1} OF {categories.length}</p>
+                                <p className="text-gray-400 mb-8 z-10 text-center">
+                                    {spinComplete ? "Ready to Forge Legend" : `${catIndex + 1} OF ${categories.length}`}
+                                </p>
 
                                 <div className="relative z-10 w-full max-w-[400px]">
                                     {/* Spin Pointer */}
@@ -451,20 +461,51 @@ function App() {
                                 </div>
 
                                 <div className="flex gap-4 mt-8 z-10 w-full max-w-sm">
-                                    <button
-                                        onClick={handleSpinClick}
-                                        disabled={isSpinning}
-                                        className="flex-1 py-4 bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-800 disabled:text-gray-500 rounded-xl font-bold transition-all shadow-lg text-lg uppercase tracking-wider"
-                                    >
-                                        Spin
-                                    </button>
-                                    <button
-                                        onClick={handleAutoSpin}
-                                        disabled={isSpinning}
-                                        className="px-6 py-4 bg-[#222] hover:bg-[#333] disabled:bg-[#111] disabled:text-gray-600 border border-[#444] rounded-xl font-bold transition-all text-lg uppercase tracking-wider"
-                                    >
-                                        Auto
-                                    </button>
+                                    {!spinComplete ? (
+                                        <>
+                                            <button
+                                                onClick={handleSpinClick}
+                                                disabled={isSpinning}
+                                                className="flex-1 py-4 bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-800 disabled:text-gray-500 rounded-xl font-bold transition-all shadow-lg text-lg uppercase tracking-wider"
+                                            >
+                                                Spin
+                                            </button>
+                                            <button
+                                                onClick={handleAutoSpin}
+                                                disabled={isSpinning}
+                                                className="px-6 py-4 bg-[#222] hover:bg-[#333] disabled:bg-[#111] disabled:text-gray-600 border border-[#444] rounded-xl font-bold transition-all text-lg uppercase tracking-wider"
+                                            >
+                                                Auto
+                                            </button>
+                                        </>
+                                    ) : (
+                                        <div className="flex flex-col gap-3 w-full">
+                                            {isGeneratingLore ? (
+                                                <button
+                                                    disabled
+                                                    className="w-full py-4 bg-indigo-800 text-indigo-300 rounded-xl font-bold transition-all shadow-lg text-lg uppercase tracking-wider flex items-center justify-center gap-2"
+                                                >
+                                                    <div className="w-5 h-5 border-2 border-indigo-400 border-t-transparent rounded-full animate-spin" />
+                                                    Generating Lore...
+                                                </button>
+                                            ) : (
+                                                <button
+                                                    onClick={handleGenerateLoreAndProceed}
+                                                    className="w-full py-4 bg-indigo-600 hover:bg-indigo-700 rounded-xl font-bold transition-all shadow-lg text-lg uppercase tracking-wider shadow-indigo-500/20"
+                                                >
+                                                    Generate Lore & View
+                                                </button>
+                                            )}
+                                            {!isGeneratingLore && (
+                                                <button
+                                                    onClick={() => setScreen('result')}
+                                                    className="w-full py-3 bg-[#222] hover:bg-[#333] border border-[#444] rounded-xl font-bold transition-all text-sm uppercase tracking-wider text-gray-400"
+                                                >
+                                                    View Base Character (No Lore)
+                                                </button>
+                                            )}
+                                        </div>
+                                    )}
                                 </div>
 
                                 <AnimatePresence>
@@ -534,23 +575,6 @@ function App() {
                             />
 
                             <div className="mt-8 flex justify-center gap-4">
-                                {!lore && !isGeneratingLore && (
-                                    <button
-                                        onClick={handleGenerateLore}
-                                        className="px-8 py-3 bg-indigo-600 hover:bg-indigo-700 rounded-full font-bold transition-all shadow-lg uppercase tracking-widest text-sm"
-                                    >
-                                        Generate Lore
-                                    </button>
-                                )}
-                                {isGeneratingLore && (
-                                    <button
-                                        disabled
-                                        className="px-8 py-3 bg-indigo-800 text-indigo-300 rounded-full font-bold transition-all shadow-lg uppercase tracking-widest text-sm flex items-center gap-2"
-                                    >
-                                        <div className="w-4 h-4 border-2 border-indigo-400 border-t-transparent rounded-full animate-spin" />
-                                        Generating...
-                                    </button>
-                                )}
                                 {lore && (
                                     <button
                                         onClick={handleSaveCharacter}
