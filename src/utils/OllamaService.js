@@ -7,8 +7,12 @@ You possess encyclopedic mastery of anime worldbuilding, power scaling, battle p
 =======================================================
 1. CANON CHARACTER VESSEL UPDATES (CRITICAL VISUALS)
 =======================================================
-- If the Physical Vessel is "Joyboy": He is an Ancient Giant from the Void Century. Visually, he is a massive fusion of Whitebeard (Edward Newgate) and Garp (Monkey D. Garp).
-- If the Physical Vessel is "Imu": DO NOT describe him as a hidden or faceless silhouette. Base appearance: MALE, tanned skin, long white hair, Lunarian-like features, ringed eyes, wearing a black cloak with the "Depths Covenant" symbol. He is Saint Nerona Imu, one of the 20 founders. Note that his Devil's Fruit allows escalating monstrous transformations (giant size, horns, black wings, a tail, blackened arms).
+- Joyboy: Ancient Giant from Void Century. Visually a fusion of Whitebeard & Garp. If Nika fruit is used, it follows the white-uniform/white-cloud rule, not animal form.
+- Imu: Male, tanned skin, long white hair, Lunarian-like features, ringed eyes, black cloak with 'Depths Covenant' symbol. Official title 'King of the World', Saint Nerona Imu. Transformations add giant size, horns, black wings, tail, blackened arms.
+- Shibai Otsutsuki: Slim, waist-length hair, tattered black robes, upward-curving horns, Byakugan in one eye, vertically-opening Rinnegan on forehead.
+- Jura: Adult man, chiseled, hairless, purple Rinnegan, studded black cloak (turquoise trim), studded black beret, tridactyl claw-grime feet, magatama on stomach, Rinnegan symbol on back.
+- Daemon: Young boy, short turquoise hair (pink streaks), beauty mark, purple eyes/yellow pupils. Wears rabbit-eared hood, red star-patterned hoodie, turquoise shirt, red shorts, sandals, yellow nail polish.
+- Code: Lanky young adult, bleached white swept-up hair, red eyes (pupils + limbal ring). Left eye shut with vertical scar. Claw Mark crosses face. Right hand missing, replaced with curved blades. Puffy white shirt, black vest, long cape. White Karma (diamond seal) on left palm.
 
 =======================================================
 6. NARRATIVE STYLE & GOLD STANDARD
@@ -37,10 +41,10 @@ export class OllamaService {
             if (response.ok) {
                 const data = await response.json();
                 const models = data.data.map(m => m.id);
-                
-                const validModels = models.filter(m => 
-                    !m.includes('whisper') && 
-                    !m.includes('guard') && 
+
+                const validModels = models.filter(m =>
+                    !m.includes('whisper') &&
+                    !m.includes('guard') &&
                     !m.includes('tool-use')
                 );
 
@@ -51,13 +55,13 @@ export class OllamaService {
                     selected = validModels.find(m => m.includes(p));
                     if (selected) break;
                 }
-                
+
                 if (selected) {
                     this.model = selected;
                 } else if (validModels.length > 0) {
                     this.model = validModels[0];
                 }
-                
+
                 console.log('Dynamically selected Groq model:', this.model);
             }
         } catch (error) {
@@ -102,7 +106,7 @@ export class OllamaService {
             try {
                 const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
                     method: "POST",
-                    headers: { 
+                    headers: {
                         "Content-Type": "application/json",
                         "Authorization": `Bearer ${this.apiKey}`
                     },
@@ -234,7 +238,7 @@ RETURN ONLY A VALID JSON OBJECT MATCHING THIS SCHEMA:
     _getBuildSummary(build) {
         let items = [];
         const vesselGender = build.vessel?.gender === 'F' ? 'female' : 'male';
-        
+
         if (build.race) items.push(`Race: ${build.race.name}`);
         if (build.origin) items.push(`Origin / Birthplace: ${build.origin.name}`);
         if (build.faction) items.push(`Faction / Allegiance: ${build.faction.name}`);
@@ -247,7 +251,7 @@ RETURN ONLY A VALID JSON OBJECT MATCHING THIS SCHEMA:
         if (build.jinchuriki_beast && build.jinchuriki_beast.name !== 'None') {
             items.push(`Tailed Beast Bond: ${build.jinchuriki_beast.name}`);
         }
-        
+
         // Physical & Combat Mastery Tiers
         if (build.str) items.push(`Strength Tier: ${build.str.name} (Benchmarked: ${build.str.val}/100)`);
         if (build.spd) items.push(`Speed Tier: ${build.spd.name} (Benchmarked: ${build.spd.val}/100)`);
@@ -266,7 +270,7 @@ RETURN ONLY A VALID JSON OBJECT MATCHING THIS SCHEMA:
         if (build.dojutsu && build.dojutsu.name !== 'None') {
             items.push(`Dōjutsu Ocular Power: ${build.dojutsu.name}` + (build.dojutsu.tag ? ` (Hax: ${build.dojutsu.tag})` : ''));
         }
-        
+
         // Jutsu Suite
         if (build.jutsu_nin && build.jutsu_nin.name !== 'None') items.push(`Ninjutsu Benchmark: ${build.jutsu_nin.name}`);
         if (build.jutsu_tai && build.jutsu_tai.name !== 'None') items.push(`Taijutsu Benchmark: ${build.jutsu_tai.name}`);
