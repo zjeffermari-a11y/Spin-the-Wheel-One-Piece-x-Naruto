@@ -285,7 +285,7 @@ RETURN ONLY A VALID JSON OBJECT MATCHING THIS SCHEMA:
         if (build.haki_conq && build.haki_conq.name !== 'None') items.push(`Conqueror's Haki: ${build.haki_conq.name}`);
 
         // Armament & Style
-        if (build.weapon && build.weapon.name !== 'None') items.push(`Armament / Weapon: ${build.weapon.name}`);
+        if (build.weapon && build.weapon.name !== 'None') items.push(`Armament / Weapon: ${build.weapon.name}` + (build.weapon.desc ? ` (${build.weapon.desc})` : ''));
         if (build.style && build.style.name !== 'None') items.push(`Fighting Style: ${build.style.name}`);
         if (build.summon && build.summon.name !== 'None') items.push(`Summoning Contract: ${build.summon.name}`);
         if (build.potential && build.potential.name !== 'None') items.push(`Growth Potential: ${build.potential.name}`);
