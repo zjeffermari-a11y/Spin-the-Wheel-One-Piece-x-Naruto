@@ -496,14 +496,6 @@ function App() {
                                                     Generate Lore & View
                                                 </button>
                                             )}
-                                            {!isGeneratingLore && (
-                                                <button
-                                                    onClick={() => setScreen('result')}
-                                                    className="w-full py-3 bg-[#222] hover:bg-[#333] border border-[#444] rounded-xl font-bold transition-all text-sm uppercase tracking-wider text-gray-400"
-                                                >
-                                                    View Base Character (No Lore)
-                                                </button>
-                                            )}
                                         </div>
                                     )}
                                 </div>
@@ -588,7 +580,7 @@ function App() {
                                     onClick={startCreation}
                                     className="px-8 py-3 bg-[#222] hover:bg-[#333] border border-[#444] rounded-full font-bold transition-all shadow-lg uppercase tracking-widest text-sm"
                                 >
-                                    {lore ? 'Create Another Legend' : 'Discard & Re-Spin'}
+                                    Create Another Legend
                                 </button>
                             </div>
                         </motion.div>
