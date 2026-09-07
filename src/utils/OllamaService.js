@@ -298,7 +298,7 @@ RETURN ONLY A VALID JSON OBJECT MATCHING THIS SCHEMA:
         for (const key in build) {
             const item = build[key];
             if (!item || item.name === 'None') continue;
-            if (item.tag === 'hax' || item.val >= 100) {
+            if ((item.tag && item.tag.includes('hax')) || item.val >= 100) {
                 haxItems.push(`${item.name} (${key.toUpperCase()})`);
             }
         }
