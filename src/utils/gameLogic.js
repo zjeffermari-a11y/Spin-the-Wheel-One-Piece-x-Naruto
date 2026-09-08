@@ -53,11 +53,14 @@ export function calculateSynergies(build) {
     // Sniper weapon + Brawler fighting style
     if (weaponTag === 'sniper' && style === 'Brawler') { syns.push({ name: '🤡 RIFLE GOES BONK', desc: 'Picked up a precision sniper weapon... and uses it as a baseball bat. Yasopp would cry.' }); bonuses.iq -= 15; bonuses.str += 5; }
 
-    // Brawler with a legendary sword
-    if (style === 'Brawler' && (weaponName === 'Supreme Grade (Yoru)' || weaponName === 'Enma' || weaponName === 'Shusui' || weaponName === 'Kusanagi' || weaponName === 'Kubikiribōchō')) { syns.push({ name: '🗡️ SWORD? WHAT SWORD?', desc: 'Was handed a legendary blade and still chose to throw hands. Absolute menace.' }); bonuses.iq -= 10; bonuses.str += 10; }
+    // Brawler with any sword
+    if (style === 'Brawler' && weaponTag === 'sword') { syns.push({ name: '🗡️ SWORD? WHAT SWORD?', desc: 'Was handed a blade and still chose to throw hands. Absolute menace.' }); bonuses.iq -= 10; bonuses.str += 10; }
 
     // Swordsmanship with a sniper weapon
     if (style === 'Swordsmanship' && weaponTag === 'sniper') { syns.push({ name: '🎻 SNIPER FENCER', desc: 'Attempts to parry bullets with a rifle barrel. Surprisingly stylish, horribly ineffective.' }); bonuses.iq -= 10; bonuses.abl -= 5; }
+
+    // Sniper fighting style with a sword weapon
+    if (style === 'Sniper' && weaponTag === 'sword') { syns.push({ name: '🎯 SWORD SNIPER?!', desc: 'A marksman wielding a sword. Are you going to throw it? Zoro would never.' }); bonuses.iq -= 10; bonuses.abl -= 5; }
 
     // Gentle Fist (close-range palm strikes) with a ranged weapon
     if (style === 'Gentle Fist' && weaponTag === 'sniper') { syns.push({ name: '👐 LONG-RANGE PALM STRIKES?', desc: 'The Hyūga clan taught you to strike chakra points at melee range. You brought a rifle. The elders are disappointed.' }); bonuses.iq -= 10; }
