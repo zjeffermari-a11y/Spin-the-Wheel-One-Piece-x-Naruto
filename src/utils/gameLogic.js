@@ -46,5 +46,30 @@ export function calculateSynergies(build) {
     if (vessel === 'Stussy' && faction === 'CP0') { syns.push({ name: '💄 FATAL ESPIONAGE', desc: 'Deadly covert spy weaving seductive deception and pinpoint strikes.' }); bonuses.iq += 15; bonuses.spd += 10; bonuses.hax += 8; }
     if (df === 'Doa Doa' && (faction === 'CP9' || faction === 'CP0' || faction === 'Anbu')) { syns.push({ name: '🚪 DIMENSIONAL INFILTRATOR', desc: 'Stealth operative stepping through door-dimensions unseen.' }); bonuses.iq += 12; bonuses.spd += 10; bonuses.hax += 12; }
 
+    // ═══ ANTI-SYNERGIES (Funny Contradictory Combos) ═══
+    const weaponName = getVal('weapon');
+    const weaponTag = getTag('weapon');
+
+    // Sniper weapon + Brawler fighting style
+    if (weaponTag === 'sniper' && style === 'Brawler') { syns.push({ name: '🤡 RIFLE GOES BONK', desc: 'Picked up a precision sniper weapon... and uses it as a baseball bat. Yasopp would cry.' }); bonuses.iq -= 15; bonuses.str += 5; }
+
+    // Brawler with a legendary sword
+    if (style === 'Brawler' && (weaponName === 'Supreme Grade (Yoru)' || weaponName === 'Enma' || weaponName === 'Shusui' || weaponName === 'Kusanagi' || weaponName === 'Kubikiribōchō')) { syns.push({ name: '🗡️ SWORD? WHAT SWORD?', desc: 'Was handed a legendary blade and still chose to throw hands. Absolute menace.' }); bonuses.iq -= 10; bonuses.str += 10; }
+
+    // Swordsmanship with a sniper weapon
+    if (style === 'Swordsmanship' && weaponTag === 'sniper') { syns.push({ name: '🎻 SNIPER FENCER', desc: 'Attempts to parry bullets with a rifle barrel. Surprisingly stylish, horribly ineffective.' }); bonuses.iq -= 10; bonuses.abl -= 5; }
+
+    // Gentle Fist (close-range palm strikes) with a ranged weapon
+    if (style === 'Gentle Fist' && weaponTag === 'sniper') { syns.push({ name: '👐 LONG-RANGE PALM STRIKES?', desc: 'The Hyūga clan taught you to strike chakra points at melee range. You brought a rifle. The elders are disappointed.' }); bonuses.iq -= 10; }
+
+    // Eight Gates (pure taijutsu) with a Devil Fruit
+    if (style === 'Eight Gates (Opened)' && df !== 'None') { syns.push({ name: '💢 GUY-SENSEI DISAPPROVES', desc: 'Might Guy opened all Eight Gates without a Devil Fruit. You took the easy way out. Pathetic.' }); bonuses.overall -= 3; }
+
+    // Fishman Karate style but not a Fish-Man
+    if (style === 'Fishman Karate' && race !== 'Fish-Man') { syns.push({ name: '🐟 CULTURAL APPROPRIATION', desc: 'Learning underwater martial arts without gills. Jinbe is confused but impressed by your audacity.' }); bonuses.abl -= 5; bonuses.dur += 5; }
+
+    // Murakumogiri (massive polearm) with Sniper fighting style
+    if (weaponName === 'Murakumogiri (Whitebeard)' && style === 'Sniper') { syns.push({ name: '🏋️ THROWING THE WHOLE NAGINATA', desc: 'A sniper wielding Whitebeard\'s 7-foot naginata. Your idea of "long range" is throwing the entire weapon.' }); bonuses.iq -= 10; bonuses.str += 10; }
+
     return { list: syns, bonuses };
 }
