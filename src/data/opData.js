@@ -42,7 +42,14 @@ export const opData = [
   { "id": 41, "name": "Jabra", "crew": "CP9", "bounty": "0", "image_keyword": "jabra", "rarity": "U", "val": 75, "tag": "rokushiki", "gender": "M", "haki": [] },
   { "id": 42, "name": "Kalifa", "crew": "CP9", "bounty": "0", "image_keyword": "kalifa", "rarity": "U", "val": 72, "tag": "rokushiki", "gender": "F", "haki": [] },
   { "id": 43, "name": "Blueno", "crew": "CP9", "bounty": "0", "image_keyword": "blueno", "rarity": "U", "val": 70, "tag": "rokushiki", "gender": "M", "haki": [] },
-  { "id": 44, "name": "Spandam", "crew": "CP9", "bounty": "0", "image_keyword": "spandam", "rarity": "C", "val": 15, "gender": "M", "haki": [] }
+  { "id": 44, "name": "Spandam", "crew": "CP9", "bounty": "0", "image_keyword": "spandam", "rarity": "C", "val": 15, "gender": "M", "haki": [] },
+
+  // ---- ELBAF ARC CHARACTERS ----
+  { "id": 45, "name": "King Harald", "crew": "Elbaf Royalty", "bounty": "0", "image_keyword": "harald", "rarity": "R", "val": 78, "gender": "M", "haki": ["obs", "arm"], "desc": "Former King of Elbaf. A warmongering youth turned pacifist diplomat after meeting Ida. Father of Loki and Hajrudin." },
+  { "id": 46, "name": "Figarland Shamrock", "crew": "Holy Knights", "bounty": "0", "image_keyword": "shamrock", "rarity": "L", "val": 98, "tag": "infusion", "gender": "M", "haki": ["obs", "arm", "conq"], "desc": "Supreme Commander of the Holy Knights. Twin brother of Shanks. Wields the Devil Fruit sword Cerberus." },
+  { "id": 47, "name": "Manmayer Gunko", "crew": "Holy Knights", "bounty": "0", "image_keyword": "gunko", "rarity": "E", "val": 90, "gender": "F", "haki": ["obs", "arm"], "desc": "Holy Knight and World Noble. Former Devoted Blade of God from the God Valley Incident. Ate the Aro Aro no Mi (Arrow-Arrow Fruit)." },
+  { "id": 48, "name": "Shepherd Sommers", "crew": "Holy Knights", "bounty": "0", "image_keyword": "sommers", "rarity": "E", "val": 88, "gender": "M", "haki": ["obs", "arm"], "desc": "Sadistic Holy Knight who enjoys inflicting pain. Ate the Iba Iba no Mi (Thorn-Thorn Fruit). Known for his lunatic personality." },
+  { "id": 49, "name": "Prince Loki", "crew": "Elbaf Royalty", "bounty": "0", "image_keyword": "loki", "rarity": "L", "val": 100, "tag": "infusion", "gender": "M", "haki": ["obs", "conq"], "desc": "The Accursed Prince of Elbaf. Ate the Ryu Ryu no Mi, Model: Nidhogg. Calls himself the Sun God." }
 ];
 
 /* ==========================================
@@ -72,6 +79,8 @@ const devilFruitDB = [
   { name: "Mero Mero",            type: "paramecia", rarity: "E", val: 92,  tag: "turn infatuated enemies to stone" },
   { name: "Doa Doa",              type: "paramecia", rarity: "R", val: 82,  tag: "create doors anywhere including pocket dimensions" },
   { name: "Awa Awa",              type: "paramecia", rarity: "U", val: 68,  tag: "soap and bubbles that wash away strength" },
+  { name: "Aro Aro",              type: "paramecia", rarity: "E", val: 90,  tag: "arrow manipulation and projectile creation" },
+  { name: "Iba Iba",              type: "paramecia", rarity: "E", val: 88,  tag: "thorn manifestation and manipulation to pin down enemies" },
 
   // ---- LOGIA ----
   { name: "Moku Moku",            type: "logia",     rarity: "C", val: 55,  tag: "smoke" },
@@ -108,6 +117,7 @@ const devilFruitDB = [
   { name: "Hito Hito: Nika",            type: "mythical", rarity: "L", val: 100, tag: "rubber body and cartoon imagination reality warping" },
   { name: "Tori Tori: Phoenix",          type: "mythical", rarity: "L", val: 98,  tag: "blue flames of healing and regeneration" },
   { name: "Uo Uo: Azure Dragon",         type: "mythical", rarity: "L", val: 100, tag: "massive dragon transformation with elemental breath" },
+  { name: "Ryu Ryu: Nidhogg",            type: "mythical", rarity: "L", val: 100, tag: "city-dwarfing black dragon transformation surpassing Kaido" },
   { name: "Hito Hito: Daibutsu",         type: "mythical", rarity: "E", val: 92,  tag: "giant golden buddha with shockwaves" },
   { name: "Inu Inu: Okuchi no Makami",   type: "mythical", rarity: "E", val: 94,  tag: "legendary wolf with freezing breath" },
   { name: "Hebi Hebi: Yamata no Orochi", type: "mythical", rarity: "R", val: 78,  tag: "beast" },
