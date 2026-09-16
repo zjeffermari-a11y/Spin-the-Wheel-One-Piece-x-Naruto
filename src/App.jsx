@@ -67,6 +67,7 @@ function App() {
 
     const [isSpinning, setIsSpinning] = useState(false);
     const [currentOutcome, setCurrentOutcome] = useState(null);
+    const [currentSegmentName, setCurrentSegmentName] = useState('');
 
     const { playTick, playLock, playEpic } = useAudio();
 
@@ -382,36 +383,42 @@ function App() {
     };
 
     return (
-        <div className="min-h-screen bg-[#050505] text-white font-sans selection:bg-indigo-500/30">
+        <div className="min-h-screen bg-[#050505] text-white selection:bg-indigo-500/30" style={{ fontFamily: "'Chakra Petch', 'Segoe UI', system-ui, sans-serif" }}>
+            {/* Noise texture overlay */}
+            <div className="fixed inset-0 pointer-events-none z-[1] opacity-[0.03]" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%270 0 256 256%27 xmlns=%27http://www.w3.org/2000/svg%27%3E%3Cfilter id=%27noise%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%270.9%27 numOctaves=%274%27 stitchTiles=%27stitch%27/%3E%3C/filter%3E%3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url(%23noise)%27/%3E%3C/svg%3E")', backgroundRepeat: 'repeat' }} />
+
             {/* Header */}
-            <header className="p-6 border-b border-[#222] bg-[#0a0a0a] flex justify-between items-center sticky top-0 z-40">
-                <h1 className="text-2xl md:text-3xl font-black tracking-tighter bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-transparent bg-clip-text">
-                    SPIN YOUR DESTINY
-                </h1>
-                <div className="flex gap-4 items-center">
+            <header className="px-6 py-4 border-b border-[#1a1a1a] bg-[#080808]/90 backdrop-blur-md flex justify-between items-center sticky top-0 z-40">
+                <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-xs font-black">⚡</div>
+                    <h1 className="text-xl md:text-2xl font-black tracking-tight text-white uppercase">
+                        Spin Your <span className="text-orange-500">Destiny</span>
+                    </h1>
+                </div>
+                <div className="flex gap-3 items-center">
                     {user ? (
-                        <div className="flex items-center gap-3 mr-2 bg-[#111] border border-[#222] pl-3 pr-1 py-1 rounded-full">
-                            <span className="text-xs text-gray-400 max-w-[100px] truncate" title={user.email}>{user.email}</span>
-                            <button onClick={handleLogout} className="p-1.5 bg-[#1a1a1a] hover:bg-red-500/20 rounded-full transition-colors text-gray-400 hover:text-red-400" title="Log Out">
+                        <div className="flex items-center gap-2 mr-1 bg-[#111] border border-[#1a1a1a] pl-3 pr-1 py-1 rounded-lg">
+                            <span className="text-xs text-gray-500 max-w-[80px] truncate" title={user.email}>{user.email}</span>
+                            <button onClick={handleLogout} className="p-1.5 hover:bg-red-500/20 rounded-md transition-colors text-gray-500 hover:text-red-400" title="Log Out">
                                 <LogOut size={14} />
                             </button>
                         </div>
                     ) : (
-                        <button onClick={() => setIsAuthOpen(true)} className="flex items-center gap-2 px-3 py-1.5 bg-indigo-600/20 hover:bg-indigo-600/40 border border-indigo-500/30 rounded-full transition-colors text-indigo-400 hover:text-indigo-300 text-sm font-bold mr-2" title="Log In / Sign Up">
-                            <User size={16} />
+                        <button onClick={() => setIsAuthOpen(true)} className="flex items-center gap-2 px-3 py-1.5 bg-orange-600/10 hover:bg-orange-600/20 border border-orange-500/20 rounded-lg transition-colors text-orange-400 hover:text-orange-300 text-sm font-bold" title="Log In / Sign Up">
+                            <User size={14} />
                             <span>Sign In</span>
                         </button>
                     )}
-                    <button onClick={() => setIsRosterOpen(true)} className="p-2 bg-[#1a1a1a] hover:bg-[#2a2a2a] rounded-full transition-colors text-gray-400 hover:text-white" title="Roster">
-                        <Users size={20} />
+                    <button onClick={() => setIsRosterOpen(true)} className="p-2 hover:bg-[#1a1a1a] rounded-lg transition-colors text-gray-500 hover:text-white" title="Roster">
+                        <Users size={18} />
                     </button>
-                    <button onClick={() => setIsSettingsOpen(true)} className="p-2 bg-[#1a1a1a] hover:bg-[#2a2a2a] rounded-full transition-colors text-gray-400 hover:text-white" title="Settings">
-                        <Settings size={20} />
+                    <button onClick={() => setIsSettingsOpen(true)} className="p-2 hover:bg-[#1a1a1a] rounded-lg transition-colors text-gray-500 hover:text-white" title="Settings">
+                        <Settings size={18} />
                     </button>
                 </div>
             </header>
 
-            <main className="p-4 md:p-8">
+            <main className="p-4 md:p-8 relative z-[2]">
                 <AnimatePresence mode="wait">
                     {screen === 'landing' && (
                         <motion.div
@@ -419,17 +426,24 @@ function App() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -20 }}
-                            className="flex flex-col items-center justify-center min-h-[70vh] text-center"
+                            className="flex flex-col items-center justify-center min-h-[70vh] text-center relative"
                         >
-                            <h2 className="text-5xl md:text-7xl font-black mb-6 drop-shadow-2xl text-white">FORGE YOUR <span className="text-indigo-500">LEGEND</span></h2>
-                            <p className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-12">
-                                Spin the wheel of fate to combine abilities from across universes. Generate unique characters with dynamic stats, synergies, and AI-powered lore.
+                            {/* Background kanji */}
+                            <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] text-[20rem] font-black select-none pointer-events-none">運命</div>
+                            
+                            <div className="text-sm font-bold text-orange-500/60 uppercase tracking-[0.5em] mb-4">One Piece × Naruto</div>
+                            <h2 className="text-5xl md:text-7xl font-black mb-6 text-white uppercase tracking-tight">
+                                Forge Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-red-500">Legend</span>
+                            </h2>
+                            <p className="text-base md:text-lg text-gray-500 max-w-xl mx-auto mb-12 leading-relaxed">
+                                Spin the wheel of fate. Combine abilities from across universes. Generate unique characters with dynamic stats, synergies, and AI-powered lore.
                             </p>
                             <button
                                 onClick={startCreation}
-                                className="px-8 py-4 bg-white text-black hover:bg-gray-200 rounded-full font-black text-xl tracking-wider transition-all hover:scale-105 active:scale-95 shadow-[0_0_40px_rgba(255,255,255,0.2)]"
+                                className="group relative px-10 py-4 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-500 hover:to-red-500 text-white rounded-lg font-black text-lg tracking-wider transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-orange-900/30 uppercase"
                             >
-                                BEGIN CREATION
+                                <span className="relative z-10">Begin Creation</span>
+                                <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-orange-600 to-red-600 blur-xl opacity-40 group-hover:opacity-60 transition-opacity" />
                             </button>
                         </motion.div>
                     )}
@@ -440,40 +454,53 @@ function App() {
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 1.1 }}
-                            className="flex flex-col lg:flex-row gap-8 max-w-7xl mx-auto"
+                            className="flex flex-col lg:flex-row gap-6 max-w-7xl mx-auto"
                         >
                             {/* Left Column: Wheel */}
-                            <div className="flex-1 bg-[#111] p-8 rounded-2xl border border-[#333] shadow-2xl flex flex-col items-center relative overflow-hidden">
-                                <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-indigo-900/10 to-transparent pointer-events-none" />
-
-                                <h3 className="text-3xl font-black mb-2 text-white drop-shadow-md z-10 text-center uppercase tracking-wider">
-                                    {spinComplete ? "BUILD COMPLETE" : categories[catIndex].name}
-                                </h3>
-                                <p className="text-gray-400 mb-8 z-10 text-center">
-                                    {spinComplete ? "Ready to Forge Legend" : `${catIndex + 1} OF ${categories.length}`}
-                                </p>
-
-                                <div className="relative z-10 w-full max-w-[400px]">
-                                    {/* Spin Pointer */}
-                                    <div className="absolute top-[-20px] left-1/2 -translate-x-1/2 z-20 w-0 h-0 border-l-[15px] border-l-transparent border-r-[15px] border-r-transparent border-t-[30px] border-t-white drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]" />
-
-                                    <Wheel ref={wheelRef} options={categories[catIndex].options} onTick={playTick} />
+                            <div className="flex-1 bg-[#0a0a0a] p-6 md:p-8 rounded-xl border border-[#1a1a1a] flex flex-col items-center relative overflow-hidden">
+                                {/* Category header */}
+                                <div className="flex items-center gap-3 mb-6 z-10">
+                                    <div className="px-3 py-1 bg-orange-600/10 border border-orange-500/20 rounded text-xs font-bold text-orange-400 uppercase tracking-widest">
+                                        {spinComplete ? 'Done' : `${catIndex + 1}/${categories.length}`}
+                                    </div>
+                                    <h3 className="text-2xl font-black text-white uppercase tracking-wide">
+                                        {spinComplete ? 'Build Complete' : categories[catIndex].name}
+                                    </h3>
                                 </div>
 
-                                <div className="flex gap-4 mt-8 z-10 w-full max-w-sm">
+                                <div className="relative z-10 w-full max-w-[380px]">
+                                    {/* Spin Pointer — sharper, glowing */}
+                                    <div className="absolute top-[-16px] left-1/2 -translate-x-1/2 z-20">
+                                        <div className="w-0 h-0 border-l-[12px] border-l-transparent border-r-[12px] border-r-transparent border-t-[24px] border-t-orange-500 drop-shadow-[0_0_8px_rgba(249,115,22,0.6)]" />
+                                    </div>
+
+                                    <Wheel ref={wheelRef} options={categories[catIndex].options} onTick={playTick} onSegmentChange={setCurrentSegmentName} />
+                                </div>
+
+                                {/* Live Readout — the name ticker */}
+                                <div className="w-full max-w-sm mt-4 z-10">
+                                    <div className="bg-[#111] border border-[#1a1a1a] rounded-lg px-4 py-3 text-center overflow-hidden">
+                                        <div className="text-[10px] font-bold text-gray-600 uppercase tracking-[0.3em] mb-1">Currently On</div>
+                                        <div className="text-lg md:text-xl font-black text-white truncate transition-all duration-75" key={currentSegmentName}>
+                                            {currentSegmentName || '---'}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="flex gap-3 mt-6 z-10 w-full max-w-sm">
                                     {!spinComplete ? (
                                         <>
                                             <button
                                                 onClick={handleSpinClick}
                                                 disabled={isSpinning}
-                                                className="flex-1 py-4 bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-800 disabled:text-gray-500 rounded-xl font-bold transition-all shadow-lg text-lg uppercase tracking-wider"
+                                                className="flex-1 py-3.5 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-500 hover:to-red-500 disabled:from-gray-800 disabled:to-gray-800 disabled:text-gray-500 rounded-lg font-bold transition-all text-base uppercase tracking-wider"
                                             >
                                                 Spin
                                             </button>
                                             <button
                                                 onClick={handleAutoSpin}
                                                 disabled={isSpinning}
-                                                className="px-6 py-4 bg-[#222] hover:bg-[#333] disabled:bg-[#111] disabled:text-gray-600 border border-[#444] rounded-xl font-bold transition-all text-lg uppercase tracking-wider"
+                                                className="px-5 py-3.5 bg-[#151515] hover:bg-[#1a1a1a] disabled:opacity-40 border border-[#222] rounded-lg font-bold transition-all text-base uppercase tracking-wider text-gray-400 hover:text-white"
                                             >
                                                 Auto
                                             </button>
@@ -483,15 +510,15 @@ function App() {
                                             {isGeneratingLore ? (
                                                 <button
                                                     disabled
-                                                    className="w-full py-4 bg-indigo-800 text-indigo-300 rounded-xl font-bold transition-all shadow-lg text-lg uppercase tracking-wider flex items-center justify-center gap-2"
+                                                    className="w-full py-3.5 bg-orange-900/30 text-orange-300/60 rounded-lg font-bold transition-all text-base uppercase tracking-wider flex items-center justify-center gap-2"
                                                 >
-                                                    <div className="w-5 h-5 border-2 border-indigo-400 border-t-transparent rounded-full animate-spin" />
+                                                    <div className="w-4 h-4 border-2 border-orange-400 border-t-transparent rounded-full animate-spin" />
                                                     Generating Lore...
                                                 </button>
                                             ) : (
                                                 <button
                                                     onClick={handleGenerateLoreAndProceed}
-                                                    className="w-full py-4 bg-indigo-600 hover:bg-indigo-700 rounded-xl font-bold transition-all shadow-lg text-lg uppercase tracking-wider shadow-indigo-500/20"
+                                                    className="w-full py-3.5 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-500 hover:to-red-500 rounded-lg font-bold transition-all text-base uppercase tracking-wider"
                                                 >
                                                     Generate Lore & View
                                                 </button>
@@ -504,23 +531,23 @@ function App() {
                                     {currentOutcome && (
                                         <motion.div
                                             initial={{ opacity: 0, y: 50, scale: 0.5 }}
-                                            animate={{ opacity: 1, y: 0, scale: 1, x: ['E', 'L', 'M'].includes(currentOutcome.rarity) ? [-10, 10, -10, 10, 0] : 0 }}
+                                            animate={{ opacity: 1, y: 0, scale: 1, x: ['E', 'L', 'M'].includes(currentOutcome.rarity) ? [-8, 8, -8, 8, 0] : 0 }}
                                             transition={{ duration: 0.3 }}
                                             exit={{ opacity: 0, y: -50, scale: 0.5 }}
-                                            className="absolute inset-0 flex items-center justify-center bg-black/80 backdrop-blur-md z-30"
+                                            className="absolute inset-0 flex items-center justify-center bg-black/85 backdrop-blur-md z-30"
                                         >
                                             <div 
-                                                className="text-center p-8 rounded-2xl border-2 shadow-[0_0_50px_rgba(255,255,255,0.2)]"
+                                                className="text-center p-8 rounded-xl border shadow-lg bg-[#0a0a0a]/80"
                                                 style={{ 
                                                     borderColor: RARITY[currentOutcome.rarity]?.color || '#333',
-                                                    boxShadow: `0 0 50px ${RARITY[currentOutcome.rarity]?.color || '#ffffff'}40`
+                                                    boxShadow: `0 0 40px ${RARITY[currentOutcome.rarity]?.color || '#ffffff'}30`
                                                 }}
                                             >
-                                                <div className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-2">Acquired</div>
-                                                <div className="text-5xl font-black text-white drop-shadow-[0_0_20px_rgba(255,255,255,0.5)]">
+                                                <div className="text-[10px] font-bold text-gray-500 uppercase tracking-[0.4em] mb-3">Acquired</div>
+                                                <div className="text-3xl md:text-4xl font-black text-white">
                                                     {currentOutcome.name}
                                                 </div>
-                                                <div className="mt-2 text-lg font-bold" style={{ color: RARITY[currentOutcome.rarity]?.color || '#888' }}>
+                                                <div className="mt-3 text-sm font-bold uppercase tracking-widest" style={{ color: RARITY[currentOutcome.rarity]?.color || '#888' }}>
                                                     {RARITY[currentOutcome.rarity]?.name || 'Unknown'}
                                                 </div>
                                             </div>
@@ -530,15 +557,18 @@ function App() {
                             </div>
 
                             {/* Right Column: Build Log */}
-                            <div className="w-full lg:w-96 flex flex-col gap-4">
-                                <div className="bg-[#111] p-6 rounded-2xl border border-[#333] shadow-lg flex-1">
-                                    <h4 className="text-xl font-bold mb-4 border-b border-[#333] pb-2 text-white">Current Build</h4>
-                                    <div className="space-y-3 overflow-y-auto max-h-[60vh] pr-2">
+                            <div className="w-full lg:w-80 flex flex-col gap-4">
+                                <div className="bg-[#0a0a0a] p-4 rounded-xl border border-[#1a1a1a] flex-1">
+                                    <h4 className="text-sm font-bold mb-3 pb-2 border-b border-[#1a1a1a] text-gray-400 uppercase tracking-widest">Build Log</h4>
+                                    <div className="space-y-1.5 overflow-y-auto max-h-[65vh] pr-1 custom-scrollbar">
                                         {categories.map((c) => (
-                                            <div key={c.id} className={`p-3 rounded-xl border transition-all ${build[c.id] ? 'bg-[#1a1a1a] border-[#444]' : 'bg-[#0a0a0a] border-[#222] opacity-50'}`}>
-                                                <div className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">{c.name}</div>
-                                                <div className="text-sm font-bold truncate" style={{ color: build[c.id] ? (RARITY[build[c.id].rarity]?.color || '#fff') : '#555' }}>
-                                                    {build[c.id] ? build[c.id].name : '???'}
+                                            <div key={c.id} className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-all ${build[c.id] ? 'bg-[#111]' : 'opacity-30'}`}>
+                                                <div className="w-1 h-8 rounded-full flex-shrink-0" style={{ backgroundColor: build[c.id] ? (RARITY[build[c.id].rarity]?.color || '#333') : '#1a1a1a' }} />
+                                                <div className="min-w-0 flex-1">
+                                                    <div className="text-[10px] font-bold text-gray-600 uppercase tracking-wider">{c.name}</div>
+                                                    <div className="text-xs font-bold truncate" style={{ color: build[c.id] ? (RARITY[build[c.id].rarity]?.color || '#fff') : '#333' }}>
+                                                        {build[c.id] ? build[c.id].name : '—'}
+                                                    </div>
                                                 </div>
                                             </div>
                                         ))}

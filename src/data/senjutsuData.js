@@ -1,0 +1,51 @@
+// Canonical Senjutsu (Sage Arts) abilities from Naruto/Boruto
+export const senjutsuData = [
+    // C - Common
+    { name: 'None', rarity: 'C', val: 0 },
+    { name: 'Nature Energy Sensing (Weak)', rarity: 'C', val: 15, tag: 'sensing' },
+    { name: 'Natural Energy Absorption (Partial)', rarity: 'C', val: 20, tag: 'absorb' },
+    { name: 'Basic Sage Training (Incomplete)', rarity: 'C', val: 25, tag: 'training' },
+    { name: 'Partial Stone Form', rarity: 'C', val: 18, tag: 'petrification' },
+    { name: 'Toad Kumite (Untrained)', rarity: 'C', val: 30, tag: 'toad' },
+    { name: 'Snake Sage Sensing', rarity: 'C', val: 28, tag: 'snake' },
+    { name: 'Nature Energy Infusion (Minimal)', rarity: 'C', val: 22, tag: 'basic' },
+    // U - Uncommon
+    { name: 'Imperfect Sage Mode', rarity: 'U', val: 55, tag: 'sage' },
+    { name: 'Toad Kumite (Basic)', rarity: 'U', val: 58, tag: 'toad' },
+    { name: 'Nature Energy Sensing', rarity: 'U', val: 52, tag: 'sensing' },
+    { name: 'Sage Art: Frog Croak', rarity: 'U', val: 55, tag: 'toad' },
+    { name: 'Cursed Seal Stage 1', rarity: 'U', val: 60, tag: 'curse' },
+    { name: 'Jūgo\'s Sage Transformation (Partial)', rarity: 'U', val: 62, tag: 'transformation' },
+    { name: 'Snake Sage Mode (Imperfect)', rarity: 'U', val: 58, tag: 'snake' },
+    { name: 'Natural Energy Chakra Cloak', rarity: 'U', val: 50, tag: 'cloak' },
+    // R - Rare
+    { name: 'Cursed Seal Stage 2', rarity: 'R', val: 75, tag: 'curse' },
+    { name: 'Toad Sage Mode', rarity: 'R', val: 82, tag: 'toad sage' },
+    { name: 'Snake Sage Mode', rarity: 'R', val: 80, tag: 'snake sage' },
+    { name: 'Sage Art: Goemon', rarity: 'R', val: 78, tag: 'toad' },
+    { name: 'Sage Art: Frog Song', rarity: 'R', val: 76, tag: 'genjutsu' },
+    { name: 'Jūgo\'s Sage Transformation', rarity: 'R', val: 80, tag: 'transformation' },
+    { name: 'Sage Art: Inorganic Reanimation', rarity: 'R', val: 82, tag: 'snake' },
+    { name: 'Sage Art: Gate of the Great God', rarity: 'R', val: 85, tag: 'seal' },
+    // E - Epic
+    { name: 'Perfect Toad Sage Mode', rarity: 'E', val: 90, tag: 'toad sage' },
+    { name: 'Sage Art: Massive Rasengan Barrage', rarity: 'E', val: 92, tag: 'toad' },
+    { name: 'Sage Art: Rasenshuriken', rarity: 'E', val: 94, tag: 'wind' },
+    { name: 'Hashirama Sage Mode', rarity: 'E', val: 95, tag: 'wood sage' },
+    { name: 'Sage Art: Wood Release Golem', rarity: 'E', val: 93, tag: 'wood' },
+    { name: 'Sage Art: Gracious Deity Gates', rarity: 'E', val: 92, tag: 'seal' },
+    { name: 'Mitsuki Sage Mode', rarity: 'E', val: 90, tag: 'snake sage' },
+    { name: 'Sage Art: White Rage Technique', rarity: 'E', val: 88, tag: 'dragon' },
+    // L - Legend
+    { name: 'Sage Art: Lava Release Rasenshuriken', rarity: 'L', val: 98, tag: 'lava' },
+    { name: 'Sage Art: Magnet Release Rasengan', rarity: 'L', val: 98, tag: 'magnet' },
+    { name: 'Sage Art: Super Tailed Beast Rasenshuriken', rarity: 'L', val: 100, tag: 'hax' },
+    { name: 'Six Paths Sage Mode', rarity: 'L', val: 100, tag: 'hax' },
+    { name: 'Sage Art: Storm Release Light Fang', rarity: 'L', val: 98, tag: 'lightning' },
+    { name: 'Sage of Six Paths: Chibaku Tensei', rarity: 'L', val: 100, tag: 'hax' },
+    // M - Mythic
+    { name: 'Ten-Tails Jinchūriki Sage Mode', rarity: 'M', val: 105, tag: 'hax' },
+    { name: 'Six Paths Senjutsu (Full)', rarity: 'M', val: 105, tag: 'hax' },
+    { name: 'Baryon Mode', rarity: 'M', val: 105, tag: 'hax' },
+    { name: 'Ōtsutsuki God Sage Power', rarity: 'M', val: 105, tag: 'hax' },
+];

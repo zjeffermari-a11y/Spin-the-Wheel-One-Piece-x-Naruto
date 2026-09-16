@@ -1,6 +1,11 @@
 import { opData } from './opData.js';
 import { narutoData } from './narutoData.js';
 import { CATEGORIES } from './categories.js';
+import { ninjutsuData } from './ninjutsuData.js';
+import { taijutsuData } from './taijutsuData.js';
+import { genjutsuData } from './genjutsuData.js';
+import { kekkeiGenkaiData, kekkeiTotaData } from './kekkeiData.js';
+import { senjutsuData } from './senjutsuData.js';
 
 function shuffleArray(array) {
     let currentIndex = array.length, randomIndex;
@@ -12,34 +17,47 @@ function shuffleArray(array) {
     return array;
 }
 
+// Ability data mapping — canonical technique pools per category
+const ABILITY_POOLS = {
+    jutsu_nin: ninjutsuData,
+    jutsu_tai: taijutsuData,
+    jutsu_gen: genjutsuData,
+    jutsu_kg: kekkeiGenkaiData,
+    jutsu_kt: kekkeiTotaData,
+    jutsu_sen: senjutsuData,
+};
+
+const POOL_SIZE = 50;
+
 export function initDatabases() {
     // Deep clone the categories so we don't mutate the imported constant
     const categories = JSON.parse(JSON.stringify(CATEGORIES));
     const characterPool = [...opData, ...narutoData];
     
-    const generalBenchmarks = ['vessel', 'iq'];
-    const opBenchmarks = ['haki_obs', 'haki_arm', 'haki_conq'];
-    const narutoBenchmarks = ['jutsu_nin', 'jutsu_tai', 'jutsu_gen', 'jutsu_kg', 'jutsu_kt', 'jutsu_sen'];
+    const characterBenchmarks = ['vessel', 'iq'];
+    const hakiBenchmarks = ['haki_obs', 'haki_arm', 'haki_conq'];
+    const abilityBenchmarks = Object.keys(ABILITY_POOLS);
 
     for (let cat of categories) {
         let pool = [];
-        if (generalBenchmarks.includes(cat.id)) { 
+
+        // Character benchmarks — use character pool
+        if (characterBenchmarks.includes(cat.id)) { 
             pool = shuffleArray([...characterPool]); 
         }
-        else if (opBenchmarks.includes(cat.id)) { 
+        // Haki benchmarks — filter OP characters who have that haki type, keep canonical
+        else if (hakiBenchmarks.includes(cat.id)) { 
             pool = shuffleArray([...opData.filter(c => c.haki && c.haki.includes(cat.id.replace('haki_', '')))]); 
         }
-        else if (narutoBenchmarks.includes(cat.id)) { 
-            pool = shuffleArray([...narutoData.filter(c => c.jutsu && c.jutsu.includes(cat.id.replace('jutsu_', '')))]); 
+        // Ability benchmarks — use dedicated canonical technique pools
+        else if (abilityBenchmarks.includes(cat.id)) {
+            pool = shuffleArray([...ABILITY_POOLS[cat.id]]);
         }
         else { 
-            continue; 
+            continue; // Categories with hardcoded options (race, origin, etc.)
         }
 
-        if (['haki_conq', 'jutsu_kt', 'jutsu_kg', 'jutsu_sen'].includes(cat.id)) { 
-            pool.unshift({ name: 'None', rarity: 'C', val: 0 }); 
-        }
-        cat.options = pool.slice(0, 20);
+        cat.options = pool.slice(0, POOL_SIZE);
     }
 
     return categories;
