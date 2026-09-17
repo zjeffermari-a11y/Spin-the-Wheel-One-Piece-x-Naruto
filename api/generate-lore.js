@@ -12,7 +12,7 @@ export default async function handler(req, res) {
     }
 
     const payload = {
-      model: "openai/gpt-oss-12ob", // User preferred model
+      model: "openai/gpt-oss-120b", // User preferred model
       messages: [
           { role: "system", content: systemInstruction },
           { role: "user", content: prompt }
