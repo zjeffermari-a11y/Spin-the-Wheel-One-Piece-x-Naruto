@@ -3,7 +3,7 @@ export class OllamaService {
     }
 
     setApiKey(key) {
-        // No-op since we moved to server-side Gemini
+        // No-op since we moved to server-side AI
     }
 
     async generateContent(prompt, systemPrompt) {
@@ -18,13 +18,13 @@ export class OllamaService {
 
             if (!response.ok) {
                 const errText = await response.text();
-                throw new Error(`Gemini API failed (${response.status}): ${errText}`);
+                throw new Error(`AI API failed (${response.status}): ${errText}`);
             }
             
             const data = await response.json();
             return data;
         } catch (error) {
-            console.error("Gemini fetch error:", error);
+            console.error("AI fetch error:", error);
             throw error;
         }
     }
