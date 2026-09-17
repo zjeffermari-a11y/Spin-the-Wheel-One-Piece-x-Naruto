@@ -14,8 +14,8 @@ export default function CharacterStats({ stats, title = "Base Stats" }) {
     if (!stats) return null;
 
     return (
-        <div className="bg-white p-6 border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-            <h4 className="text-xl font-black mb-4 text-black border-b-4 border-black pb-2 uppercase">{title}</h4>
+        <div className="bg-gray-50 p-6 border border-gray-200 shadow-sm">
+            <h4 className="text-xl font-black mb-4 text-black border-b-2 border-black pb-2 uppercase">{title}</h4>
             <div className="space-y-3">
                 {Object.entries(stats).map(([key, rawValue]) => {
                     const value = Number.isFinite(rawValue) ? rawValue : 0;
@@ -25,7 +25,7 @@ export default function CharacterStats({ stats, title = "Base Stats" }) {
                             <div className="text-sm font-black text-black w-12 text-right uppercase">{label}</div>
                             <div className="flex-1 bg-gray-200 border-2 border-black h-6">
                                 <div
-                                    className="h-full bg-red-500 transition-all duration-1000 ease-out"
+                                    className="h-full bg-black transition-all duration-1000 ease-out"
                                     style={{ width: `${Math.min(100, Math.max(0, value))}%` }}
                                 />
                             </div>

@@ -155,11 +155,11 @@ ${lore?.bio || ''}
                         <span>{build.origin?.name || 'Unknown Origin'}</span>
                     </div>
 
-                    <div className="bg-white border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] p-4">
-                        <div className="text-base font-black text-black mb-2 uppercase">OVERALL POWER <span className="text-red-600 text-xl ml-2">{overall || 0}</span></div>
+                    <div className="bg-white border border-gray-200 p-4 shadow-sm">
+                        <div className="text-base font-black text-black mb-2 uppercase">OVERALL POWER <span className="text-black text-xl ml-2">{overall || 0}</span></div>
                         <div className="h-6 bg-gray-200 border-2 border-black overflow-hidden">
                             <div 
-                                className="h-full bg-red-600 transition-all duration-1000"
+                                className="h-full bg-black transition-all duration-1000"
                                 style={{ width: `${Math.min(100, Math.max(0, (overall / 150) * 100))}%` }}
                             />
                         </div>
@@ -170,8 +170,8 @@ ${lore?.bio || ''}
                 <div className="p-8 grid grid-cols-1 md:grid-cols-2 gap-8 bg-gray-50">
                     <CharacterStats stats={stats} />
                     
-                    <div className="bg-white p-6 border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                        <h4 className="text-xl font-black mb-4 text-black border-b-4 border-black pb-2 uppercase">Build Profile</h4>
+                    <div className="bg-gray-50 p-6 border border-gray-200 shadow-sm">
+                        <h4 className="text-xl font-black mb-4 text-black border-b-2 border-black pb-2 uppercase">Build Profile</h4>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-3">
                             {Object.entries(build).map(([key, item]) => {
                                 if (['str', 'spd', 'dur', 'iq', 'combat', 'chakra_cap'].includes(key)) return null;
@@ -190,55 +190,61 @@ ${lore?.bio || ''}
                         </div>
                     </div>
 
-                    <div className="md:col-span-2 bg-white p-6 border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                        <h4 className="text-xl font-black mb-4 text-black border-b-4 border-black pb-2 uppercase">Active Synergies</h4>
+                    <div className="md:col-span-2 bg-gray-50 p-6 border border-gray-200 shadow-sm">
+                        <h4 className="text-xl font-black mb-4 text-black border-b-2 border-black pb-2 uppercase">Active Synergies</h4>
                         {synergies && synergies.length > 0 ? (
-                            <div className="space-y-4">
-                                {synergies.map((syn, idx) => (
-                                    <div key={idx} className="bg-white border-4 border-black p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                                        <div className="text-xl font-black text-black mb-1 uppercase">{syn.name}</div>
-                                        <div className="text-base text-gray-700 font-medium mb-3">{syn.desc || syn.synergy_desc}</div>
-                                        <div className="flex flex-wrap gap-2">
-                                            {syn.bonuses && Object.entries(syn.bonuses).map(([stat, val]) => (
-                                                val !== 0 ? (
-                                                    <span key={stat} className={`text-sm font-black px-2 py-1 uppercase border-2 border-black ${val > 0 ? 'bg-green-400 text-black' : 'bg-red-400 text-black'}`}>
-                                                        {stat.toUpperCase()} {val > 0 ? '+' : ''}{val}
-                                                    </span>
-                                                ) : null
-                                            ))}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {synergies.map((syn, idx) => {
+                                    const emojis = ['❤️', '⚡', '🔥', '🌊', '✨', '🛡️', '🌪️', '⚔️'];
+                                    const emoji = emojis[idx % emojis.length];
+                                    return (
+                                        <div key={idx} className="bg-white border border-gray-200 p-4">
+                                            <div className="text-xl font-black text-black mb-2 flex items-center gap-2 uppercase">
+                                                <span>{emoji}</span> {syn.name}
+                                            </div>
+                                            <div className="text-sm text-gray-800 font-medium mb-4 leading-relaxed">{syn.desc || syn.synergy_desc}</div>
+                                            <div className="flex flex-wrap gap-2 mt-auto">
+                                                {syn.bonuses && Object.entries(syn.bonuses).map(([stat, val]) => (
+                                                    val !== 0 ? (
+                                                        <span key={stat} className={`text-xs font-black px-2 py-1 uppercase rounded-sm border-2 border-black ${val > 0 ? 'bg-black text-white' : 'bg-red-600 text-white'}`}>
+                                                            {stat.toUpperCase()} {val > 0 ? '+' : ''}{val}
+                                                        </span>
+                                                    ) : null
+                                                ))}
+                                            </div>
                                         </div>
-                                    </div>
-                                ))}
+                                    );
+                                })}
                             </div>
                         ) : (
-                            <div className="text-gray-500 font-black uppercase">No active synergies found for this build.</div>
+                            <div className="text-gray-500 font-medium uppercase text-sm">No active synergies found for this build.</div>
                         )}
                     </div>
 
-                    <div className="md:col-span-2 bg-white p-6 border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                        <h4 className="text-xl font-black mb-4 text-black border-b-4 border-black pb-2 uppercase">Signature Abilities</h4>
+                    <div className="md:col-span-2 bg-gray-50 p-6 border border-gray-200 shadow-sm">
+                        <h4 className="text-xl font-black mb-4 text-black border-b-2 border-black pb-2 uppercase">Signature Abilities</h4>
                         {!lore && !isGeneratingLore ? (
-                            <div className="text-gray-500 font-black uppercase">Lore has not been generated yet.</div>
+                            <div className="text-gray-500 font-medium uppercase text-sm">Lore has not been generated yet.</div>
                         ) : !lore && isGeneratingLore ? (
-                            <div className="text-red-600 font-black uppercase tracking-widest animate-pulse">
+                            <div className="text-black font-black uppercase tracking-widest animate-pulse">
                                 Forging signature moves...
                             </div>
                         ) : lore.signature_abilities && lore.signature_abilities.length > 0 ? (
-                            <div className="space-y-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 {lore.signature_abilities.map((ability, idx) => (
-                                    <div key={idx} className="bg-white border-4 border-black p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                                        <div className="text-xl font-black text-red-600 mb-1 uppercase">{ability.name}</div>
-                                        <div className="text-base text-black font-medium">{ability.desc}</div>
+                                    <div key={idx} className="bg-white border border-gray-200 p-4">
+                                        <div className="text-lg font-black text-black mb-2 uppercase">{ability.name}</div>
+                                        <div className="text-sm text-gray-800 font-medium leading-relaxed">{ability.desc}</div>
                                     </div>
                                 ))}
                             </div>
                         ) : (
-                            <div className="text-gray-500 font-black uppercase">No signature abilities recorded.</div>
+                            <div className="text-gray-500 font-medium uppercase text-sm">No signature abilities recorded.</div>
                         )}
                     </div>
 
-                    <div className="md:col-span-2 bg-white p-6 border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                        <h4 className="text-xl font-black mb-4 text-black border-b-4 border-black pb-2 uppercase">Lore & Legend</h4>
+                    <div className="md:col-span-2 bg-gray-50 p-6 border border-gray-200 shadow-sm">
+                        <h4 className="text-xl font-black mb-4 text-black border-b-2 border-black pb-2 uppercase">Lore & Legend</h4>
                         {!lore && !isGeneratingLore ? (
                             <div className="text-gray-500 font-black uppercase">Lore has not been generated yet.</div>
                         ) : !lore && isGeneratingLore ? (
