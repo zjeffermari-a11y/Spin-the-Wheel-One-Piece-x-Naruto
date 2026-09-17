@@ -79,6 +79,9 @@ function App() {
     const categoriesRef = useRef([]);
 
     React.useEffect(() => {
+        // SECURITY CLEANUP: Proactively remove any old leaked API keys from returning users' local storage
+        localStorage.removeItem('spin_wheel_groq_api_key');
+
         // Check current session
         const syncUserKey = (session) => {
             const u = session?.user || null;
