@@ -385,6 +385,22 @@ function App() {
 
     return (
         <div className="min-h-screen bg-[#F9FAFB] text-black font-inter relative">
+            {screen === 'result' && (
+                <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 0 }}>
+                    {/* Rising particles from bottom */}
+                    {[...Array(15)].map((_, i) => (
+                        <div key={`rise-${i}`} className="particle" style={{ left: `${Math.random() * 100}%`, width: `${Math.random() * 6 + 4}px`, height: `${Math.random() * 6 + 4}px`, animationDuration: `${Math.random() * 4 + 4}s`, animationDelay: `${Math.random() * 5}s` }} />
+                    ))}
+                    {/* Scattered drift particles */}
+                    {[...Array(20)].map((_, i) => (
+                        <div key={`scatter-${i}`} className="particle-scattered" style={{ left: `${Math.random() * 100}%`, top: `${Math.random() * 100}%`, width: `${Math.random() * 10 + 4}px`, height: `${Math.random() * 10 + 4}px`, animationDuration: `${Math.random() * 5 + 3}s`, animationDelay: `${Math.random() * 6}s` }} />
+                    ))}
+                    {/* Sparkle flashes */}
+                    {[...Array(10)].map((_, i) => (
+                        <div key={`sparkle-${i}`} className="particle-sparkle" style={{ left: `${Math.random() * 100}%`, top: `${Math.random() * 100}%`, width: `${Math.random() * 4 + 2}px`, height: `${Math.random() * 4 + 2}px`, animationDuration: `${Math.random() * 2 + 1.5}s`, animationDelay: `${Math.random() * 5}s` }} />
+                    ))}
+                </div>
+            )}
             
             {/* Header */}
             <header className="px-6 py-4 bg-white border-b-2 border-black flex justify-between items-center sticky top-0 z-40">
@@ -562,55 +578,8 @@ function App() {
                             key="loading"
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
-                            className="bg-white border-2 border-gray-100 w-full max-w-4xl mx-auto py-32 px-8 flex flex-col items-center justify-center text-center shadow-sm relative overflow-hidden"
+                            className="bg-white w-full max-w-4xl mx-auto py-32 px-8 flex flex-col items-center justify-center text-center shadow-lg relative overflow-hidden"
                         >
-                            {/* Ember particles — rise from bottom */}
-                            <div className="particle-container">
-                                {[...Array(25)].map((_, i) => (
-                                    <div 
-                                        key={`ember-${i}`}
-                                        className="particle-ember"
-                                        style={{
-                                            left: `${Math.random() * 100}%`,
-                                            bottom: `${Math.random() * 20}%`,
-                                            width: `${Math.random() * 8 + 3}px`,
-                                            height: `${Math.random() * 8 + 3}px`,
-                                            animationDuration: `${Math.random() * 3 + 2}s`,
-                                            animationDelay: `${Math.random() * 3}s`
-                                        }}
-                                    />
-                                ))}
-                                {/* Sparkles — scattered across entire screen */}
-                                {[...Array(15)].map((_, i) => (
-                                    <div 
-                                        key={`sparkle-${i}`}
-                                        className="particle-sparkle"
-                                        style={{
-                                            left: `${Math.random() * 100}%`,
-                                            top: `${Math.random() * 100}%`,
-                                            width: `${Math.random() * 4 + 2}px`,
-                                            height: `${Math.random() * 4 + 2}px`,
-                                            animationDuration: `${Math.random() * 2 + 1}s`,
-                                            animationDelay: `${Math.random() * 4}s`
-                                        }}
-                                    />
-                                ))}
-                                {/* Scattered drift particles */}
-                                {[...Array(12)].map((_, i) => (
-                                    <div 
-                                        key={`scatter-${i}`}
-                                        className="particle-scattered"
-                                        style={{
-                                            left: `${Math.random() * 100}%`,
-                                            top: `${Math.random() * 100}%`,
-                                            width: `${Math.random() * 10 + 4}px`,
-                                            height: `${Math.random() * 10 + 4}px`,
-                                            animationDuration: `${Math.random() * 4 + 3}s`,
-                                            animationDelay: `${Math.random() * 5}s`
-                                        }}
-                                    />
-                                ))}
-                            </div>
                             <div className="relative z-10">
                                 <div className="lore-spinner mb-12"></div>
                                 <h2 className="text-5xl md:text-7xl font-bebas tracking-widest text-black">
@@ -628,56 +597,8 @@ function App() {
                             key="result"
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
-                            className="w-full bg-white border-2 border-gray-100 shadow-sm relative overflow-hidden"
+                            className="w-full bg-white shadow-xl relative overflow-hidden"
                         >
-                            {/* Particles Background — mixed types scattered everywhere */}
-                            <div className="particle-container">
-                                {/* Rising particles from bottom */}
-                                {[...Array(15)].map((_, i) => (
-                                    <div 
-                                        key={`rise-${i}`} 
-                                        className="particle"
-                                        style={{
-                                            left: `${Math.random() * 100}%`,
-                                            width: `${Math.random() * 6 + 4}px`,
-                                            height: `${Math.random() * 6 + 4}px`,
-                                            animationDuration: `${Math.random() * 4 + 4}s`,
-                                            animationDelay: `${Math.random() * 5}s`
-                                        }}
-                                    />
-                                ))}
-                                {/* Scattered drift particles */}
-                                {[...Array(20)].map((_, i) => (
-                                    <div 
-                                        key={`scatter-${i}`} 
-                                        className="particle-scattered"
-                                        style={{
-                                            left: `${Math.random() * 100}%`,
-                                            top: `${Math.random() * 100}%`,
-                                            width: `${Math.random() * 10 + 4}px`,
-                                            height: `${Math.random() * 10 + 4}px`,
-                                            animationDuration: `${Math.random() * 5 + 3}s`,
-                                            animationDelay: `${Math.random() * 6}s`
-                                        }}
-                                    />
-                                ))}
-                                {/* Sparkle flashes */}
-                                {[...Array(10)].map((_, i) => (
-                                    <div 
-                                        key={`sparkle-${i}`} 
-                                        className="particle-sparkle"
-                                        style={{
-                                            left: `${Math.random() * 100}%`,
-                                            top: `${Math.random() * 100}%`,
-                                            width: `${Math.random() * 4 + 2}px`,
-                                            height: `${Math.random() * 4 + 2}px`,
-                                            animationDuration: `${Math.random() * 2 + 1.5}s`,
-                                            animationDelay: `${Math.random() * 5}s`
-                                        }}
-                                    />
-                                ))}
-                            </div>
-
                             <div className="relative z-10 p-6 md:p-12">
                                 <CharacterCard
                                     build={build}
@@ -726,12 +647,7 @@ function App() {
                         >
                             CLOSE RECORD
                         </button>
-                        <div className="w-full bg-white border-2 border-gray-100 p-8 shadow-xl relative overflow-hidden">
-                             <div className="particle-container">
-                                {[...Array(10)].map((_, i) => (
-                                    <div key={i} className="particle" style={{ left: `${Math.random() * 100}%`, width: `${Math.random() * 6 + 4}px`, height: `${Math.random() * 6 + 4}px`, animationDuration: `${Math.random() * 4 + 4}s`, animationDelay: `${Math.random() * 5}s` }} />
-                                ))}
-                            </div>
+                        <div className="w-full bg-white p-8 shadow-xl relative overflow-hidden">
                             <div className="relative z-10">
                                 <CharacterCard
                                     build={viewingSavedCharacter.build}
