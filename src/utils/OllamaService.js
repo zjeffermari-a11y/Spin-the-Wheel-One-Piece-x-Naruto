@@ -1,3 +1,5 @@
+import { CHARACTER_LORE } from '../data/characters';
+
 export class OllamaService {
     constructor() {
     }
@@ -32,9 +34,11 @@ export class OllamaService {
     async generateSynergies(build) {
         const buildSummary = this._getBuildSummary(build);
         const haxBreakdown = this._getHaxBreakdown(build);
+        const vesselLore = this._getVesselLoreDirective(build);
         const prompt = `CHARACTER:
 ${buildSummary}
 ${haxBreakdown ? `HAX: ${haxBreakdown}` : ''}
+${vesselLore ? `\nVESSEL LORE (STRICT OVERRIDE):\n${vesselLore}` : ''}
 
 TASK: Invent 1 unique synergy (under 3 sentences) merging their Devil Fruit, Haki, Dōjutsu, Ninjutsu, or Vessel.
 
@@ -68,11 +72,14 @@ SCHEMA:
         const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         const randomLetter = letters.charAt(Math.floor(Math.random() * letters.length));
 
+        const vesselLore = this._getVesselLoreDirective(build);
+
         const prompt = `CHARACTER:
 ${buildSummary}
 ${haxBreakdown ? `HAX: ${haxBreakdown}` : ''}
 APEX: ${this._getHighestStats(stats)}
 VULNERABLE: ${this._getLowestStats(stats)}
+${vesselLore ? `\nVESSEL LORE (STRICT OVERRIDE):\n${vesselLore}` : ''}
 
 MANDATES:
 1. NAME/EPITHET: Authentic name (start with ${randomLetter}). Unique epic epithet (no generic titles).
@@ -157,6 +164,19 @@ RULES:
         if (build.potential && build.potential.name !== 'None') items.push(`Growth Potential: ${build.potential.name}`);
 
         return items.join('\n');
+    }
+
+    _getVesselLoreDirective(build) {
+        if (!build.vessel || build.vessel.name === 'None') return null;
+        const lore = CHARACTER_LORE[build.vessel.name];
+        if (!lore) return null;
+
+        return `You MUST adhere to the following canonical traits of this vessel, which override random generation:
+- OVERRIDES: ${lore.overrides}
+- APPEARANCE: ${lore.appearance}
+- PERSONALITY: ${lore.personality}
+- ABILITIES: ${lore.abilities}
+- HAX: ${lore.hax}`;
     }
 
     _getHaxBreakdown(build) {
