@@ -17,8 +17,14 @@ const Wheel = forwardRef(({ options, onTick, onSegmentChange }, ref) => {
         return options[index] || null;
     }, [options]);
 
-    const draw = (ctx, canvas) => {
+    const offscreenCanvasRef = useRef(document.createElement('canvas'));
+
+    const preRenderWheel = useCallback(() => {
         if (!options || options.length === 0) return;
+        const canvas = offscreenCanvasRef.current;
+        canvas.width = 500;
+        canvas.height = 500;
+        const ctx = canvas.getContext('2d');
         const W = canvas.width;
         const H = canvas.height;
         const cx = W / 2;
@@ -26,9 +32,7 @@ const Wheel = forwardRef(({ options, onTick, onSegmentChange }, ref) => {
         const r = Math.min(W, H) / 2 - 10;
         
         ctx.clearRect(0, 0, W, H);
-        ctx.save();
         ctx.translate(cx, cy);
-        ctx.rotate(rotationRef.current);
 
         let currentAngle = 0;
         const arc = (Math.PI * 2) / options.length;
@@ -44,7 +48,6 @@ const Wheel = forwardRef(({ options, onTick, onSegmentChange }, ref) => {
             ctx.arc(0, 0, r, startAngle, endAngle);
             ctx.closePath();
             
-            // Use rarity color with alternating brightness for readability
             const baseColor = RARITY[opt.rarity]?.color || '#333';
             ctx.fillStyle = i % 2 === 0 ? baseColor : darkenColor(baseColor, 0.85);
             ctx.fill();
@@ -52,39 +55,32 @@ const Wheel = forwardRef(({ options, onTick, onSegmentChange }, ref) => {
             ctx.lineWidth = isLargeWheel ? 1 : 2;
             ctx.stroke();
 
-            // Draw text on the wheel
             ctx.save();
             ctx.rotate(startAngle + arc / 2);
             ctx.textAlign = 'right';
             ctx.textBaseline = 'middle';
             
-            // Dynamically calculate font size based on slice height at the edge
-            // Even at 50 slices, we want it to be readable, minimum 9px
             const fontSize = Math.max(9, Math.min(18, Math.floor(r * arc * 0.6)));
             ctx.font = `900 ${fontSize}px "Bebas Neue", sans-serif`;
             
-            // High contrast text: White fill with a sharp black outline
             ctx.fillStyle = '#ffffff';
             ctx.lineWidth = 2;
             ctx.strokeStyle = '#000000';
             
-            // Truncate if necessary, but try to fit
             const text = opt.name.substring(0, 24);
-            ctx.strokeText(text, r - 15, 1); // 1px offset for Bebas baseline adjustment
+            ctx.strokeText(text, r - 15, 1);
             ctx.fillText(text, r - 15, 1);
             ctx.restore();
 
             currentAngle += arc;
         }
 
-        // Outer ring solid border
         ctx.beginPath();
         ctx.arc(0, 0, r, 0, Math.PI * 2);
         ctx.strokeStyle = '#000';
         ctx.lineWidth = 4;
         ctx.stroke();
 
-        // Center hub - Brutalist style (Black outer, white inner, black dot)
         ctx.beginPath();
         ctx.arc(0, 0, 30, 0, Math.PI * 2);
         ctx.fillStyle = '#000';
@@ -99,19 +95,32 @@ const Wheel = forwardRef(({ options, onTick, onSegmentChange }, ref) => {
         ctx.arc(0, 0, 5, 0, Math.PI * 2);
         ctx.fillStyle = '#000';
         ctx.fill();
+    }, [options]);
 
+    const draw = (ctx, canvas) => {
+        if (!options || options.length === 0) return;
+        const W = canvas.width;
+        const H = canvas.height;
+        const cx = W / 2;
+        const cy = H / 2;
+        
+        ctx.clearRect(0, 0, W, H);
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.rotate(rotationRef.current);
+        ctx.drawImage(offscreenCanvasRef.current, -cx, -cy);
         ctx.restore();
     };
 
     useEffect(() => {
+        preRenderWheel();
         const canvas = canvasRef.current;
         const ctx = canvas.getContext('2d');
         rotationRef.current = 0;
         draw(ctx, canvas);
-        // Report initial segment
         const seg = getPointerSegment(0);
         if (seg && onSegmentChange) onSegmentChange(seg.name);
-    }, [options]);
+    }, [options, preRenderWheel]);
 
     useImperativeHandle(ref, () => ({
         spinTo: (targetIndex, durationMs, callback) => {
