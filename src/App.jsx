@@ -385,18 +385,19 @@ function App() {
 
     return (
         <div className="min-h-screen bg-[#F9FAFB] text-black font-inter relative">
+            {/* Global Particle Overlay for Result Screen */}
             {screen === 'result' && (
-                <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 0 }}>
+                <div className="fixed inset-0 pointer-events-none overflow-hidden z-50">
                     {/* Rising particles from bottom */}
-                    {[...Array(15)].map((_, i) => (
-                        <div key={`rise-${i}`} className="particle" style={{ left: `${Math.random() * 100}%`, width: `${Math.random() * 6 + 4}px`, height: `${Math.random() * 6 + 4}px`, animationDuration: `${Math.random() * 4 + 4}s`, animationDelay: `${Math.random() * 5}s` }} />
+                    {[...Array(25)].map((_, i) => (
+                        <div key={`rise-${i}`} className="particle" style={{ left: `${Math.random() * 100}%`, bottom: '-20px', width: `${Math.random() * 6 + 4}px`, height: `${Math.random() * 6 + 4}px`, animationDuration: `${Math.random() * 4 + 4}s`, animationDelay: `${Math.random() * 5}s` }} />
                     ))}
                     {/* Scattered drift particles */}
-                    {[...Array(20)].map((_, i) => (
+                    {[...Array(25)].map((_, i) => (
                         <div key={`scatter-${i}`} className="particle-scattered" style={{ left: `${Math.random() * 100}%`, top: `${Math.random() * 100}%`, width: `${Math.random() * 10 + 4}px`, height: `${Math.random() * 10 + 4}px`, animationDuration: `${Math.random() * 5 + 3}s`, animationDelay: `${Math.random() * 6}s` }} />
                     ))}
                     {/* Sparkle flashes */}
-                    {[...Array(10)].map((_, i) => (
+                    {[...Array(15)].map((_, i) => (
                         <div key={`sparkle-${i}`} className="particle-sparkle" style={{ left: `${Math.random() * 100}%`, top: `${Math.random() * 100}%`, width: `${Math.random() * 4 + 2}px`, height: `${Math.random() * 4 + 2}px`, animationDuration: `${Math.random() * 2 + 1.5}s`, animationDelay: `${Math.random() * 5}s` }} />
                     ))}
                 </div>
@@ -580,9 +581,16 @@ function App() {
                             animate={{ opacity: 1 }}
                             className="bg-white w-full max-w-4xl mx-auto py-32 px-8 flex flex-col items-center justify-center text-center shadow-lg relative overflow-hidden"
                         >
-                            <div className="relative z-10">
-                                <div className="lore-spinner mb-12"></div>
-                                <h2 className="text-5xl md:text-7xl font-bebas tracking-widest text-black">
+                            <div className="absolute inset-0 pointer-events-none z-0 bg-gradient-to-b from-transparent to-gray-50/50"></div>
+                            <div className="relative z-10 flex flex-col items-center">
+                                {/* AI Studio-like spinner with pulsing core */}
+                                <div className="relative w-24 h-24 mb-12">
+                                    <div className="absolute inset-0 border-4 border-gray-100 rounded-full"></div>
+                                    <div className="absolute inset-0 border-4 border-[#eab308] rounded-full border-t-transparent animate-spin"></div>
+                                    <div className="absolute inset-2 bg-[#eab308]/20 rounded-full animate-pulse"></div>
+                                    <div className="absolute inset-6 bg-[#eab308] rounded-full animate-pulse blur-sm"></div>
+                                </div>
+                                <h2 className="text-5xl md:text-7xl font-bebas tracking-widest text-black animate-pulse">
                                     FORGING DESTINY
                                 </h2>
                                 <p className="mt-4 text-gray-500 font-bold max-w-lg mx-auto">
