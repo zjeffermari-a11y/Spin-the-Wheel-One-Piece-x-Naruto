@@ -19,7 +19,7 @@ export default function CharacterCard({ build, stats, overall, bounty, lore, syn
 *"${lore?.epithet || 'The Nameless'}"*
 
 **Tier:** ${tier?.name || 'Unknown Tier'}
-**Bounty:** ฿ ${bounty === -1 ? '??? (Unknown)' : bounty?.toLocaleString() || '0'}
+**Bounty:** ฿ ${Number(bounty) === -1 ? '??? (Unknown)' : bounty?.toLocaleString() || '0'}
 **Overall Power:** ${overall || 0}
 
 ## Build Profile
@@ -134,7 +134,7 @@ ${lore?.bio || ''}
                             {tier?.name || 'Unknown Tier'}
                         </div>
                         <div className="text-4xl font-display tracking-widest text-black flex items-center gap-2 bg-white px-3 border border-gray-200">
-                            <span>฿</span> {bounty === -1 ? '???' : bounty?.toLocaleString() || '0'}
+                            <span>฿</span> {Number(bounty) === -1 ? '???' : bounty?.toLocaleString() || '0'}
                         </div>
                     </div>
                     
