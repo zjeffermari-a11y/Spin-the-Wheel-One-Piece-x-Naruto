@@ -562,15 +562,64 @@ function App() {
                             key="loading"
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
-                            className="bg-white border-2 border-gray-100 w-full max-w-4xl mx-auto py-32 px-8 flex flex-col items-center justify-center text-center shadow-sm"
+                            className="bg-white border-2 border-gray-100 w-full max-w-4xl mx-auto py-32 px-8 flex flex-col items-center justify-center text-center shadow-sm relative overflow-hidden"
                         >
-                            <div className="lore-spinner mb-12"></div>
-                            <h2 className="text-5xl md:text-7xl font-bebas tracking-widest text-black">
-                                FORGING DESTINY
-                            </h2>
-                            <p className="mt-4 text-gray-500 font-bold max-w-lg">
-                                The energies of the world are converging. Awakening your unique vessel, abilities, and legendary lore...
-                            </p>
+                            {/* Ember particles — rise from bottom */}
+                            <div className="particle-container">
+                                {[...Array(25)].map((_, i) => (
+                                    <div 
+                                        key={`ember-${i}`}
+                                        className="particle-ember"
+                                        style={{
+                                            left: `${Math.random() * 100}%`,
+                                            bottom: `${Math.random() * 20}%`,
+                                            width: `${Math.random() * 8 + 3}px`,
+                                            height: `${Math.random() * 8 + 3}px`,
+                                            animationDuration: `${Math.random() * 3 + 2}s`,
+                                            animationDelay: `${Math.random() * 3}s`
+                                        }}
+                                    />
+                                ))}
+                                {/* Sparkles — scattered across entire screen */}
+                                {[...Array(15)].map((_, i) => (
+                                    <div 
+                                        key={`sparkle-${i}`}
+                                        className="particle-sparkle"
+                                        style={{
+                                            left: `${Math.random() * 100}%`,
+                                            top: `${Math.random() * 100}%`,
+                                            width: `${Math.random() * 4 + 2}px`,
+                                            height: `${Math.random() * 4 + 2}px`,
+                                            animationDuration: `${Math.random() * 2 + 1}s`,
+                                            animationDelay: `${Math.random() * 4}s`
+                                        }}
+                                    />
+                                ))}
+                                {/* Scattered drift particles */}
+                                {[...Array(12)].map((_, i) => (
+                                    <div 
+                                        key={`scatter-${i}`}
+                                        className="particle-scattered"
+                                        style={{
+                                            left: `${Math.random() * 100}%`,
+                                            top: `${Math.random() * 100}%`,
+                                            width: `${Math.random() * 10 + 4}px`,
+                                            height: `${Math.random() * 10 + 4}px`,
+                                            animationDuration: `${Math.random() * 4 + 3}s`,
+                                            animationDelay: `${Math.random() * 5}s`
+                                        }}
+                                    />
+                                ))}
+                            </div>
+                            <div className="relative z-10">
+                                <div className="lore-spinner mb-12"></div>
+                                <h2 className="text-5xl md:text-7xl font-bebas tracking-widest text-black">
+                                    FORGING DESTINY
+                                </h2>
+                                <p className="mt-4 text-gray-500 font-bold max-w-lg mx-auto">
+                                    The energies of the world are converging. Awakening your unique vessel, abilities, and legendary lore...
+                                </p>
+                            </div>
                         </motion.div>
                     )}
 
@@ -581,17 +630,48 @@ function App() {
                             animate={{ opacity: 1 }}
                             className="w-full bg-white border-2 border-gray-100 shadow-sm relative overflow-hidden"
                         >
-                            {/* Particles Background */}
+                            {/* Particles Background — mixed types scattered everywhere */}
                             <div className="particle-container">
-                                {[...Array(20)].map((_, i) => (
+                                {/* Rising particles from bottom */}
+                                {[...Array(15)].map((_, i) => (
                                     <div 
-                                        key={i} 
+                                        key={`rise-${i}`} 
                                         className="particle"
                                         style={{
                                             left: `${Math.random() * 100}%`,
                                             width: `${Math.random() * 6 + 4}px`,
                                             height: `${Math.random() * 6 + 4}px`,
                                             animationDuration: `${Math.random() * 4 + 4}s`,
+                                            animationDelay: `${Math.random() * 5}s`
+                                        }}
+                                    />
+                                ))}
+                                {/* Scattered drift particles */}
+                                {[...Array(20)].map((_, i) => (
+                                    <div 
+                                        key={`scatter-${i}`} 
+                                        className="particle-scattered"
+                                        style={{
+                                            left: `${Math.random() * 100}%`,
+                                            top: `${Math.random() * 100}%`,
+                                            width: `${Math.random() * 10 + 4}px`,
+                                            height: `${Math.random() * 10 + 4}px`,
+                                            animationDuration: `${Math.random() * 5 + 3}s`,
+                                            animationDelay: `${Math.random() * 6}s`
+                                        }}
+                                    />
+                                ))}
+                                {/* Sparkle flashes */}
+                                {[...Array(10)].map((_, i) => (
+                                    <div 
+                                        key={`sparkle-${i}`} 
+                                        className="particle-sparkle"
+                                        style={{
+                                            left: `${Math.random() * 100}%`,
+                                            top: `${Math.random() * 100}%`,
+                                            width: `${Math.random() * 4 + 2}px`,
+                                            height: `${Math.random() * 4 + 2}px`,
+                                            animationDuration: `${Math.random() * 2 + 1.5}s`,
                                             animationDelay: `${Math.random() * 5}s`
                                         }}
                                     />
