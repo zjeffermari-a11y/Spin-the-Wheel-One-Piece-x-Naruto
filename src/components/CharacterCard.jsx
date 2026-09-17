@@ -194,13 +194,10 @@ ${lore?.bio || ''}
                         <h4 className="text-xl font-black mb-4 text-black border-b-2 border-black pb-2 uppercase">Active Synergies</h4>
                         {synergies && synergies.length > 0 ? (
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                {synergies.map((syn, idx) => {
-                                    const emojis = ['❤️', '⚡', '🔥', '🌊', '✨', '🛡️', '🌪️', '⚔️'];
-                                    const emoji = emojis[idx % emojis.length];
-                                    return (
+                                {synergies.map((syn, idx) => (
                                         <div key={idx} className="bg-white border border-gray-200 p-4">
-                                            <div className="text-xl font-black text-black mb-2 flex items-center gap-2 uppercase">
-                                                <span>{emoji}</span> {syn.name}
+                                            <div className="text-xl font-black text-black mb-2 uppercase">
+                                                {syn.name}
                                             </div>
                                             <div className="text-sm text-gray-800 font-medium mb-4 leading-relaxed">{syn.desc || syn.synergy_desc}</div>
                                             <div className="flex flex-wrap gap-2 mt-auto">
@@ -213,9 +210,8 @@ ${lore?.bio || ''}
                                                 ))}
                                             </div>
                                         </div>
-                                    );
-                                })}
-                            </div>
+                                    ))}
+                                </div>
                         ) : (
                             <div className="text-gray-500 font-medium uppercase text-sm">No active synergies found for this build.</div>
                         )}
