@@ -46,55 +46,36 @@ const Wheel = forwardRef(({ options, onTick, onSegmentChange }, ref) => {
             
             // Use rarity color with alternating brightness for readability
             const baseColor = RARITY[opt.rarity]?.color || '#333';
-            ctx.fillStyle = i % 2 === 0 ? baseColor : darkenColor(baseColor, 0.7);
+            ctx.fillStyle = i % 2 === 0 ? baseColor : darkenColor(baseColor, 0.85);
             ctx.fill();
-            ctx.strokeStyle = '#0a0a0a';
-            ctx.lineWidth = isLargeWheel ? 1 : 3;
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = isLargeWheel ? 1 : 2;
             ctx.stroke();
 
-            // Only draw text for smaller wheels (<=20 slices)
-            if (!isLargeWheel) {
-                ctx.save();
-                ctx.rotate(startAngle + arc / 2);
-                ctx.textAlign = 'right';
-                ctx.textBaseline = 'middle';
-                ctx.fillStyle = '#ffffff';
-                const fontSize = Math.max(10, Math.min(18, Math.floor(r * arc * 0.4)));
-                ctx.font = `bold ${fontSize}px sans-serif`;
-                ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
-                ctx.shadowBlur = 4;
-                ctx.shadowOffsetX = 2;
-                ctx.shadowOffsetY = 2;
-                ctx.fillText(opt.name.substring(0, 16), r - 25, 0);
-                ctx.restore();
-            }
-            
             currentAngle += arc;
         }
 
-        // Outer ring glow
+        // Outer ring solid border
         ctx.beginPath();
         ctx.arc(0, 0, r, 0, Math.PI * 2);
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
-        ctx.lineWidth = 3;
+        ctx.strokeStyle = '#000';
+        ctx.lineWidth = 4;
         ctx.stroke();
 
-        // Center hub
-        const gradient = ctx.createRadialGradient(0, 0, 10, 0, 0, 45);
-        gradient.addColorStop(0, '#333');
-        gradient.addColorStop(1, '#111');
+        // Center hub - Brutalist style (Black outer, white inner, black dot)
         ctx.beginPath();
-        ctx.arc(0, 0, 40, 0, Math.PI * 2);
-        ctx.fillStyle = gradient;
+        ctx.arc(0, 0, 30, 0, Math.PI * 2);
+        ctx.fillStyle = '#000';
         ctx.fill();
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
-        ctx.lineWidth = 3;
-        ctx.stroke();
 
-        // Center dot
         ctx.beginPath();
-        ctx.arc(0, 0, 6, 0, Math.PI * 2);
+        ctx.arc(0, 0, 15, 0, Math.PI * 2);
         ctx.fillStyle = '#fff';
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(0, 0, 5, 0, Math.PI * 2);
+        ctx.fillStyle = '#000';
         ctx.fill();
 
         ctx.restore();

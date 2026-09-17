@@ -353,6 +353,7 @@ function App() {
     };
 
     const handleGenerateLoreAndProceed = async () => {
+        setScreen('loading');
         await handleGenerateLore();
         setScreen('result');
     };
@@ -383,67 +384,60 @@ function App() {
     };
 
     return (
-        <div className="min-h-screen bg-[#050505] text-white selection:bg-indigo-500/30" style={{ fontFamily: "'Chakra Petch', 'Segoe UI', system-ui, sans-serif" }}>
-            {/* Noise texture overlay */}
-            <div className="fixed inset-0 pointer-events-none z-[1] opacity-[0.03]" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%270 0 256 256%27 xmlns=%27http://www.w3.org/2000/svg%27%3E%3Cfilter id=%27noise%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%270.9%27 numOctaves=%274%27 stitchTiles=%27stitch%27/%3E%3C/filter%3E%3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url(%23noise)%27/%3E%3C/svg%3E")', backgroundRepeat: 'repeat' }} />
-
+        <div className="min-h-screen bg-[#F9FAFB] text-black font-inter relative">
+            
             {/* Header */}
-            <header className="px-6 py-4 border-b border-[#1a1a1a] bg-[#080808]/90 backdrop-blur-md flex justify-between items-center sticky top-0 z-40">
+            <header className="px-6 py-4 bg-white border-b-2 border-black flex justify-between items-center sticky top-0 z-40">
                 <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-xs font-black">⚡</div>
-                    <h1 className="text-xl md:text-2xl font-black tracking-tight text-white uppercase">
-                        Spin Your <span className="text-orange-500">Destiny</span>
+                    <h1 className="text-2xl md:text-3xl font-bebas tracking-wider uppercase text-black">
+                        SUMMON
                     </h1>
                 </div>
-                <div className="flex gap-3 items-center">
+                <div className="flex gap-4 items-center">
                     {user ? (
-                        <div className="flex items-center gap-2 mr-1 bg-[#111] border border-[#1a1a1a] pl-3 pr-1 py-1 rounded-lg">
-                            <span className="text-xs text-gray-500 max-w-[80px] truncate" title={user.email}>{user.email}</span>
-                            <button onClick={handleLogout} className="p-1.5 hover:bg-red-500/20 rounded-md transition-colors text-gray-500 hover:text-red-400" title="Log Out">
-                                <LogOut size={14} />
+                        <div className="flex items-center gap-2 mr-1 bg-white border-2 border-black pl-3 pr-1 py-1">
+                            <span className="text-sm font-bold text-black max-w-[80px] truncate" title={user.email}>{user.email}</span>
+                            <button onClick={handleLogout} className="p-1.5 hover:bg-gray-100 transition-colors text-black" title="Log Out">
+                                <LogOut size={16} strokeWidth={2.5} />
                             </button>
                         </div>
                     ) : (
-                        <button onClick={() => setIsAuthOpen(true)} className="flex items-center gap-2 px-3 py-1.5 bg-orange-600/10 hover:bg-orange-600/20 border border-orange-500/20 rounded-lg transition-colors text-orange-400 hover:text-orange-300 text-sm font-bold" title="Log In / Sign Up">
-                            <User size={14} />
+                        <button onClick={() => setIsAuthOpen(true)} className="flex items-center gap-2 px-5 py-2 bg-black text-white hover:bg-gray-800 transition-colors text-sm font-bebas tracking-widest uppercase" title="Log In / Sign Up">
+                            <User size={16} strokeWidth={2.5} />
                             <span>Sign In</span>
                         </button>
                     )}
-                    <button onClick={() => setIsRosterOpen(true)} className="p-2 hover:bg-[#1a1a1a] rounded-lg transition-colors text-gray-500 hover:text-white" title="Roster">
-                        <Users size={18} />
+                    <button onClick={() => setIsRosterOpen(true)} className="p-2 hover:bg-gray-100 transition-colors text-black" title="Roster">
+                        <Users size={20} strokeWidth={2.5} />
                     </button>
-                    <button onClick={() => setIsSettingsOpen(true)} className="p-2 hover:bg-[#1a1a1a] rounded-lg transition-colors text-gray-500 hover:text-white" title="Settings">
-                        <Settings size={18} />
+                    <button onClick={() => setIsSettingsOpen(true)} className="p-2 hover:bg-gray-100 transition-colors text-black" title="Settings">
+                        <Settings size={20} strokeWidth={2.5} />
                     </button>
                 </div>
             </header>
 
-            <main className="p-4 md:p-8 relative z-[2]">
+            <main className="p-4 md:p-12 relative z-10 w-full max-w-[1400px] mx-auto min-h-[calc(100vh-80px)] flex flex-col justify-center">
                 <AnimatePresence mode="wait">
                     {screen === 'landing' && (
                         <motion.div
                             key="landing"
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -20 }}
-                            className="flex flex-col items-center justify-center min-h-[70vh] text-center relative"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="bg-white border-2 border-gray-100 w-full max-w-4xl mx-auto py-24 px-8 flex flex-col items-center justify-center text-center shadow-sm"
                         >
-                            {/* Background kanji */}
-                            <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] text-[20rem] font-black select-none pointer-events-none">運命</div>
-                            
-                            <div className="text-sm font-bold text-orange-500/60 uppercase tracking-[0.5em] mb-4">One Piece × Naruto</div>
-                            <h2 className="text-5xl md:text-7xl font-black mb-6 text-white uppercase tracking-tight">
-                                Forge Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-red-500">Legend</span>
+                            <h2 className="text-7xl md:text-9xl font-bebas leading-none tracking-normal text-black">
+                                FORGE YOUR<br/>
+                                <span className="text-[#CC0000]">CREW</span>
                             </h2>
-                            <p className="text-base md:text-lg text-gray-500 max-w-xl mx-auto mb-12 leading-relaxed">
-                                Spin the wheel of fate. Combine abilities from across universes. Generate unique characters with dynamic stats, synergies, and AI-powered lore.
+                            <p className="mt-6 text-lg font-bold text-gray-600">
+                                Assemble abilities from across dimensions.
                             </p>
                             <button
                                 onClick={startCreation}
-                                className="group relative px-10 py-4 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-500 hover:to-red-500 text-white rounded-lg font-black text-lg tracking-wider transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-orange-900/30 uppercase"
+                                className="mt-12 px-12 py-4 bg-black text-white font-bebas text-2xl tracking-widest uppercase hover:bg-gray-900 transition-colors"
                             >
-                                <span className="relative z-10">Begin Creation</span>
-                                <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-orange-600 to-red-600 blur-xl opacity-40 group-hover:opacity-60 transition-opacity" />
+                                COMMENCE
                             </button>
                         </motion.div>
                     )}
@@ -451,167 +445,188 @@ function App() {
                     {screen === 'spinning' && categories[catIndex] && (
                         <motion.div
                             key="spinning"
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 1.1 }}
-                            className="flex flex-col lg:flex-row gap-6 max-w-7xl mx-auto"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="w-full bg-white border-2 border-gray-100 shadow-sm p-6 md:p-12"
                         >
-                            {/* Left Column: Wheel */}
-                            <div className="flex-1 bg-[#0a0a0a] p-6 md:p-8 rounded-xl border border-[#1a1a1a] flex flex-col items-center relative overflow-hidden">
-                                {/* Category header */}
-                                <div className="flex items-center gap-3 mb-6 z-10">
-                                    <div className="px-3 py-1 bg-orange-600/10 border border-orange-500/20 rounded text-xs font-bold text-orange-400 uppercase tracking-widest">
-                                        {spinComplete ? 'Done' : `${catIndex + 1}/${categories.length}`}
-                                    </div>
-                                    <h3 className="text-2xl font-black text-white uppercase tracking-wide">
-                                        {spinComplete ? 'Build Complete' : categories[catIndex].name}
-                                    </h3>
-                                </div>
-
-                                <div className="relative z-10 w-full max-w-[380px]">
-                                    {/* Spin Pointer — sharper, glowing */}
-                                    <div className="absolute top-[-16px] left-1/2 -translate-x-1/2 z-20">
-                                        <div className="w-0 h-0 border-l-[12px] border-l-transparent border-r-[12px] border-r-transparent border-t-[24px] border-t-orange-500 drop-shadow-[0_0_8px_rgba(249,115,22,0.6)]" />
-                                    </div>
-
-                                    <Wheel ref={wheelRef} options={categories[catIndex].options} onTick={playTick} onSegmentChange={setCurrentSegmentName} />
-                                </div>
-
-                                {/* Live Readout — the name ticker */}
-                                <div className="w-full max-w-sm mt-4 z-10">
-                                    <div className="bg-[#111] border border-[#1a1a1a] rounded-lg px-4 py-3 text-center overflow-hidden">
-                                        <div className="text-[10px] font-bold text-gray-600 uppercase tracking-[0.3em] mb-1">Currently On</div>
-                                        <div className="text-lg md:text-xl font-black text-white truncate transition-all duration-75" key={currentSegmentName}>
-                                            {currentSegmentName || '---'}
+                            <div className="grid grid-cols-1 lg:grid-cols-[200px_1fr_300px] gap-8 md:gap-12 w-full">
+                                
+                                {/* Left Column: Drop Rates */}
+                                <div className="hidden lg:block">
+                                    <div className="border-2 border-gray-100 p-4 w-full">
+                                        <h4 className="font-bebas text-xl tracking-widest border-b-2 border-black pb-2 mb-4">DROP RATES</h4>
+                                        <div className="space-y-3 font-bold text-sm text-gray-600">
+                                            <div className="flex items-center justify-between"><div className="flex items-center gap-2"><div className="w-3 h-3 bg-gray-500"></div>COMMON</div><span>47.1%</span></div>
+                                            <div className="flex items-center justify-between"><div className="flex items-center gap-2"><div className="w-3 h-3 bg-green-500"></div>UNCOMMON</div><span>26.2%</span></div>
+                                            <div className="flex items-center justify-between"><div className="flex items-center gap-2"><div className="w-3 h-3 bg-blue-500"></div>RARE</div><span>15.7%</span></div>
+                                            <div className="flex items-center justify-between"><div className="flex items-center gap-2"><div className="w-3 h-3 bg-purple-500"></div>EPIC</div><span>8.4%</span></div>
+                                            <div className="flex items-center justify-between"><div className="flex items-center gap-2"><div className="w-3 h-3 bg-yellow-500"></div>LEGEND</div><span>2.1%</span></div>
+                                            <div className="flex items-center justify-between"><div className="flex items-center gap-2"><div className="w-3 h-3 bg-red-500"></div>MYTHIC</div><span>0.5%</span></div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div className="flex gap-3 mt-6 z-10 w-full max-w-sm">
-                                    {!spinComplete ? (
-                                        <>
-                                            <button
-                                                onClick={handleSpinClick}
-                                                disabled={isSpinning}
-                                                className="flex-1 py-3.5 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-500 hover:to-red-500 disabled:from-gray-800 disabled:to-gray-800 disabled:text-gray-500 rounded-lg font-bold transition-all text-base uppercase tracking-wider"
-                                            >
-                                                Spin
-                                            </button>
-                                            <button
-                                                onClick={handleAutoSpin}
-                                                disabled={isSpinning}
-                                                className="px-5 py-3.5 bg-[#151515] hover:bg-[#1a1a1a] disabled:opacity-40 border border-[#222] rounded-lg font-bold transition-all text-base uppercase tracking-wider text-gray-400 hover:text-white"
-                                            >
-                                                Auto
-                                            </button>
-                                        </>
-                                    ) : (
-                                        <div className="flex flex-col gap-3 w-full">
-                                            {isGeneratingLore ? (
-                                                <button
-                                                    disabled
-                                                    className="w-full py-3.5 bg-orange-900/30 text-orange-300/60 rounded-lg font-bold transition-all text-base uppercase tracking-wider flex items-center justify-center gap-2"
-                                                >
-                                                    <div className="w-4 h-4 border-2 border-orange-400 border-t-transparent rounded-full animate-spin" />
-                                                    Generating Lore...
-                                                </button>
-                                            ) : (
-                                                <button
-                                                    onClick={handleGenerateLoreAndProceed}
-                                                    className="w-full py-3.5 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-500 hover:to-red-500 rounded-lg font-bold transition-all text-base uppercase tracking-wider"
-                                                >
-                                                    Generate Lore & View
-                                                </button>
-                                            )}
+                                {/* Center Column: Wheel */}
+                                <div className="flex flex-col items-center relative min-h-[500px]">
+                                    <div className="text-center mb-8">
+                                        <h3 className="font-bebas text-5xl tracking-widest text-black">
+                                            {spinComplete ? 'BUILD COMPLETE' : categories[catIndex].name.toUpperCase()}
+                                        </h3>
+                                        <div className="font-bold text-gray-500 tracking-widest mt-1">
+                                            {spinComplete ? 'READY' : `${catIndex + 1} // ${categories.length}`}
                                         </div>
-                                    )}
-                                </div>
+                                    </div>
 
-                                <AnimatePresence>
-                                    {currentOutcome && (
-                                        <motion.div
-                                            initial={{ opacity: 0, y: 50, scale: 0.5 }}
-                                            animate={{ opacity: 1, y: 0, scale: 1, x: ['E', 'L', 'M'].includes(currentOutcome.rarity) ? [-8, 8, -8, 8, 0] : 0 }}
-                                            transition={{ duration: 0.3 }}
-                                            exit={{ opacity: 0, y: -50, scale: 0.5 }}
-                                            className="absolute inset-0 flex items-center justify-center bg-black/85 backdrop-blur-md z-30"
-                                        >
-                                            <div 
-                                                className="text-center p-8 rounded-xl border shadow-lg bg-[#0a0a0a]/80"
-                                                style={{ 
-                                                    borderColor: RARITY[currentOutcome.rarity]?.color || '#333',
-                                                    boxShadow: `0 0 40px ${RARITY[currentOutcome.rarity]?.color || '#ffffff'}30`
-                                                }}
+                                    <div className="relative w-full max-w-[400px] aspect-square flex items-center justify-center">
+                                        {/* Simple Black Pointer */}
+                                        <div className="absolute top-[-10px] left-1/2 -translate-x-1/2 z-20">
+                                            <div className="w-0 h-0 border-l-[16px] border-l-transparent border-r-[16px] border-r-transparent border-t-[28px] border-t-black" />
+                                        </div>
+
+                                        <Wheel ref={wheelRef} options={categories[catIndex].options} onTick={playTick} onSegmentChange={setCurrentSegmentName} />
+                                    </div>
+
+                                    <div className="mt-8 font-bebas text-3xl tracking-widest text-gray-400">
+                                        {currentSegmentName ? currentSegmentName.toUpperCase() : '...'}
+                                    </div>
+
+                                    <div className="flex gap-4 mt-8 w-full max-w-sm">
+                                        {!spinComplete ? (
+                                            <>
+                                                <button
+                                                    onClick={handleSpinClick}
+                                                    disabled={isSpinning}
+                                                    className="flex-1 py-4 bg-black text-white font-bebas text-2xl tracking-widest disabled:opacity-50 hover:bg-gray-800 transition-colors"
+                                                >
+                                                    SPIN
+                                                </button>
+                                                <button
+                                                    onClick={handleAutoSpin}
+                                                    disabled={isSpinning}
+                                                    className="flex-1 py-4 bg-gray-100 text-black font-bebas text-2xl tracking-widest disabled:opacity-50 hover:bg-gray-200 transition-colors"
+                                                >
+                                                    AUTO
+                                                </button>
+                                            </>
+                                        ) : (
+                                            <button
+                                                onClick={handleGenerateLoreAndProceed}
+                                                className="w-full py-4 bg-black text-white font-bebas text-2xl tracking-widest hover:bg-gray-800 transition-colors"
                                             >
-                                                <div className="text-[10px] font-bold text-gray-500 uppercase tracking-[0.4em] mb-3">Acquired</div>
-                                                <div className="text-3xl md:text-4xl font-black text-white">
-                                                    {currentOutcome.name}
-                                                </div>
-                                                <div className="mt-3 text-sm font-bold uppercase tracking-widest" style={{ color: RARITY[currentOutcome.rarity]?.color || '#888' }}>
-                                                    {RARITY[currentOutcome.rarity]?.name || 'Unknown'}
-                                                </div>
-                                            </div>
-                                        </motion.div>
-                                    )}
-                                </AnimatePresence>
-                            </div>
-
-                            {/* Right Column: Build Log */}
-                            <div className="w-full lg:w-80 flex flex-col gap-4">
-                                <div className="bg-[#0a0a0a] p-4 rounded-xl border border-[#1a1a1a] flex-1">
-                                    <h4 className="text-sm font-bold mb-3 pb-2 border-b border-[#1a1a1a] text-gray-400 uppercase tracking-widest">Build Log</h4>
-                                    <div className="space-y-1.5 overflow-y-auto max-h-[65vh] pr-1 custom-scrollbar">
-                                        {categories.map((c) => (
-                                            <div key={c.id} className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-all ${build[c.id] ? 'bg-[#111]' : 'opacity-30'}`}>
-                                                <div className="w-1 h-8 rounded-full flex-shrink-0" style={{ backgroundColor: build[c.id] ? (RARITY[build[c.id].rarity]?.color || '#333') : '#1a1a1a' }} />
-                                                <div className="min-w-0 flex-1">
-                                                    <div className="text-[10px] font-bold text-gray-600 uppercase tracking-wider">{c.name}</div>
-                                                    <div className="text-xs font-bold truncate" style={{ color: build[c.id] ? (RARITY[build[c.id].rarity]?.color || '#fff') : '#333' }}>
-                                                        {build[c.id] ? build[c.id].name : '—'}
+                                                GENERATE LORE
+                                            </button>
+                                        )}
+                                    </div>
+                                    
+                                    <AnimatePresence>
+                                        {currentOutcome && (
+                                            <motion.div
+                                                initial={{ opacity: 0, scale: 0.8 }}
+                                                animate={{ opacity: 1, scale: 1 }}
+                                                exit={{ opacity: 0, scale: 0.8 }}
+                                                className="absolute inset-0 flex items-center justify-center bg-white/90 backdrop-blur-sm z-30"
+                                            >
+                                                <div className="text-center p-8 bg-white border-4 shadow-2xl" style={{ borderColor: RARITY[currentOutcome.rarity]?.color || '#000' }}>
+                                                    <div className="font-bold text-gray-500 uppercase tracking-widest mb-2">ACQUIRED</div>
+                                                    <div className="text-4xl md:text-5xl font-bebas text-black">
+                                                        {currentOutcome.name}
                                                     </div>
+                                                </div>
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
+                                </div>
+
+                                {/* Right Column: Active Draft */}
+                                <div className="w-full">
+                                    <h4 className="font-bebas text-2xl tracking-widest mb-4">ACTIVE DRAFT</h4>
+                                    <div className="space-y-2 overflow-y-auto max-h-[600px] pr-2 custom-scrollbar">
+                                        {categories.map((c) => (
+                                            <div key={c.id} className="border-b-2 border-gray-100 border-dashed border-l-4 p-3 bg-gray-50" style={{ borderLeftColor: build[c.id] ? (RARITY[build[c.id].rarity]?.color || '#000') : '#E5E7EB' }}>
+                                                <div className="text-xs font-bold text-gray-500 uppercase tracking-widest">{c.name}</div>
+                                                <div className="font-bold uppercase mt-1 truncate" style={{ color: build[c.id] ? (RARITY[build[c.id].rarity]?.color || '#000') : '#9CA3AF' }}>
+                                                    {build[c.id] ? build[c.id].name : 'PENDING'}
                                                 </div>
                                             </div>
                                         ))}
                                     </div>
                                 </div>
+                                
                             </div>
+                        </motion.div>
+                    )}
+
+                    {screen === 'loading' && (
+                        <motion.div
+                            key="loading"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            className="bg-white border-2 border-gray-100 w-full max-w-4xl mx-auto py-32 px-8 flex flex-col items-center justify-center text-center shadow-sm"
+                        >
+                            <div className="lore-spinner mb-12"></div>
+                            <h2 className="text-5xl md:text-7xl font-bebas tracking-widest text-black">
+                                FORGING DESTINY
+                            </h2>
+                            <p className="mt-4 text-gray-500 font-bold max-w-lg">
+                                The energies of the world are converging. Awakening your unique vessel, abilities, and legendary lore...
+                            </p>
                         </motion.div>
                     )}
 
                     {screen === 'result' && (
                         <motion.div
                             key="result"
-                            initial={{ opacity: 0, y: 30 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="w-full"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            className="w-full bg-white border-2 border-gray-100 shadow-sm relative overflow-hidden"
                         >
-                            <CharacterCard
-                                build={build}
-                                stats={stats}
-                                overall={overall}
-                                bounty={bounty}
-                                tier={tier}
-                                lore={lore}
-                                synergies={synergies}
-                                isGeneratingLore={isGeneratingLore}
-                            />
+                            {/* Particles Background */}
+                            <div className="particle-container">
+                                {[...Array(20)].map((_, i) => (
+                                    <div 
+                                        key={i} 
+                                        className="particle"
+                                        style={{
+                                            left: `${Math.random() * 100}%`,
+                                            width: `${Math.random() * 6 + 4}px`,
+                                            height: `${Math.random() * 6 + 4}px`,
+                                            animationDuration: `${Math.random() * 4 + 4}s`,
+                                            animationDelay: `${Math.random() * 5}s`
+                                        }}
+                                    />
+                                ))}
+                            </div>
 
-                            <div className="mt-8 flex justify-center gap-4">
-                                {lore && (
+                            <div className="relative z-10 p-6 md:p-12">
+                                <CharacterCard
+                                    build={build}
+                                    stats={stats}
+                                    overall={overall}
+                                    bounty={bounty}
+                                    tier={tier}
+                                    lore={lore}
+                                    synergies={synergies}
+                                    isGeneratingLore={false}
+                                />
+
+                                <div className="mt-12 flex justify-center gap-4">
+                                    {lore && (
+                                        <button
+                                            onClick={handleSaveCharacter}
+                                            disabled={isSaved}
+                                            className="px-8 py-4 bg-black text-white disabled:bg-gray-300 font-bebas text-2xl tracking-widest hover:bg-gray-800 transition-colors"
+                                        >
+                                            {isSaved ? 'SAVED' : 'SAVE TO ROSTER'}
+                                        </button>
+                                    )}
                                     <button
-                                        onClick={handleSaveCharacter}
-                                        disabled={isSaved}
-                                        className="px-8 py-3 bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-800 disabled:text-gray-500 rounded-full font-bold transition-all shadow-lg uppercase tracking-widest text-sm"
+                                        onClick={startCreation}
+                                        className="px-8 py-4 bg-white text-black border-2 border-black font-bebas text-2xl tracking-widest hover:bg-gray-100 transition-colors"
                                     >
-                                        {isSaved ? 'Legend Saved' : 'Save Legend'}
+                                        COMMENCE AGAIN
                                     </button>
-                                )}
-                                <button
-                                    onClick={startCreation}
-                                    className="px-8 py-3 bg-[#222] hover:bg-[#333] border border-[#444] rounded-full font-bold transition-all shadow-lg uppercase tracking-widest text-sm"
-                                >
-                                    Create Another Legend
-                                </button>
+                                </div>
                             </div>
                         </motion.div>
                     )}
@@ -623,23 +638,32 @@ function App() {
             <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
 
             {viewingSavedCharacter && (
-                <div className="fixed inset-0 z-[100] bg-black/95 overflow-y-auto p-4 md:p-8">
-                    <div className="w-full max-w-5xl mx-auto flex flex-col items-center pt-4 pb-20">
+                <div className="fixed inset-0 z-[100] bg-white/95 overflow-y-auto p-4 md:p-8">
+                    <div className="w-full max-w-5xl mx-auto flex flex-col items-center pt-12 pb-20">
                         <button
                             onClick={() => setViewingSavedCharacter(null)}
-                            className="mb-8 px-10 py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full font-black transition-all shadow-lg uppercase tracking-widest text-lg shadow-indigo-500/20"
+                            className="mb-8 px-10 py-4 bg-black text-white font-bebas text-2xl tracking-widest hover:bg-gray-800 transition-colors"
                         >
-                            Back to Current Action
+                            CLOSE RECORD
                         </button>
-                        <CharacterCard
-                            build={viewingSavedCharacter.build}
-                            stats={viewingSavedCharacter.stats}
-                            overall={viewingSavedCharacter.overall}
-                            bounty={viewingSavedCharacter.bounty}
-                            tier={viewingSavedCharacter.tier}
-                            lore={viewingSavedCharacter.lore}
-                            synergies={viewingSavedCharacter.synergies || []}
-                        />
+                        <div className="w-full bg-white border-2 border-gray-100 p-8 shadow-xl relative overflow-hidden">
+                             <div className="particle-container">
+                                {[...Array(10)].map((_, i) => (
+                                    <div key={i} className="particle" style={{ left: `${Math.random() * 100}%`, width: `${Math.random() * 6 + 4}px`, height: `${Math.random() * 6 + 4}px`, animationDuration: `${Math.random() * 4 + 4}s`, animationDelay: `${Math.random() * 5}s` }} />
+                                ))}
+                            </div>
+                            <div className="relative z-10">
+                                <CharacterCard
+                                    build={viewingSavedCharacter.build}
+                                    stats={viewingSavedCharacter.stats}
+                                    overall={viewingSavedCharacter.overall}
+                                    bounty={viewingSavedCharacter.bounty}
+                                    tier={viewingSavedCharacter.tier}
+                                    lore={viewingSavedCharacter.lore}
+                                    synergies={viewingSavedCharacter.synergies || []}
+                                />
+                            </div>
+                        </div>
                     </div>
                 </div>
             )}

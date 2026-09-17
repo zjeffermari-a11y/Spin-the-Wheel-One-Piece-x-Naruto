@@ -111,14 +111,14 @@ ${lore?.bio || ''}
                     <>
                         <button 
                             onClick={handleCopyMarkdown}
-                            className="flex items-center gap-2 px-4 py-2 bg-[#222] hover:bg-[#333] border border-[#444] text-white rounded-lg transition-colors font-bold shadow-lg cursor-pointer"
+                            className="flex items-center gap-2 px-4 py-2 bg-white hover:bg-gray-100 border-2 border-black text-black rounded-none shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-transform active:translate-y-1 active:shadow-none font-black uppercase cursor-pointer"
                         >
                             <Copy size={18} />
                             Copy Markdown
                         </button>
                         <button 
                             onClick={handleDownload}
-                            className="flex items-center gap-2 px-4 py-2 bg-[#4f46e5] hover:bg-[#4338ca] text-white rounded-lg transition-colors font-bold shadow-lg cursor-pointer"
+                            className="flex items-center gap-2 px-4 py-2 bg-black hover:bg-gray-800 text-white border-2 border-black rounded-none shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-transform active:translate-y-1 active:shadow-none font-black uppercase cursor-pointer"
                         >
                             <Download size={18} />
                             Download PDF
@@ -127,39 +127,39 @@ ${lore?.bio || ''}
                 )}
             </div>
             
-            <div ref={cardRef} className="bg-[#111] rounded-2xl shadow-[0_0_50px_rgba(0,0,0,0.8)] overflow-hidden border border-[#333]">
+            <div ref={cardRef} className="bg-white border-4 border-black shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] overflow-hidden">
                 {/* Header */}
-                <div className="p-8 border-b border-[#222] bg-gradient-to-b from-[#1a1a1a] to-[#111] relative overflow-hidden">
+                <div className="p-8 border-b-4 border-black bg-white relative overflow-hidden">
                     <div className="flex justify-between items-start mb-4">
                         <div 
-                            className={`px-4 py-1 rounded-full text-sm font-bold border-2 ${tierClass} bg-black/50 backdrop-blur-sm`}
+                            className={`px-4 py-1 rounded-none text-sm font-black border-4 ${tierClass} bg-white`}
                             style={{ color: tierColor, borderColor: tierColor }}
                         >
                             {tier?.name || 'Unknown Tier'}
                         </div>
-                        <div className="text-2xl font-bold tracking-wider text-[#ffd700] flex items-center gap-2 drop-shadow-[0_0_10px_rgba(255,215,0,0.5)]">
-                            <span className="text-3xl">฿</span> {bounty === -1 ? '??? (Unknown)' : bounty?.toLocaleString() || '0'}
+                        <div className="text-3xl font-black tracking-tighter text-black flex items-center gap-2">
+                            <span className="text-4xl">฿</span> {bounty === -1 ? '??? (UNKNOWN)' : bounty?.toLocaleString() || '0'}
                         </div>
                     </div>
                     
-                    <h2 className="text-4xl md:text-5xl font-black mb-2 tracking-tight text-white drop-shadow-lg">
+                    <h2 className="text-5xl md:text-6xl font-black mb-2 tracking-tighter text-black uppercase">
                         {lore?.name || 'Unknown Legend'}
                     </h2>
-                    <div className="text-xl md:text-2xl text-[#818cf8] font-medium italic mb-6">
+                    <div className="text-2xl md:text-3xl text-red-600 font-black italic mb-6 uppercase tracking-tight">
                         "{lore?.epithet || 'The Nameless'}"
                     </div>
                     
-                    <div className="flex gap-4 text-sm font-bold uppercase tracking-wider text-[#9ca3af] mb-8">
+                    <div className="flex gap-4 text-base font-black uppercase tracking-widest text-gray-600 mb-8">
                         <span>{build.race?.name || 'Unknown Race'}</span>
-                        <span className="text-[#333]">/</span>
+                        <span className="text-black">/</span>
                         <span>{build.origin?.name || 'Unknown Origin'}</span>
                     </div>
 
-                    <div className="bg-[#0a0a0a] rounded-xl p-4 border border-[#222]">
-                        <div className="text-sm font-bold text-[#6b7280] mb-2">OVERALL POWER <span className="text-white text-lg ml-2">{overall || 0}</span></div>
-                        <div className="h-6 bg-[#111] rounded-full overflow-hidden border border-[#333]">
+                    <div className="bg-white border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] p-4">
+                        <div className="text-base font-black text-black mb-2 uppercase">OVERALL POWER <span className="text-red-600 text-xl ml-2">{overall || 0}</span></div>
+                        <div className="h-6 bg-gray-200 border-2 border-black overflow-hidden">
                             <div 
-                                className="h-full bg-gradient-to-r from-red-500 via-yellow-500 to-green-500 transition-all duration-1000"
+                                className="h-full bg-red-600 transition-all duration-1000"
                                 style={{ width: `${Math.min(100, Math.max(0, (overall / 150) * 100))}%` }}
                             />
                         </div>
@@ -167,11 +167,11 @@ ${lore?.bio || ''}
                 </div>
 
                 {/* Body */}
-                <div className="p-8 grid grid-cols-1 md:grid-cols-2 gap-8 bg-[#0a0a0a]">
+                <div className="p-8 grid grid-cols-1 md:grid-cols-2 gap-8 bg-gray-50">
                     <CharacterStats stats={stats} />
                     
-                    <div className="bg-[#1a1a1a] p-6 rounded-xl shadow-lg border border-[#2a2a2a]">
-                        <h4 className="text-xl font-bold mb-4 text-[#e0e0e0] border-b border-[#333] pb-2">Build Profile</h4>
+                    <div className="bg-white p-6 border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                        <h4 className="text-xl font-black mb-4 text-black border-b-4 border-black pb-2 uppercase">Build Profile</h4>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-3">
                             {Object.entries(build).map(([key, item]) => {
                                 if (['str', 'spd', 'dur', 'iq', 'combat', 'chakra_cap'].includes(key)) return null;
@@ -180,8 +180,8 @@ ${lore?.bio || ''}
                                 const label = key.replace(/_/g, ' ').toUpperCase();
                                 return (
                                     <div key={key} className="flex flex-col">
-                                        <span className="text-xs text-[#6b7280] font-bold">{label}</span>
-                                        <span className={`text-sm font-bold res-${item.rarity || 'C'}`} style={{ color: RARITY[item.rarity]?.color }}>
+                                        <span className="text-xs text-gray-500 font-black uppercase">{label}</span>
+                                        <span className={`text-sm font-black uppercase res-${item.rarity || 'C'}`} style={{ color: RARITY[item.rarity]?.color }}>
                                             {item.name}
                                         </span>
                                     </div>
@@ -190,18 +190,18 @@ ${lore?.bio || ''}
                         </div>
                     </div>
 
-                    <div className="md:col-span-2 bg-[#1a1a1a] p-6 rounded-xl shadow-lg border border-[#2a2a2a]">
-                        <h4 className="text-xl font-bold mb-4 text-[#e0e0e0] border-b border-[#333] pb-2">Active Synergies</h4>
+                    <div className="md:col-span-2 bg-white p-6 border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                        <h4 className="text-xl font-black mb-4 text-black border-b-4 border-black pb-2 uppercase">Active Synergies</h4>
                         {synergies && synergies.length > 0 ? (
                             <div className="space-y-4">
                                 {synergies.map((syn, idx) => (
-                                    <div key={idx} className="bg-gradient-to-r from-indigo-900/30 to-purple-900/30 p-4 rounded-lg border border-[#6366f1]/20">
-                                        <div className="text-lg font-bold text-[#a5b4fc] mb-1">{syn.name}</div>
-                                        <div className="text-sm text-[#d1d5db] italic mb-2">{syn.desc || syn.synergy_desc}</div>
-                                        <div className="flex flex-wrap gap-2 mt-2">
+                                    <div key={idx} className="bg-white border-4 border-black p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                                        <div className="text-xl font-black text-black mb-1 uppercase">{syn.name}</div>
+                                        <div className="text-base text-gray-700 font-medium mb-3">{syn.desc || syn.synergy_desc}</div>
+                                        <div className="flex flex-wrap gap-2">
                                             {syn.bonuses && Object.entries(syn.bonuses).map(([stat, val]) => (
                                                 val !== 0 ? (
-                                                    <span key={stat} className={`text-xs font-bold px-2 py-1 rounded bg-[#0a0a0a] ${val > 0 ? 'text-[#4ade80] border border-[#14532d]' : 'text-[#f87171] border border-[#7f1d1d]'}`}>
+                                                    <span key={stat} className={`text-sm font-black px-2 py-1 uppercase border-2 border-black ${val > 0 ? 'bg-green-400 text-black' : 'bg-red-400 text-black'}`}>
                                                         {stat.toUpperCase()} {val > 0 ? '+' : ''}{val}
                                                     </span>
                                                 ) : null
@@ -211,46 +211,44 @@ ${lore?.bio || ''}
                                 ))}
                             </div>
                         ) : (
-                            <div className="text-[#6b7280] italic">No active synergies found for this build.</div>
+                            <div className="text-gray-500 font-black uppercase">No active synergies found for this build.</div>
                         )}
                     </div>
 
-                    <div className="md:col-span-2 bg-[#1a1a1a] p-6 rounded-xl shadow-lg border border-[#2a2a2a]">
-                        <h4 className="text-xl font-bold mb-4 text-[#e0e0e0] border-b border-[#333] pb-2">Signature Abilities</h4>
+                    <div className="md:col-span-2 bg-white p-6 border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                        <h4 className="text-xl font-black mb-4 text-black border-b-4 border-black pb-2 uppercase">Signature Abilities</h4>
                         {!lore && !isGeneratingLore ? (
-                            <div className="text-[#6b7280] italic">Lore has not been generated yet. Click 'Generate Lore' to consult the ancient texts.</div>
+                            <div className="text-gray-500 font-black uppercase">Lore has not been generated yet.</div>
                         ) : !lore && isGeneratingLore ? (
-                            <div className="text-[#818cf8] italic animate-pulse flex items-center gap-2">
-                                <div className="w-4 h-4 border-2 border-[#6366f1] border-t-transparent rounded-full animate-spin" />
+                            <div className="text-red-600 font-black uppercase tracking-widest animate-pulse">
                                 Forging signature moves...
                             </div>
                         ) : lore.signature_abilities && lore.signature_abilities.length > 0 ? (
                             <div className="space-y-4">
                                 {lore.signature_abilities.map((ability, idx) => (
-                                    <div key={idx} className="bg-gradient-to-r from-red-900/30 to-orange-900/30 p-4 rounded-lg border border-[#ef4444]/20">
-                                        <div className="text-lg font-bold text-[#fca5a5] mb-1">{ability.name}</div>
-                                        <div className="text-sm text-[#d1d5db] italic">{ability.desc}</div>
+                                    <div key={idx} className="bg-white border-4 border-black p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                                        <div className="text-xl font-black text-red-600 mb-1 uppercase">{ability.name}</div>
+                                        <div className="text-base text-black font-medium">{ability.desc}</div>
                                     </div>
                                 ))}
                             </div>
                         ) : (
-                            <div className="text-[#6b7280] italic">No signature abilities recorded.</div>
+                            <div className="text-gray-500 font-black uppercase">No signature abilities recorded.</div>
                         )}
                     </div>
 
-                    <div className="md:col-span-2 bg-[#1a1a1a] p-6 rounded-xl shadow-lg border border-[#2a2a2a]">
-                        <h4 className="text-xl font-bold mb-4 text-[#e0e0e0] border-b border-[#333] pb-2">Lore & Legend</h4>
+                    <div className="md:col-span-2 bg-white p-6 border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                        <h4 className="text-xl font-black mb-4 text-black border-b-4 border-black pb-2 uppercase">Lore & Legend</h4>
                         {!lore && !isGeneratingLore ? (
-                            <div className="text-[#6b7280] italic">Lore has not been generated yet. Click 'Generate Lore' to consult the ancient texts.</div>
+                            <div className="text-gray-500 font-black uppercase">Lore has not been generated yet.</div>
                         ) : !lore && isGeneratingLore ? (
-                            <div className="text-[#818cf8] italic animate-pulse flex items-center gap-2">
-                                <div className="w-4 h-4 border-2 border-[#6366f1] border-t-transparent rounded-full animate-spin" />
-                                Consulting the ancient texts... (Generating lore)
+                            <div className="text-red-600 font-black uppercase tracking-widest animate-pulse">
+                                Consulting the ancient texts...
                             </div>
                         ) : !lore.bio ? (
-                            <div className="text-[#f87171] italic">Failed to generate lore. Is your Ollama server running?</div>
+                            <div className="text-red-600 font-black uppercase">Failed to generate lore. Is your Ollama server running?</div>
                         ) : (
-                            <p className="text-[#d1d5db] leading-relaxed text-sm md:text-base italic">
+                            <p className="text-black font-medium leading-relaxed text-base md:text-lg">
                                 {lore.bio}
                             </p>
                         )}
