@@ -106,17 +106,17 @@ ${lore?.bio || ''}
 
     return (
         <div className="w-full max-w-4xl mx-auto flex flex-col gap-4">
-            <div className="flex justify-end gap-3">
+            <div className="flex flex-col sm:flex-row justify-end gap-3">
                 <button 
                     onClick={handleCopyMarkdown}
-                    className="flex items-center gap-2 px-4 py-2 bg-white hover:bg-black hover:text-white border border-gray-200 text-black font-display uppercase tracking-widest cursor-pointer shadow-sm hover:shadow-md hover:shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-150 focus:outline-none focus:ring-4 focus:ring-black focus:ring-offset-2"
+                    className="w-full sm:w-auto justify-center flex items-center gap-2 px-4 py-2 bg-white hover:bg-black hover:text-white border border-gray-200 text-black font-display uppercase tracking-widest cursor-pointer shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-150 focus:outline-none focus:ring-4 focus:ring-black focus:ring-offset-2"
                 >
                     <Copy size={18} />
                     Copy Markdown
                 </button>
                 <button 
                     onClick={handleDownload}
-                    className="flex items-center gap-2 px-4 py-2 bg-zinc-900 hover:bg-black text-white border border-gray-200 font-display uppercase tracking-widest cursor-pointer shadow-sm hover:shadow-md hover:shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-150 focus:outline-none focus:ring-4 focus:ring-black focus:ring-offset-2"
+                    className="w-full sm:w-auto justify-center flex items-center gap-2 px-4 py-2 bg-zinc-900 hover:bg-black text-white border border-gray-200 font-display uppercase tracking-widest cursor-pointer shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-150 focus:outline-none focus:ring-4 focus:ring-black focus:ring-offset-2"
                 >
                     <Download size={18} />
                     Download PDF
@@ -125,35 +125,35 @@ ${lore?.bio || ''}
             
             <div ref={cardRef} className="bg-white overflow-hidden border border-gray-200 manga-panel">
                 {/* Header */}
-                <div className="p-8 border-b border-gray-200 bg-white relative overflow-hidden bg-halftone">
-                    <div className="flex justify-between items-start mb-4">
+                <div className="p-4 md:p-8 border-b border-gray-200 bg-white relative overflow-hidden bg-halftone">
+                    <div className="flex justify-between items-start mb-4 gap-2">
                         <div 
-                            className={`px-4 py-1 text-sm font-display uppercase tracking-widest border ${tierClass} bg-white text-black`}
+                            className={`px-2 py-1 text-xs md:text-sm md:px-4 font-display uppercase tracking-widest border ${tierClass} bg-white text-black`}
                             style={{ borderColor: tierColor }}
                         >
                             {tier?.name || 'Unknown Tier'}
                         </div>
-                        <div className="text-4xl font-display tracking-widest text-black flex items-center gap-2 bg-white px-3 border border-gray-200">
+                        <div className="text-2xl md:text-4xl font-display tracking-widest text-black flex items-center gap-2 bg-white px-2 md:px-3 border border-gray-200">
                             <span>฿</span> {Number(bounty) === -1 ? '???' : bounty?.toLocaleString() || '0'}
                         </div>
                     </div>
                     
-                    <h2 className="text-6xl md:text-8xl font-display mb-2 uppercase tracking-tight text-black">
+                    <h2 className="text-4xl md:text-6xl lg:text-8xl font-display mb-2 uppercase tracking-tight text-black break-words leading-none">
                         {lore?.name || 'UNKNOWN LEGEND'}
                     </h2>
-                    <div className="text-2xl md:text-3xl text-gray-700 font-bold mb-6 font-body uppercase">
+                    <div className="text-lg md:text-2xl lg:text-3xl text-gray-700 font-bold mb-6 font-body uppercase break-words leading-snug">
                         "{lore?.epithet || 'The Nameless'}"
                     </div>
                     
-                    <div className="flex gap-4 text-lg font-display uppercase tracking-widest text-black mb-8 bg-white p-2 border border-gray-200 w-fit">
+                    <div className="flex flex-wrap gap-2 text-sm md:text-lg font-display uppercase tracking-widest text-black mb-8 bg-white p-2 border border-gray-200 w-fit max-w-full">
                         <span>{build.race?.name || 'Unknown Race'}</span>
                         <span>//</span>
                         <span>{build.origin?.name || 'Unknown Origin'}</span>
                     </div>
 
-                    <div className="bg-white p-4 border border-gray-200">
-                        <div className="text-lg font-display uppercase tracking-widest text-black mb-2">OVERALL POWER <span className="text-2xl ml-2">{overall || 0}</span></div>
-                        <div className="h-8 bg-white overflow-hidden border border-gray-200">
+                    <div className="bg-white p-2 md:p-4 border border-gray-200">
+                        <div className="text-sm md:text-lg font-display uppercase tracking-widest text-black mb-2">OVERALL POWER <span className="text-xl md:text-2xl ml-2">{overall || 0}</span></div>
+                        <div className="h-6 md:h-8 bg-white overflow-hidden border border-gray-200">
                             <div 
                                 className="h-full bg-black transition-all duration-1000"
                                 style={{ width: `${Math.min(100, Math.max(0, (overall / 150) * 100))}%` }}
@@ -163,10 +163,10 @@ ${lore?.bio || ''}
                 </div>
 
                 {/* Body */}
-                <div className="p-8 grid grid-cols-1 md:grid-cols-2 gap-8 bg-white border-t border-gray-100">
+                <div className="p-4 md:p-8 grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 bg-white border-t border-gray-100">
                     <CharacterStats stats={stats} />
                     
-                    <div className="bg-white border border-gray-200 p-6">
+                    <div className="bg-white border border-gray-200 p-4 md:p-6">
                         <h4 className="text-3xl font-display uppercase mb-4 text-black border-b border-gray-200 pb-2">Build Profile</h4>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-4">
                             {Object.entries(build).map(([key, item]) => {
@@ -186,7 +186,7 @@ ${lore?.bio || ''}
                         </div>
                     </div>
 
-                    <div className="md:col-span-2 bg-white border border-gray-200 p-6">
+                    <div className="md:col-span-2 bg-white border border-gray-200 p-4 md:p-6">
                         <h4 className="text-3xl font-display uppercase mb-4 text-black border-b border-gray-200 pb-2">Active Synergies</h4>
                         {synergies && synergies.length > 0 ? (
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -211,7 +211,7 @@ ${lore?.bio || ''}
                         )}
                     </div>
 
-                    <div className="md:col-span-2 bg-white border border-gray-200 p-6">
+                    <div className="md:col-span-2 bg-white border border-gray-200 p-4 md:p-6">
                         <h4 className="text-3xl font-display uppercase mb-4 text-black border-b border-gray-200 pb-2">Signature Abilities</h4>
                         {!lore ? (
                             <div className="text-gray-500 italic font-body">
@@ -231,7 +231,7 @@ ${lore?.bio || ''}
                         )}
                     </div>
 
-                    <div className="md:col-span-2 bg-white border border-gray-200 p-6">
+                    <div className="md:col-span-2 bg-white border border-gray-200 p-4 md:p-6">
                         <h4 className="text-3xl font-display uppercase mb-4 text-black border-b border-gray-200 pb-2">Lore & Legend</h4>
                         {!lore ? (
                             <div className="text-gray-500 italic font-body">

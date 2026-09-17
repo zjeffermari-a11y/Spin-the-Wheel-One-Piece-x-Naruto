@@ -386,7 +386,7 @@ function App() {
     return (
         <div className="min-h-screen bg-halftone text-black font-body">
             {/* Header */}
-            <header className="p-6 border-b border-gray-200 bg-white flex justify-between items-center sticky top-0 z-40 manga-panel mx-4 mt-4">
+            <header className="p-4 md:p-6 border-b border-gray-200 bg-white flex flex-col md:flex-row justify-between items-center sticky top-0 z-40 manga-panel mx-2 md:mx-4 mt-2 md:mt-4 gap-4">
                 <h1 className="text-2xl md:text-3xl font-display uppercase tracking-tighter text-black">
                     SUMMON
                 </h1>
@@ -445,9 +445,9 @@ function App() {
                             className="flex flex-col lg:flex-row gap-8 max-w-7xl mx-auto"
                         >
                             {/* Left Column: Wheel */}
-                            <div className="flex-1 bg-white p-8 border border-gray-200 flex flex-col items-center relative overflow-hidden">
+                            <div className="flex-1 bg-white p-4 md:p-8 border border-gray-200 flex flex-col items-center relative overflow-hidden">
                                 <RarityLegend />
-                                <h3 className="text-5xl font-display mb-2 text-black text-center uppercase tracking-wider">
+                                <h3 className="text-3xl md:text-5xl font-display mb-2 text-black text-center uppercase tracking-wider">
                                     {categories[catIndex].name}
                                 </h3>
                                 <p className="text-xl font-bold text-gray-500 mb-8 z-10 text-center uppercase tracking-widest">{catIndex + 1} // {categories.length}</p>
@@ -471,7 +471,7 @@ function App() {
                                 <div className="mt-8 h-12 flex items-center justify-center z-10">
                                     <h4 
                                         ref={hoverTextRef} 
-                                        className="text-3xl font-display uppercase tracking-widest text-center transition-colors duration-75"
+                                        className="text-xl md:text-3xl font-display uppercase tracking-widest text-center transition-colors duration-75"
                                     >
                                         ...
                                     </h4>
@@ -608,17 +608,17 @@ function App() {
                                 />
                             </div>
 
-                            <div className="mt-8 flex justify-center gap-4">
+                            <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4">
                                 <button
                                     onClick={handleSaveCharacter}
                                     disabled={isSaved}
-                                    className="px-8 py-4 bg-zinc-900 text-white border border-gray-200 hover:bg-black disabled:bg-gray-300 disabled:text-gray-500 disabled:shadow-none disabled:transform-none font-display uppercase tracking-widest text-xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-150 active:scale-95 focus:outline-none focus:ring-4 focus:ring-black focus:ring-offset-2"
+                                    className="w-full sm:w-auto px-8 py-4 bg-zinc-900 text-white border border-gray-200 hover:bg-black disabled:bg-gray-300 disabled:text-gray-500 disabled:shadow-none disabled:transform-none font-display uppercase tracking-widest text-xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-150 active:scale-95 focus:outline-none focus:ring-4 focus:ring-black focus:ring-offset-2"
                                 >
                                     {isSaved ? 'SAVED' : 'SAVE TO CREW'}
                                 </button>
                                 <button
                                     onClick={startCreation}
-                                    className="px-8 py-4 bg-white text-black border border-gray-200 hover:bg-black hover:text-white font-display uppercase tracking-widest text-xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-150 active:scale-95 focus:outline-none focus:ring-4 focus:ring-black focus:ring-offset-2"
+                                    className="w-full sm:w-auto px-8 py-4 bg-white text-black border border-gray-200 hover:bg-black hover:text-white font-display uppercase tracking-widest text-xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-150 active:scale-95 focus:outline-none focus:ring-4 focus:ring-black focus:ring-offset-2"
                                 >
                                     DRAFT ANOTHER
                                 </button>
