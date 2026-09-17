@@ -1,0 +1,50 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Oswald", sans-serif;
+  --font-body: "Archivo", sans-serif;
+}
+
+@layer base {
+  body {
+    background-color: #fcfcfc;
+    color: #111111;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    font-family: 'Archivo', sans-serif;
+  }
+}
+
+:root {
+  --rarity-common: #a1a1aa; /* zinc-400 */
+  --rarity-uncommon: #34d399; /* emerald-400 */
+  --rarity-rare: #60a5fa; /* blue-400 */
+  --rarity-epic: #a78bfa; /* violet-400 */
+  --rarity-legend: #fbbf24; /* amber-400 */
+  --rarity-mythic: #fb7185; /* rose-400 */
+}
+
+/* Premium gradient background effect */
+.bg-halftone {
+  background: radial-gradient(circle at top right, rgba(240, 240, 240, 1) 0%, rgba(252, 252, 252, 1) 100%);
+}
+
+.manga-panel {
+  border: 1px solid #e5e5e5;
+  background-color: #ffffff;
+  border-radius: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+}
+
+/* Elegant Text Colors */
+.res-Common { color: var(--rarity-common); }
+.res-Uncommon { color: var(--rarity-uncommon); }
+.res-Rare { color: var(--rarity-rare); }
+.res-Epic { color: var(--rarity-epic); }
+.res-Legend { color: var(--rarity-legend); }
+.res-Mythic { color: var(--rarity-mythic); }
+
+.stat-bar-fill {
+  background: #111111;
+  transition: width 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+}

@@ -1,0 +1,6 @@
+{
+  "name": "Spin Your Destiny",
+  "description": "An epic anime crossover character builder and lore generator.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
