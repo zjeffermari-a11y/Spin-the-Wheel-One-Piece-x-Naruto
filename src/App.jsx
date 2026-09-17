@@ -83,9 +83,6 @@ function App() {
         const syncUserKey = (session) => {
             const u = session?.user || null;
             setUser(u);
-            if (u?.user_metadata?.groq_api_key) {
-                localStorage.setItem('spin_wheel_groq_api_key', u.user_metadata.groq_api_key);
-            }
         };
 
         supabase.auth.getSession().then(({ data: { session } }) => {
