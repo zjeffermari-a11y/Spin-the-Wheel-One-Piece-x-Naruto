@@ -52,6 +52,28 @@ const Wheel = forwardRef(({ options, onTick, onSegmentChange }, ref) => {
             ctx.lineWidth = isLargeWheel ? 1 : 2;
             ctx.stroke();
 
+            // Draw text on the wheel
+            ctx.save();
+            ctx.rotate(startAngle + arc / 2);
+            ctx.textAlign = 'right';
+            ctx.textBaseline = 'middle';
+            
+            // Dynamically calculate font size based on slice height at the edge
+            // Even at 50 slices, we want it to be readable, minimum 9px
+            const fontSize = Math.max(9, Math.min(18, Math.floor(r * arc * 0.6)));
+            ctx.font = `900 ${fontSize}px "Bebas Neue", sans-serif`;
+            
+            // High contrast text: White fill with a sharp black outline
+            ctx.fillStyle = '#ffffff';
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = '#000000';
+            
+            // Truncate if necessary, but try to fit
+            const text = opt.name.substring(0, 24);
+            ctx.strokeText(text, r - 15, 1); // 1px offset for Bebas baseline adjustment
+            ctx.fillText(text, r - 15, 1);
+            ctx.restore();
+
             currentAngle += arc;
         }
 
