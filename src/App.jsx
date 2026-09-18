@@ -63,6 +63,8 @@ function App() {
     const [isRosterOpen, setIsRosterOpen] = useState(false);
     const [isSaved, setIsSaved] = useState(false);
     const [viewingSavedCharacter, setViewingSavedCharacter] = useState(null);
+    const [portraitUrl, setPortraitUrl] = useState(null);
+    const [isGeneratingPortrait, setIsGeneratingPortrait] = useState(false);
 
     const [user, setUser] = useState(null);
     const [isAuthOpen, setIsAuthOpen] = useState(false);
@@ -119,6 +121,7 @@ function App() {
         setSynergies([]);
         setIsSaved(false);
         setIsBuildComplete(false);
+        setPortraitUrl(null);
         autoSpinRef.current = false;
         setScreen('spinning');
     };
@@ -140,7 +143,8 @@ function App() {
                     build: build,
                     stats: stats,
                     synergies: synergies,
-                    lore: lore
+                    lore: lore,
+                    portraitUrl: portraitUrl
                 }]);
                 
                 if (error) throw error;
@@ -338,11 +342,35 @@ function App() {
     const handleGenerateLore = async () => {
         if (!build || Object.keys(build).length === 0) return;
         setScreen('generating');
+        setPortraitUrl(null);
+        setIsGeneratingPortrait(true);
         
         try {
             const ollama = new OllamaService();
-            const bioData = await ollama.generateBio(build, stats, tier.name, formatBountyStr(bounty, tier));
+            
+            // Build visual prompt description
+            const visualTraits = Object.values(build).filter(b => b && b.name !== 'None').map(b => b.name).join(", ");
+            const visualPrompt = `A warrior possessing: ${visualTraits}. Tier: ${tier.name}. Power Level: ${overall}.`;
+
+            // Start both generation processes simultaneously
+            const lorePromise = ollama.generateBio(build, stats, tier.name, formatBountyStr(bounty, tier));
+            const portraitPromise = fetch("/api/generate-portrait", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ prompt: visualPrompt })
+            }).then(r => r.json()).catch(err => {
+                console.error("Portrait error", err);
+                return { url: null };
+            });
+
+            const [bioData, portraitData] = await Promise.all([lorePromise, portraitPromise]);
+
             setLore(bioData);
+            if (portraitData?.url) {
+                setPortraitUrl(portraitData.url);
+            }
+            setIsGeneratingPortrait(false);
+
             if (bioData && bioData.custom_synergy) {
                 setSynergies(prev => {
                     const current = prev || [];
@@ -353,6 +381,7 @@ function App() {
         } catch (error) {
             console.warn("Could not generate lore:", error.message);
             setLore({ name: "Unknown Anomaly", epithet: "The Glitched", bio: "A tear in the fabric of the universe created this entity." });
+            setIsGeneratingPortrait(false);
         }
         
         setScreen('result');
@@ -617,6 +646,8 @@ function App() {
                                     tier={tier}
                                     lore={lore}
                                     synergies={synergies}
+                                    portraitUrl={portraitUrl}
+                                    isGeneratingPortrait={isGeneratingPortrait}
                                 />
                             </div>
 
@@ -664,6 +695,7 @@ function App() {
                                     tier={viewingSavedCharacter.tier}
                                     lore={viewingSavedCharacter.lore}
                                     synergies={viewingSavedCharacter.synergies || []}
+                                    portraitUrl={viewingSavedCharacter.portraitUrl}
                                 />
                             </div>
                         </div>

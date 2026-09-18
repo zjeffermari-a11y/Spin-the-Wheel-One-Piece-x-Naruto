@@ -3,7 +3,7 @@ import CharacterStats from './CharacterStats';
 import { Download, Copy } from 'lucide-react';
 import { RARITY } from '../data/rarity';
 
-export default function CharacterCard({ build, stats, overall, bounty, lore, synergies, tier }) {
+export default function CharacterCard({ build, stats, overall, bounty, lore, synergies, tier, portraitUrl, isGeneratingPortrait }) {
     const cardRef = useRef(null);
 
     const handleCopyMarkdown = () => {
@@ -137,17 +137,30 @@ ${lore?.bio || ''}
                         <div className="text-[20rem] md:text-[30rem] font-display">⚓</div>
                     </div>
                     
-                    <div className="z-10 text-center flex flex-col items-center justify-center p-8 w-full h-full">
-                        <div 
-                            className={`text-6xl md:text-9xl mb-4 font-display uppercase tracking-widest res-${tier?.rarity || 'Common'}`}
-                            style={{ color: tierColor, textShadow: '2px 2px 0 #000' }}
-                        >
-                            {tier?.name || 'Unknown Tier'}
+                    {isGeneratingPortrait ? (
+                        <div className="z-10 flex flex-col items-center justify-center">
+                            <div className="w-16 h-16 mb-4 border-8 border-black border-t-transparent rounded-full animate-spin"></div>
+                            <div className="font-display uppercase tracking-widest text-xl text-black">Awaiting Visuals...</div>
                         </div>
-                        <div className="text-3xl md:text-5xl font-display uppercase tracking-widest text-black border-t-4 border-b-4 border-black py-4 w-full bg-white/30 backdrop-blur-sm">
-                            {build.faction?.name || 'Unknown Faction'}
+                    ) : portraitUrl ? (
+                        <img 
+                            src={portraitUrl} 
+                            alt={`${lore?.name || 'Legend'} Portrait`}
+                            className="absolute inset-0 w-full h-full object-cover z-10"
+                        />
+                    ) : (
+                        <div className="z-10 text-center flex flex-col items-center justify-center p-8 w-full h-full">
+                            <div 
+                                className={`text-6xl md:text-9xl mb-4 font-display uppercase tracking-widest res-${tier?.rarity || 'Common'}`}
+                                style={{ color: tierColor, textShadow: '2px 2px 0 #000' }}
+                            >
+                                {tier?.name || 'Unknown Tier'}
+                            </div>
+                            <div className="text-3xl md:text-5xl font-display uppercase tracking-widest text-black border-t-4 border-b-4 border-black py-4 w-full bg-white/30 backdrop-blur-sm">
+                                {build.faction?.name || 'Unknown Faction'}
+                            </div>
                         </div>
-                    </div>
+                    )}
                 </div>
 
                 {/* Name & Bounty */}

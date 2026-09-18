@@ -10,6 +10,52 @@ async function startServer() {
   
   app.use(express.json({ limit: "10mb" }));
 
+  // AI Portrait Generation Route using Official OpenAI API
+  app.post("/api/generate-portrait", async (req, res) => {
+    const { prompt } = req.body;
+    if (!prompt) return res.status(400).json({ error: "Missing prompt" });
+    
+    try {
+      const apiKey = process.env.OPENAI_API_KEY;
+      if (!apiKey) {
+        throw new Error("OPENAI_API_KEY is not configured in the environment.");
+      }
+
+      console.log("Generating portrait via OpenAI API...");
+      
+      const payload = {
+        model: "gpt-image-2.5-sunburst", // User preferred model
+        prompt: `Generate a One Piece anime style Wanted Poster portrait for this character. The art should be a character portrait with no extra text or UI. Character Description: ${prompt}`,
+        n: 1,
+        size: "1024x1024",
+        response_format: "url"
+      };
+
+      const response = await fetch("https://api.openai.com/v1/images/generations", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${apiKey}`
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) {
+        const errorData = await response.text();
+        console.error("OpenAI Image API Error:", errorData);
+        throw new Error(`OpenAI API failed: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      const imageUrl = data.data[0].url;
+
+      res.json({ url: imageUrl });
+    } catch (error) {
+      console.error("Portrait Generation error:", error);
+      res.status(500).json({ error: error.message || "Failed to generate portrait" });
+    }
+  });
+
   // AI Route using Groq
   app.post("/api/generate-lore", async (req, res) => {
     try {
