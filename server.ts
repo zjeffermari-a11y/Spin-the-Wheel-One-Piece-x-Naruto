@@ -24,7 +24,7 @@ async function startServer() {
       console.log("Generating portrait via OpenAI API...");
       
       const payload = {
-        model: "gpt-image-2.5-sunburst", // User preferred model
+        model: "dall-e-3",
         prompt: `Generate a One Piece anime style Wanted Poster portrait for this character. The art should be a character portrait with no extra text or UI. Character Description: ${prompt}`,
         n: 1,
         size: "1024x1024",
