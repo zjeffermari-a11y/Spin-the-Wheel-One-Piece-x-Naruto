@@ -51,12 +51,8 @@ ${prompt}`,
     const data = await response.json();
 
     if (!response.ok) {
-      console.error('OpenAI Image API Error:', data);
-
       return res.status(response.status).json({
-        error:
-          data?.error?.message ||
-          `OpenAI API error: ${response.status} ${response.statusText}`
+        error: data?.error?.message || "OpenAI image generation failed"
       });
     }
 
@@ -75,12 +71,12 @@ ${prompt}`,
     });
 
   } catch (error) {
-    console.error('Portrait Generation error:', error);
+    console.error("Portrait Generation error:", error);
 
     return res.status(500).json({
       error: error instanceof Error
         ? error.message
-        : 'Failed to generate portrait'
+        : String(error)
     });
   }
 }
