@@ -16,7 +16,7 @@ export default async function handler(req, res) {
     }
 
     const payload = {
-      model: "dall-e-3",
+      model: "gpt-image-2.5-sunburst", // User preferred model
       prompt: `Generate a One Piece anime style Wanted Poster portrait for this character. The art should be a character portrait with no extra text or UI. Character Description: ${prompt}`,
       n: 1,
       size: "1024x1024",
