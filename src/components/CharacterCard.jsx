@@ -109,141 +109,161 @@ ${lore?.bio || ''}
             <div className="flex flex-col sm:flex-row justify-end gap-3">
                 <button 
                     onClick={handleCopyMarkdown}
-                    className="w-full sm:w-auto justify-center flex items-center gap-2 px-4 py-2 bg-white/90 hover:bg-black hover:text-white border border-gray-200 text-black font-display uppercase tracking-widest cursor-pointer shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-150 focus:outline-none focus:ring-4 focus:ring-black focus:ring-offset-2"
+                    className="w-full sm:w-auto justify-center flex items-center gap-2 px-4 py-2 bg-white/90 hover:bg-zinc-100 border-2 border-black text-black font-display uppercase tracking-widest cursor-pointer shadow-brutal hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all duration-75 focus:outline-none"
                 >
                     <Copy size={18} />
                     Copy Markdown
                 </button>
                 <button 
                     onClick={handleDownload}
-                    className="w-full sm:w-auto justify-center flex items-center gap-2 px-4 py-2 bg-zinc-900 hover:bg-black text-white border border-gray-200 font-display uppercase tracking-widest cursor-pointer shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-150 focus:outline-none focus:ring-4 focus:ring-black focus:ring-offset-2"
+                    className="w-full sm:w-auto justify-center flex items-center gap-2 px-4 py-2 bg-black hover:bg-zinc-800 text-white border-2 border-black font-display uppercase tracking-widest cursor-pointer shadow-brutal hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all duration-75 focus:outline-none"
                 >
                     <Download size={18} />
                     Download PDF
                 </button>
             </div>
             
-            <div ref={cardRef} className="bg-white/90 backdrop-blur-md overflow-hidden border border-gray-100 shadow-xl manga-panel">
-                {/* Header */}
-                <div className="p-4 md:p-8 border-b border-gray-200 relative overflow-hidden bg-halftone">
-                    <div className="flex justify-between items-start mb-4 gap-2">
+            <div ref={cardRef} className="bg-[#e8dcc7]/90 backdrop-blur-md overflow-hidden border-4 border-black shadow-brutal pb-8">
+                {/* Poster Header */}
+                <div className="pt-8 md:pt-12 px-4 text-center">
+                    <h1 className="wanted-text text-7xl md:text-[10rem] text-zinc-900 mb-2 leading-none">WANTED</h1>
+                    <h2 className="text-xl md:text-4xl text-zinc-800 tracking-[0.5em] md:tracking-[1em] font-display mb-6 ml-[0.5em] md:ml-[1em]">DEAD OR ALIVE</h2>
+                </div>
+                
+                {/* Center Portrait Frame */}
+                <div className="border-4 border-black bg-white/40 m-6 md:m-12 mt-0 aspect-square md:aspect-[4/3] flex flex-col items-center justify-center relative overflow-hidden shadow-brutal-sm">
+                    {/* Marine Watermark */}
+                    <div className="absolute inset-0 flex items-center justify-center opacity-5 pointer-events-none">
+                        <div className="text-[20rem] md:text-[30rem] font-display">⚓</div>
+                    </div>
+                    
+                    <div className="z-10 text-center flex flex-col items-center justify-center p-8 w-full h-full">
                         <div 
-                            className={`px-2 py-1 text-xs md:text-sm md:px-4 font-display uppercase tracking-widest border ${tierClass} bg-white/50 text-black`}
-                            style={{ borderColor: tierColor }}
+                            className={`text-6xl md:text-9xl mb-4 font-display uppercase tracking-widest res-${tier?.rarity || 'Common'}`}
+                            style={{ color: tierColor, textShadow: '2px 2px 0 #000' }}
                         >
                             {tier?.name || 'Unknown Tier'}
                         </div>
-                        <div className="text-2xl md:text-4xl font-display tracking-widest text-black flex items-center gap-2 bg-white/50 px-2 md:px-3 border border-gray-200">
-                            <span>฿</span> {Number(bounty) === -1 ? '???' : bounty?.toLocaleString() || '0'}
-                        </div>
-                    </div>
-                    
-                    <h2 className="text-4xl md:text-6xl lg:text-8xl font-display mb-2 uppercase tracking-tight text-black break-words leading-none">
-                        {lore?.name || 'UNKNOWN LEGEND'}
-                    </h2>
-                    <div className="text-lg md:text-2xl lg:text-3xl text-gray-700 font-bold mb-6 font-body uppercase break-words leading-snug">
-                        "{lore?.epithet || 'The Nameless'}"
-                    </div>
-                    
-                    <div className="flex flex-wrap gap-2 text-sm md:text-lg font-display uppercase tracking-widest text-black mb-8 bg-white/50 p-2 border border-gray-200 w-fit max-w-full">
-                        <span>{build.race?.name || 'Unknown Race'}</span>
-                        <span>//</span>
-                        <span>{build.origin?.name || 'Unknown Origin'}</span>
-                    </div>
-
-                    <div className="bg-white/50 p-2 md:p-4 border border-gray-200">
-                        <div className="text-sm md:text-lg font-display uppercase tracking-widest text-black mb-2">OVERALL POWER <span className="text-xl md:text-2xl ml-2">{overall || 0}</span></div>
-                        <div className="h-6 md:h-8 bg-white/50 overflow-hidden border border-gray-200">
-                            <div 
-                                className="h-full bg-black transition-all duration-1000"
-                                style={{ width: `${Math.min(100, Math.max(0, (overall / 150) * 100))}%` }}
-                            />
+                        <div className="text-3xl md:text-5xl font-display uppercase tracking-widest text-black border-t-4 border-b-4 border-black py-4 w-full bg-white/30 backdrop-blur-sm">
+                            {build.faction?.name || 'Unknown Faction'}
                         </div>
                     </div>
                 </div>
 
-                {/* Body */}
-                <div className="p-4 md:p-8 grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 border-t border-gray-100">
+                {/* Name & Bounty */}
+                <div className="text-center px-4">
+                    <h2 className="text-5xl md:text-8xl font-display mb-2 uppercase tracking-tight text-black break-words leading-none px-4">
+                        {lore?.name || 'UNKNOWN LEGEND'}
+                    </h2>
+                    <div className="text-2xl md:text-4xl text-zinc-800 font-bold mb-8 font-body uppercase break-words leading-snug">
+                        "{lore?.epithet || 'The Nameless'}"
+                    </div>
+                    
+                    <div className="wanted-text text-5xl md:text-7xl tracking-widest text-black flex items-center justify-center gap-4 mb-4 px-4 break-all">
+                        <span>฿</span> {Number(bounty) === -1 ? '???' : bounty?.toLocaleString() || '0'}-
+                    </div>
+                </div>
+
+                {/* Marine Dossier (Stats & Lore) */}
+                <div className="mt-12 mx-4 md:mx-8 border-4 border-black bg-white/70 backdrop-blur-sm">
+                    <div className="bg-black text-white p-3 md:p-4 border-b-4 border-black">
+                        <h3 className="text-2xl md:text-4xl font-display uppercase tracking-widest text-center">MARINE DOSSIER</h3>
+                    </div>
+                    <div className="p-4 md:p-8 grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
+                        {/* Overall Power Bar */}
+                        <div className="md:col-span-2 bg-white/50 p-4 border-2 border-black shadow-brutal-sm">
+                            <div className="text-xl md:text-2xl font-display uppercase tracking-widest text-black mb-2 flex justify-between">
+                                <span>THREAT LEVEL</span>
+                                <span>{overall || 0}</span>
+                            </div>
+                            <div className="h-8 md:h-10 bg-white/50 overflow-hidden border-2 border-black">
+                                <div 
+                                    className="h-full bg-black transition-all duration-1000"
+                                    style={{ width: `${Math.min(100, Math.max(0, (overall / 150) * 100))}%` }}
+                                />
+                            </div>
+                        </div>
                     <CharacterStats stats={stats} />
                     
-                    <div className="bg-white/50 border border-gray-200 p-4 md:p-6">
-                        <h4 className="text-3xl font-display uppercase mb-4 text-black border-b border-gray-200 pb-2">Build Profile</h4>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-4">
-                            {Object.entries(build).map(([key, item]) => {
-                                if (['str', 'spd', 'dur', 'iq', 'combat', 'chakra_cap'].includes(key)) return null;
-                                if (!item || item.name === 'None') return null;
-                                
-                                const label = key.replace(/_/g, ' ').toUpperCase();
-                                return (
-                                    <div key={key} className="flex flex-col border border-gray-200 p-2 bg-gray-50">
-                                        <span className="text-xs text-gray-500 font-display uppercase tracking-widest">{label}</span>
-                                        <span className={`text-lg font-bold uppercase font-display res-${item.rarity || 'C'}`} style={{ color: RARITY[item.rarity]?.color }}>
-                                            {item.name}
-                                        </span>
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    </div>
-
-                    <div className="md:col-span-2 bg-white/50 border border-gray-200 p-4 md:p-6">
-                        <h4 className="text-3xl font-display uppercase mb-4 text-black border-b border-gray-200 pb-2">Active Synergies</h4>
-                        {synergies && synergies.length > 0 ? (
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                {synergies.map((syn, idx) => (
-                                    <div key={idx} className="bg-white/60 p-4 border border-gray-200 shadow-sm hover:shadow-md">
-                                        <div className="text-xl font-display uppercase text-black mb-1">{syn.name}</div>
-                                        <div className="text-sm text-gray-700 mb-2 font-body font-bold">{syn.desc || syn.synergy_desc}</div>
-                                        <div className="flex flex-wrap gap-2 mt-2">
-                                            {syn.bonuses && Object.entries(syn.bonuses).map(([stat, val]) => (
-                                                val !== 0 ? (
-                                                    <span key={stat} className={`text-xs font-display tracking-widest px-2 py-1 border border-gray-200 ${val > 0 ? 'bg-black text-white' : 'bg-red-500 text-white'}`}>
-                                                        {stat.toUpperCase()} {val > 0 ? '+' : ''}{val}
-                                                    </span>
-                                                ) : null
-                                            ))}
+                        <div className="bg-white/50 border-2 border-black p-4 md:p-6 shadow-brutal-sm">
+                            <h4 className="text-3xl font-display uppercase mb-4 text-black border-b-4 border-black pb-2">Build Profile</h4>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-4">
+                                {Object.entries(build).map(([key, item]) => {
+                                    if (['str', 'spd', 'dur', 'iq', 'combat', 'chakra_cap'].includes(key)) return null;
+                                    if (!item || item.name === 'None') return null;
+                                    
+                                    const label = key.replace(/_/g, ' ').toUpperCase();
+                                    return (
+                                        <div key={key} className="flex flex-col border-2 border-black p-2 bg-gray-50/80">
+                                            <span className="text-xs text-gray-800 font-display uppercase tracking-widest font-bold">{label}</span>
+                                            <span className={`text-lg font-bold uppercase font-display res-${item.rarity || 'C'}`} style={{ color: RARITY[item.rarity]?.color, textShadow: '1px 1px 0px rgba(0,0,0,0.2)' }}>
+                                                {item.name}
+                                            </span>
                                         </div>
-                                    </div>
-                                ))}
+                                    );
+                                })}
                             </div>
-                        ) : (
-                            <div className="text-gray-500 italic">No active synergies found for this build.</div>
-                        )}
-                    </div>
+                        </div>
 
-                    <div className="md:col-span-2 bg-white/50 border border-gray-200 p-4 md:p-6">
-                        <h4 className="text-3xl font-display uppercase mb-4 text-black border-b border-gray-200 pb-2">Signature Abilities</h4>
-                        {!lore ? (
-                            <div className="text-gray-500 italic font-body">
-                                Signature abilities locked. Click "Generate Lore & Abilities" to unlock.
-                            </div>
-                        ) : lore.signature_abilities && lore.signature_abilities.length > 0 ? (
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                {lore.signature_abilities.map((ability, idx) => (
-                                    <div key={idx} className="bg-white/60 p-4 border border-gray-200 shadow-sm hover:shadow-md">
-                                        <div className="text-xl font-display uppercase text-black mb-1">{ability.name}</div>
-                                        <div className="text-sm text-gray-700 font-body font-bold">{ability.desc}</div>
-                                    </div>
-                                ))}
-                            </div>
-                        ) : (
-                            <div className="text-gray-500 italic">No signature abilities recorded.</div>
-                        )}
-                    </div>
+                        <div className="md:col-span-2 bg-white/50 border-2 border-black p-4 md:p-6 shadow-brutal-sm">
+                            <h4 className="text-3xl font-display uppercase mb-4 text-black border-b-4 border-black pb-2">Active Synergies</h4>
+                            {synergies && synergies.length > 0 ? (
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    {synergies.map((syn, idx) => (
+                                        <div key={idx} className="bg-white/70 p-4 border-2 border-black shadow-brutal-sm">
+                                            <div className="text-xl font-display uppercase text-black mb-1">{syn.name}</div>
+                                            <div className="text-sm text-gray-800 mb-2 font-body font-bold">{syn.desc || syn.synergy_desc}</div>
+                                            <div className="flex flex-wrap gap-2 mt-2">
+                                                {syn.bonuses && Object.entries(syn.bonuses).map(([stat, val]) => (
+                                                    val !== 0 ? (
+                                                        <span key={stat} className={`text-xs font-display tracking-widest px-2 py-1 border-2 border-black shadow-[2px_2px_0px_0px_#000] ${val > 0 ? 'bg-black text-white' : 'bg-red-600 text-white'}`}>
+                                                            {stat.toUpperCase()} {val > 0 ? '+' : ''}{val}
+                                                        </span>
+                                                    ) : null
+                                                ))}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            ) : (
+                                <div className="text-gray-800 font-bold italic">No active synergies found for this build.</div>
+                            )}
+                        </div>
 
-                    <div className="md:col-span-2 bg-white/50 border border-gray-200 p-4 md:p-6">
-                        <h4 className="text-3xl font-display uppercase mb-4 text-black border-b border-gray-200 pb-2">Lore & Legend</h4>
-                        {!lore ? (
-                            <div className="text-gray-500 italic font-body">
-                                Legend unwritten. Click "Generate Lore & Abilities" to forge destiny.
-                            </div>
-                        ) : !lore.bio ? (
-                            <div className="text-red-600 font-display uppercase tracking-widest">Failed to generate lore.</div>
-                        ) : (
-                            <p className="text-black font-body text-lg leading-relaxed border-l-4 border-rose-500 bg-white/60 p-4">
-                                {lore.bio}
-                            </p>
-                        )}
+                        <div className="md:col-span-2 bg-white/50 border-2 border-black p-4 md:p-6 shadow-brutal-sm">
+                            <h4 className="text-3xl font-display uppercase mb-4 text-black border-b-4 border-black pb-2">Signature Abilities</h4>
+                            {!lore ? (
+                                <div className="text-gray-800 font-bold italic font-body">
+                                    Signature abilities locked. Click "Generate Lore & Abilities" to unlock.
+                                </div>
+                            ) : lore.signature_abilities && lore.signature_abilities.length > 0 ? (
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    {lore.signature_abilities.map((ability, idx) => (
+                                        <div key={idx} className="bg-white/70 p-4 border-2 border-black shadow-brutal-sm">
+                                            <div className="text-xl font-display uppercase text-black mb-1">{ability.name}</div>
+                                            <div className="text-sm text-gray-800 font-body font-bold">{ability.desc}</div>
+                                        </div>
+                                    ))}
+                                </div>
+                            ) : (
+                                <div className="text-gray-800 font-bold italic">No signature abilities recorded.</div>
+                            )}
+                        </div>
+
+                        <div className="md:col-span-2 bg-white/50 border-2 border-black p-4 md:p-6 shadow-brutal-sm">
+                            <h4 className="text-3xl font-display uppercase mb-4 text-black border-b-4 border-black pb-2">Lore & Legend</h4>
+                            {!lore ? (
+                                <div className="text-gray-800 font-bold italic font-body">
+                                    Legend unwritten. Click "Generate Lore & Abilities" to forge destiny.
+                                </div>
+                            ) : !lore.bio ? (
+                                <div className="text-red-600 font-display uppercase tracking-widest font-bold">Failed to generate lore.</div>
+                            ) : (
+                                <p className="text-black font-body text-lg leading-relaxed border-l-8 border-black bg-white/80 p-6 shadow-brutal-sm">
+                                    {lore.bio}
+                                </p>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>

@@ -24,6 +24,20 @@
   --rarity-mythic: #fb7185; /* rose-400 */
 }
 
+/* Brutalism */
+.shadow-brutal {
+  box-shadow: 6px 6px 0px 0px #000;
+}
+
+.shadow-brutal-sm {
+  box-shadow: 4px 4px 0px 0px #000;
+}
+
+.wanted-text {
+  font-family: "Times New Roman", Times, serif;
+  transform: scaleY(1.2);
+}
+
 /* Premium gradient background effect */
 .bg-halftone {
   background: radial-gradient(circle at top right, rgba(240, 240, 240, 1) 0%, rgba(252, 252, 252, 1) 100%);

@@ -398,7 +398,7 @@ function App() {
         <PageLayout bgImage={bgImage}>
         <div className="min-h-screen text-black font-body">
             {/* Header */}
-            <header className="p-4 md:p-6 border-b border-gray-200/50 bg-white/90 backdrop-blur-sm flex flex-col md:flex-row justify-between items-center sticky top-0 z-40 manga-panel mx-2 md:mx-4 mt-2 md:mt-4 gap-4">
+            <header className="p-4 md:p-6 border-b-4 border-black bg-white/90 backdrop-blur-sm flex flex-col md:flex-row justify-between items-center sticky top-0 z-40 manga-panel mx-2 md:mx-4 mt-2 md:mt-4 gap-4 shadow-brutal">
                 <h1 className="text-2xl md:text-3xl font-display uppercase tracking-tighter text-black">
                     SUMMON
                 </h1>
@@ -411,15 +411,15 @@ function App() {
                             </button>
                         </div>
                     ) : (
-                        <button onClick={() => setIsAuthOpen(true)} className="flex items-center gap-2 px-4 py-2 bg-black text-white border border-gray-200 hover:bg-zinc-900 hover:text-white font-display uppercase tracking-widest text-sm mr-2 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-150 focus:outline-none focus:ring-4 focus:ring-black focus:ring-offset-2" title="Log In / Sign Up">
+                        <button onClick={() => setIsAuthOpen(true)} className="flex items-center gap-2 px-4 py-2 bg-black text-white border-2 border-black hover:bg-zinc-800 font-display uppercase tracking-widest text-sm mr-2 shadow-brutal-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all duration-75 focus:outline-none" title="Log In / Sign Up">
                             <User size={16} />
                             <span>Sign In</span>
                         </button>
                     )}
-                    <button onClick={() => setIsRosterOpen(true)} className="p-2 border border-gray-200 bg-white hover:bg-zinc-900 hover:text-white text-black shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-150 focus:outline-none focus:ring-4 focus:ring-black focus:ring-offset-2" title="Crew">
+                    <button onClick={() => setIsRosterOpen(true)} className="p-2 border-2 border-black bg-white hover:bg-zinc-100 text-black shadow-brutal-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all duration-75 focus:outline-none" title="Crew">
                         <Users size={20} />
                     </button>
-                    <button onClick={() => setIsSettingsOpen(true)} className="p-2 border border-gray-200 bg-white hover:bg-zinc-900 hover:text-white text-black shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-150 focus:outline-none focus:ring-4 focus:ring-black focus:ring-offset-2" title="Settings">
+                    <button onClick={() => setIsSettingsOpen(true)} className="p-2 border-2 border-black bg-white hover:bg-zinc-100 text-black shadow-brutal-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all duration-75 focus:outline-none" title="Settings">
                         <Settings size={20} />
                     </button>
                 </div>
@@ -433,7 +433,7 @@ function App() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -20 }}
-                            className="flex flex-col items-center justify-center min-h-[70vh] text-center bg-white/90 backdrop-blur-sm border border-gray-100 rounded-lg shadow-xl p-12 mt-8 mx-auto max-w-4xl"
+                            className="flex flex-col items-center justify-center min-h-[70vh] text-center bg-white/90 backdrop-blur-sm border-4 border-black rounded-sm shadow-brutal p-12 mt-8 mx-auto max-w-4xl"
                         >
                             <h2 className="text-6xl md:text-8xl font-display uppercase mb-6 text-black">Forge Your <br/><span className="text-red-600">Crew</span></h2>
                             <p className="text-xl md:text-2xl font-bold text-gray-700 max-w-2xl mx-auto mb-12">
@@ -441,7 +441,7 @@ function App() {
                             </p>
                             <button
                                 onClick={startCreation}
-                                className="px-10 py-5 bg-zinc-900 text-white border border-gray-200 hover:bg-black font-display uppercase text-2xl tracking-widest shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-150 active:scale-95 focus:outline-none focus:ring-4 focus:ring-black focus:ring-offset-2"
+                                className="px-10 py-5 bg-black text-white border-4 border-black hover:bg-zinc-900 font-display uppercase text-2xl tracking-widest shadow-brutal hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-none transition-all duration-75 focus:outline-none"
                             >
                                 COMMENCE
                             </button>
@@ -457,7 +457,7 @@ function App() {
                             className="flex flex-col lg:flex-row gap-8 max-w-7xl mx-auto"
                         >
                             {/* Left Column: Wheel */}
-                            <div className="flex-1 bg-white/90 backdrop-blur-sm p-4 md:p-8 border border-gray-100 rounded-lg shadow-xl flex flex-col items-center relative overflow-hidden">
+                            <div className="flex-1 bg-white/90 backdrop-blur-sm p-4 md:p-8 border-4 border-black rounded-sm shadow-brutal flex flex-col items-center relative overflow-hidden">
                                 <RarityLegend />
                                 <h3 className="text-3xl md:text-5xl font-display mb-2 text-black text-center uppercase tracking-wider">
                                     {categories[catIndex].name}
@@ -494,14 +494,14 @@ function App() {
                                         <button
                                             onClick={handleSpinClick}
                                             disabled={isSpinning}
-                                            className="flex-1 py-4 bg-zinc-900 text-white border border-gray-200 hover:bg-black disabled:bg-gray-300 disabled:text-gray-500 disabled:shadow-none disabled:transform-none font-display text-2xl uppercase tracking-widest shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-150 active:scale-95 focus:outline-none focus:ring-4 focus:ring-black focus:ring-offset-2"
+                                            className="flex-1 py-4 bg-black text-white border-4 border-black disabled:bg-gray-300 disabled:border-gray-400 disabled:text-gray-500 font-display text-2xl uppercase tracking-widest shadow-brutal hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-none disabled:shadow-none disabled:transform-none transition-all duration-75 focus:outline-none"
                                         >
                                             SPIN
                                         </button>
                                         <button
                                             onClick={handleAutoSpin}
                                             disabled={isSpinning}
-                                            className="px-6 py-4 bg-white text-black hover:bg-black hover:text-white disabled:bg-gray-300 disabled:text-gray-500 disabled:shadow-none disabled:transform-none border border-gray-200 font-display text-xl uppercase tracking-widest shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-150 active:scale-95 focus:outline-none focus:ring-4 focus:ring-black focus:ring-offset-2"
+                                            className="px-6 py-4 bg-white text-black border-4 border-black disabled:bg-gray-200 disabled:border-gray-300 disabled:text-gray-400 font-display text-xl uppercase tracking-widest shadow-brutal hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-none disabled:shadow-none disabled:transform-none transition-all duration-75 focus:outline-none"
                                         >
                                             AUTO
                                         </button>
@@ -512,7 +512,7 @@ function App() {
                                     <div className="flex flex-col gap-4 mt-8 z-10 w-full max-w-sm">
                                         <button
                                             onClick={handleGenerateLore}
-                                            className="w-full py-4 bg-indigo-600 text-white border border-indigo-700 hover:bg-indigo-700 font-display text-xl uppercase tracking-widest shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-150 active:scale-95 focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:ring-offset-2"
+                                            className="w-full py-4 bg-red-600 text-white border-4 border-black font-display text-xl uppercase tracking-widest shadow-brutal hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-none transition-all duration-75 focus:outline-none"
                                         >
                                             GENERATE LORE & VIEW
                                         </button>
@@ -533,7 +533,7 @@ function App() {
                                                 <HalftoneBurst color={RARITY[currentOutcome.rarity]?.color} />
                                             )}
                                              <div 
-                                                className="text-center p-12 bg-white rounded-3xl shadow-2xl border-2 max-w-lg w-full mx-4 relative overflow-hidden"
+                                                className="text-center p-12 bg-white rounded-sm border-4 shadow-brutal max-w-lg w-full mx-4 relative overflow-hidden"
                                                 style={{ 
                                                     borderColor: RARITY[currentOutcome.rarity]?.color || '#111',
                                                 }}
@@ -553,11 +553,11 @@ function App() {
 
                             {/* Right Column: Build Log */}
                             <div className="w-full lg:w-96 flex flex-col gap-4">
-                                <div className="bg-white/90 backdrop-blur-sm p-6 border border-gray-100 rounded-lg shadow-xl flex-1">
-                                    <h4 className="text-2xl font-display mb-4 border-b border-gray-200 pb-2 text-black uppercase tracking-widest">Active Draft</h4>
+                                <div className="bg-white/90 backdrop-blur-sm p-6 border-4 border-black rounded-sm shadow-brutal flex-1">
+                                    <h4 className="text-2xl font-display mb-4 border-b-4 border-black pb-2 text-black uppercase tracking-widest">Active Draft</h4>
                                     <div className="space-y-4 overflow-y-auto max-h-[60vh] pr-2 mt-4">
                                         {categories.map((c) => (
-                                            <div key={c.id} className={`p-4 border transition-none ${build[c.id] ? 'bg-white border-zinc-900' : 'bg-gray-100 border-dashed border-gray-400'}`}>
+                                            <div key={c.id} className={`p-4 border-2 transition-none ${build[c.id] ? 'bg-white border-black shadow-brutal-sm' : 'bg-gray-100 border-dashed border-gray-400'}`}>
                                                 <div className="text-sm font-bold text-gray-500 uppercase tracking-widest mb-1 font-display">{c.name}</div>
                                                 <div className="text-lg font-bold truncate uppercase" style={{ color: build[c.id] ? (RARITY[build[c.id].rarity]?.color || '#111') : '#9ca3af' }}>
                                                     {build[c.id] ? build[c.id].name : 'PENDING'}
@@ -576,7 +576,7 @@ function App() {
                             initial={{ opacity: 0, scale: 0.95 }}
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 1.05 }}
-                            className="w-full max-w-7xl mx-auto flex flex-col items-center justify-center py-32 bg-white/90 backdrop-blur-sm border border-gray-100 rounded-lg shadow-xl"
+                            className="w-full max-w-7xl mx-auto flex flex-col items-center justify-center py-32 bg-white/90 backdrop-blur-sm border-4 border-black rounded-sm shadow-brutal"
                         >
                             <div className="relative w-48 h-48 mb-12">
                                 <div className="absolute inset-0 border-8 border-gray-100 rounded-full"></div>
@@ -624,13 +624,13 @@ function App() {
                                 <button
                                     onClick={handleSaveCharacter}
                                     disabled={isSaved}
-                                    className="w-full sm:w-auto px-8 py-4 bg-zinc-900 text-white border border-gray-200 hover:bg-black disabled:bg-gray-300 disabled:text-gray-500 disabled:shadow-none disabled:transform-none font-display uppercase tracking-widest text-xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-150 active:scale-95 focus:outline-none focus:ring-4 focus:ring-black focus:ring-offset-2"
+                                    className="w-full sm:w-auto px-8 py-4 bg-black text-white border-4 border-black disabled:bg-gray-300 disabled:text-gray-500 font-display uppercase tracking-widest text-xl shadow-brutal hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-none disabled:shadow-none disabled:transform-none transition-all duration-75 focus:outline-none"
                                 >
                                     {isSaved ? 'SAVED' : 'SAVE TO CREW'}
                                 </button>
                                 <button
                                     onClick={startCreation}
-                                    className="w-full sm:w-auto px-8 py-4 bg-white text-black border border-gray-200 hover:bg-black hover:text-white font-display uppercase tracking-widest text-xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-150 active:scale-95 focus:outline-none focus:ring-4 focus:ring-black focus:ring-offset-2"
+                                    className="w-full sm:w-auto px-8 py-4 bg-white text-black border-4 border-black font-display uppercase tracking-widest text-xl shadow-brutal hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-none transition-all duration-75 focus:outline-none"
                                 >
                                     DRAFT ANOTHER
                                 </button>
@@ -649,7 +649,7 @@ function App() {
                     <div className="w-full max-w-5xl mx-auto flex flex-col items-center pt-4 pb-20">
                         <button
                             onClick={() => setViewingSavedCharacter(null)}
-                            className="mb-8 px-10 py-4 bg-white text-black border border-gray-200 hover:bg-black hover:text-white transition-none font-display uppercase tracking-widest text-xl relative z-10"
+                            className="mb-8 px-10 py-4 bg-white text-black border-4 border-black font-display uppercase tracking-widest text-xl shadow-brutal hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-none transition-all duration-75 focus:outline-none relative z-10"
                         >
                             RETURN
                         </button>
