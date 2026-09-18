@@ -398,7 +398,7 @@ function App() {
         <PageLayout bgImage={bgImage}>
         <div className="min-h-screen text-black font-body">
             {/* Header */}
-            <header className="p-4 md:p-6 border-b border-gray-200 bg-white flex flex-col md:flex-row justify-between items-center sticky top-0 z-40 manga-panel mx-2 md:mx-4 mt-2 md:mt-4 gap-4">
+            <header className="p-4 md:p-6 border-b border-gray-200/50 bg-white/90 backdrop-blur-sm flex flex-col md:flex-row justify-between items-center sticky top-0 z-40 manga-panel mx-2 md:mx-4 mt-2 md:mt-4 gap-4">
                 <h1 className="text-2xl md:text-3xl font-display uppercase tracking-tighter text-black">
                     SUMMON
                 </h1>
@@ -433,7 +433,7 @@ function App() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -20 }}
-                            className="flex flex-col items-center justify-center min-h-[70vh] text-center bg-white border border-gray-200 p-12 mt-8 mx-auto max-w-4xl"
+                            className="flex flex-col items-center justify-center min-h-[70vh] text-center bg-white/90 backdrop-blur-sm border border-gray-100 rounded-lg shadow-xl p-12 mt-8 mx-auto max-w-4xl"
                         >
                             <h2 className="text-6xl md:text-8xl font-display uppercase mb-6 text-black">Forge Your <br/><span className="text-red-600">Crew</span></h2>
                             <p className="text-xl md:text-2xl font-bold text-gray-700 max-w-2xl mx-auto mb-12">
@@ -457,7 +457,7 @@ function App() {
                             className="flex flex-col lg:flex-row gap-8 max-w-7xl mx-auto"
                         >
                             {/* Left Column: Wheel */}
-                            <div className="flex-1 bg-white p-4 md:p-8 border border-gray-200 flex flex-col items-center relative overflow-hidden">
+                            <div className="flex-1 bg-white/90 backdrop-blur-sm p-4 md:p-8 border border-gray-100 rounded-lg shadow-xl flex flex-col items-center relative overflow-hidden">
                                 <RarityLegend />
                                 <h3 className="text-3xl md:text-5xl font-display mb-2 text-black text-center uppercase tracking-wider">
                                     {categories[catIndex].name}
@@ -553,7 +553,7 @@ function App() {
 
                             {/* Right Column: Build Log */}
                             <div className="w-full lg:w-96 flex flex-col gap-4">
-                                <div className="bg-white p-6 border border-gray-200 flex-1">
+                                <div className="bg-white/90 backdrop-blur-sm p-6 border border-gray-100 rounded-lg shadow-xl flex-1">
                                     <h4 className="text-2xl font-display mb-4 border-b border-gray-200 pb-2 text-black uppercase tracking-widest">Active Draft</h4>
                                     <div className="space-y-4 overflow-y-auto max-h-[60vh] pr-2 mt-4">
                                         {categories.map((c) => (
@@ -576,7 +576,7 @@ function App() {
                             initial={{ opacity: 0, scale: 0.95 }}
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 1.05 }}
-                            className="w-full max-w-7xl mx-auto flex flex-col items-center justify-center py-32 bg-white border border-gray-200 shadow-sm"
+                            className="w-full max-w-7xl mx-auto flex flex-col items-center justify-center py-32 bg-white/90 backdrop-blur-sm border border-gray-100 rounded-lg shadow-xl"
                         >
                             <div className="relative w-48 h-48 mb-12">
                                 <div className="absolute inset-0 border-8 border-gray-100 rounded-full"></div>
