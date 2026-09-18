@@ -35,7 +35,7 @@ export default async function handler(req, res) {
     if (!response.ok) {
         const err = await response.text();
         console.error("OpenAI Image API Error:", err);
-        throw new Error(`OpenAI API error: ${response.status} ${response.statusText}`);
+        throw new Error(`OpenAI API error: ${response.status} ${response.statusText} - Details: ${err}`);
     }
 
     const data = await response.json();
