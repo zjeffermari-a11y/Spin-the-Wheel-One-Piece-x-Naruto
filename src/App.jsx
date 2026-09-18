@@ -1,5 +1,6 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useMemo } from 'react';
 import HalftoneBurst from "./components/HalftoneBurst";
+import PageLayout from './components/PageLayout';
 import Wheel from './components/Wheel';
 import RarityLegend from './components/RarityLegend';
 
@@ -383,8 +384,19 @@ function App() {
         await supabase.auth.signOut();
     };
 
+    const bgImage = useMemo(() => {
+        const map = {
+            landing: '/backgrounds/page_01_home_background.png',
+            spinning: '/backgrounds/page_02_spin_background.png',
+            generating: '/backgrounds/page_02_spin_background.png',
+            result: '/backgrounds/page_03_result_background.png',
+        };
+        return map[screen] || map.landing;
+    }, [screen]);
+
     return (
-        <div className="min-h-screen bg-halftone text-black font-body">
+        <PageLayout bgImage={bgImage}>
+        <div className="min-h-screen text-black font-body">
             {/* Header */}
             <header className="p-4 md:p-6 border-b border-gray-200 bg-white flex flex-col md:flex-row justify-between items-center sticky top-0 z-40 manga-panel mx-2 md:mx-4 mt-2 md:mt-4 gap-4">
                 <h1 className="text-2xl md:text-3xl font-display uppercase tracking-tighter text-black">
@@ -659,6 +671,7 @@ function App() {
                 </div>
             )}
         </div>
+        </PageLayout>
     );
 }
 
