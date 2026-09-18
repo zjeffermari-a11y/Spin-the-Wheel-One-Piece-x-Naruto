@@ -7,14 +7,14 @@ const GROQ_API_KEY = process.env.GROQ_API_KEY;
 async function startServer() {
   const app = express();
   const PORT = 3000;
-  
+
   app.use(express.json({ limit: "10mb" }));
 
   // AI Portrait Generation Route using Official OpenAI API
   app.post("/api/generate-portrait", async (req, res) => {
     const { prompt } = req.body;
     if (!prompt) return res.status(400).json({ error: "Missing prompt" });
-    
+
     try {
       const apiKey = process.env.OPENAI_API_KEY;
       if (!apiKey) {
@@ -22,9 +22,9 @@ async function startServer() {
       }
 
       console.log("Generating portrait via OpenAI API...");
-      
+
       const payload = {
-        model: "dall-e-3",
+        model: "gpt-image-2.5-sunburst", // User preferred model
         prompt: `Generate a One Piece anime style Wanted Poster portrait for this character. The art should be a character portrait with no extra text or UI. Character Description: ${prompt}`,
         n: 1,
         size: "1024x1024",
@@ -60,12 +60,12 @@ async function startServer() {
   app.post("/api/generate-lore", async (req, res) => {
     try {
       const { prompt, systemInstruction } = req.body;
-      
+
       const payload = {
         model: "openai/gpt-oss-120b", // User preferred model
         messages: [
-            { role: "system", content: systemInstruction },
-            { role: "user", content: prompt }
+          { role: "system", content: systemInstruction },
+          { role: "user", content: prompt }
         ],
         temperature: 0.7,
         response_format: { type: "json_object" }
@@ -74,21 +74,21 @@ async function startServer() {
       const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
         method: "POST",
         headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${GROQ_API_KEY}`
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${GROQ_API_KEY}`
         },
         body: JSON.stringify(payload)
       });
 
       if (!response.ok) {
-          const err = await response.text();
-          throw new Error(`Groq API error: ${response.status} ${err}`);
+        const err = await response.text();
+        throw new Error(`Groq API error: ${response.status} ${err}`);
       }
 
       const data = await response.json();
       let content = data.choices[0].message.content || "";
       content = content.replace(/\s*```json\s*/gi, '').replace(/\s*```\s*/gi, '').trim();
-      
+
       res.json(JSON.parse(content));
     } catch (error) {
       console.error("AI Generation error:", error);
