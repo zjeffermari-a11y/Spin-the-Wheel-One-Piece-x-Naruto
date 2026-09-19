@@ -1,4 +1,33 @@
 import { CHARACTER_LORE } from '../data/characters';
+import { CROSSVERSE_LORE_RULES, getCanonicalLoreBrief } from '../data/loreCodex';
+
+const CREATIVE_MOTIFS = [
+    'a funeral bell carried across a storm sea',
+    'a shrine lantern reflected in black water',
+    'an eclipse splitting a battlefield in two',
+    'a storm-serpent coiled around a ruined gate',
+    'a red moon over a shattered fortress',
+    'a tide of paper talismans through a burning port',
+    'a broken crown buried beneath sakura petals',
+    'a thunderclap inside an abandoned temple',
+    'an iron comet crossing a winter sky',
+    'a dragon shadow moving beneath ocean waves'
+];
+
+// A new service instance is created for each character, so this module-level
+// history is deliberately shared for the active browser session.
+const RECENT_EPITHETS = [];
+const normalizeEpithet = (epithet) => String(epithet || '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim();
+
+const rememberEpithet = (epithet) => {
+    const normalized = normalizeEpithet(epithet);
+    if (!normalized || RECENT_EPITHETS.includes(normalized)) return;
+    RECENT_EPITHETS.push(normalized);
+    if (RECENT_EPITHETS.length > 30) RECENT_EPITHETS.shift();
+};
 
 export class OllamaService {
     constructor() {
@@ -35,12 +64,14 @@ export class OllamaService {
         const buildSummary = this._getBuildSummary(build);
         const haxBreakdown = this._getHaxBreakdown(build);
         const vesselLore = this._getVesselLoreDirective(build);
+        const canonicalLore = getCanonicalLoreBrief(build);
         const prompt = `CHARACTER:
 ${buildSummary}
 ${haxBreakdown ? `HAX: ${haxBreakdown}` : ''}
-${vesselLore ? `\nVESSEL LORE (STRICT OVERRIDE):\n${vesselLore}` : ''}
+${vesselLore ? `\nVESSEL IDENTITY:\n${vesselLore}` : ''}
+\n${canonicalLore}
 
-TASK: Invent 1 unique synergy (under 3 sentences) merging their Devil Fruit, Haki, Dōjutsu, Ninjutsu, or Vessel.
+TASK: Invent 1 unique, tactical synergy (under 3 sentences). It must fuse at least two selected sources, state the trigger or sequence, and name one meaningful limitation/counterplay. Do not use a power not present in the build.
 
 SCHEMA:
 {
@@ -48,7 +79,7 @@ SCHEMA:
   "desc": "How their abilities merge",
   "bonuses": { "str":0, "spd":0, "dur":0, "iq":0, "haki":0, "pwr":0, "hax":0 }
 }`;
-        return await this.generateContent(prompt, "Role: Master of anime lore. Create 1 balanced, creative power synergy in pure JSON.");
+        return await this.generateContent(prompt, `${CROSSVERSE_LORE_RULES}\n\nRole: Canon-first One Piece x Naruto combat designer. Create 1 balanced, creative power synergy in pure JSON.`);
     }
 
     async generateBio(build) {
@@ -66,32 +97,35 @@ SCHEMA:
             if (item.tag && item.tag.includes('hax')) stats.hax += (item.val * 0.15);
         }
 
-        const pronouns = build.vessel?.gender === 'F' ? 'she/her' : 'he/him';
-        const randomAdj = ['Crimson', 'Shadow', 'Silent', 'Azure', 'Hollow', 'Iron', 'Phantom'][Math.floor(Math.random() * 7)];
-        const randomNoun = ['Emperor', 'Wraith', 'Dragon', 'Fang', 'Sage', 'Demon', 'Saint'][Math.floor(Math.random() * 7)];
-        const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        const randomLetter = letters.charAt(Math.floor(Math.random() * letters.length));
-
+        const pronouns = build.vessel?.gender === 'F' ? 'she/her' : 'they/them';
         const vesselLore = this._getVesselLoreDirective(build);
+        const canonicalLore = getCanonicalLoreBrief(build);
+        const creativeMotif = CREATIVE_MOTIFS[Math.floor(Math.random() * CREATIVE_MOTIFS.length)];
+        const recentEpithetBlock = RECENT_EPITHETS.length
+            ? `\nRECENT EPITHETS — do not repeat or closely paraphrase these: ${RECENT_EPITHETS.join(' | ')}`
+            : '';
 
         const prompt = `CHARACTER:
 ${buildSummary}
 ${haxBreakdown ? `HAX: ${haxBreakdown}` : ''}
 APEX: ${this._getHighestStats(stats)}
 VULNERABLE: ${this._getLowestStats(stats)}
-${vesselLore ? `\nVESSEL LORE (STRICT OVERRIDE):\n${vesselLore}` : ''}
+${vesselLore ? `\nVESSEL IDENTITY:\n${vesselLore}` : ''}
+\n${canonicalLore}
+\nCREATIVE IMAGE SEED (use as subtle imagery only; do not name it unless it fits): ${creativeMotif}
+${recentEpithetBlock}
 
-MANDATES:
-1. NAME/EPITHET: Authentic name (start with ${randomLetter}). Unique epic epithet (no generic titles).
-2. COMBAT LORE: Describe how they exploit Apex stats/hax and compensate for Vulnerable stats.
-3. FACTION: Embed their faction (${build.faction?.name || 'Unaffiliated'}) creed/goals.
-4. BIO (3-4 sentences): 
-   - S1: Origin, lineage/vessel, faction.
-   - S2: Awakening of fused powers. (If Zoan: describe visual transformation).
-   - S3: Combat doctrine/hax exploitation.
-   - S4: Reputation (Marines, Kage, etc).
-5. SYNERGY: 1 synergy blending powers. If Weapon mismatches Style (e.g. Sniper & Brawler), embrace irony (e.g. use rifle as club).
-6. ABILITIES: 2-3 signature moves. If Zoan: 1 Hybrid, 1 Full-Beast move with visual descriptions.
+OUTPUT CONTRACT:
+1. NAME: Create a new, pronounceable 1–2 word name. Never reuse a canon vessel's full name and never force an arbitrary starting letter.
+2. EPITHET: Create a fresh 3–7 word epithet whose imagery comes from this exact build’s mechanics, origin, faction, or combat doctrine. It must be memorable even without the character name. Do NOT use generic template titles such as "The Shadow", "The Crimson", "The Silent", "The Azure", "Emperor", "Wraith", "Dragon", "Fang", "Sage", "Demon", "Saint", "God", "Destroyer", or "of Destiny".
+3. BIO: Write exactly 4 cinematic sentences about ${pronouns}.
+   - Sentence 1: origin, selected lineage/vessel, and faction (${build.faction?.name || 'Unaffiliated'}).
+   - Sentence 2: the moment the selected powers fused; describe a Zoan hybrid/full-beast visual if one was selected.
+   - Sentence 3: a concrete combat doctrine that exploits APEX and protects VULNERABLE through selected tools.
+   - Sentence 4: reputation and the specific fear, promise, or rumor attached to this character.
+4. CUSTOM SYNERGY: Fuse at least two selected sources in a causal sequence—not a list. State a setup/trigger, payoff, and one real limit, cost, or counterplay. If weapon and style clash, turn the clash into a deliberate tactic.
+5. SIGNATURE ABILITIES: Return exactly 3 distinct original moves: (a) pressure/setup, (b) mobility, defense, or control, (c) finisher. Every description must name the selected source mechanics it uses, explain the tactical effect, and avoid granting an unselected canon technique. If a Zoan is selected, include one hybrid or full-beast move among the three. If a hax is selected, at most one move may hinge on it and its condition must be explicit.
+6. Keep the character powerful at the rolled tier, but do not treat an unselected power, a vague bloodline, or a high stat as permission for omnipotence.
 
 JSON SCHEMA:
 {
@@ -101,11 +135,23 @@ JSON SCHEMA:
   "custom_synergy": { "name": "", "desc": "", "bonuses": {"str":0,"spd":0,"dur":0,"iq":0,"haki":0,"pwr":0,"hax":0} },
   "signature_abilities": [ { "name": "", "desc": "" } ]
 }`;
-        return await this.generateContent(prompt, `Role: Lorekeeper for a One Piece x Naruto crossover.
-RULES:
-1. VISUALS: If Vessel is canon (Zoro=swords, Luffy=straw hat, Naruto=whiskers), include their visual identity.
-2. TONE: Cinematic, awe-inspiring, epic.
-3. OUTPUT: ONLY valid JSON matching schema. No markdown wrappers.`);
+        const systemPrompt = `Role: You are the canon-first lorekeeper and combat choreographer for a One Piece x Naruto crossover.
+${CROSSVERSE_LORE_RULES}
+
+QUALITY BAR:
+- Silently audit every claim against the selected canon capsules before writing. When a vessel note and a selected power conflict, keep the vessel's visual/personality identity but only use a combat mechanic if it is selected or explicitly present in the vessel note.
+- A good fusion has an action chain: source A creates an opening, source B converts it, and a condition keeps it fair. Do not merely rename two powers placed side by side.
+- Give every ability a different job and sensory identity. Avoid filler such as "unleashes immense energy", "ultimate attack", "reality-breaking", or "unmatched power" unless the selected mechanic explains exactly how it works.
+- Preserve canon uncertainty. Label an unconfirmed vessel detail as a rumor instead of a fact, and never invent an exact Mangekyō ability, Devil Fruit awakening, or shinjutsu from a name alone.
+- Tone: cinematic, vivid, and consequential; mechanics: precise and readable.
+- OUTPUT: ONLY valid JSON matching the schema. No markdown wrappers or extra keys.`;
+
+        let result = await this.generateContent(prompt, systemPrompt);
+        if (RECENT_EPITHETS.includes(normalizeEpithet(result?.epithet))) {
+            result = await this.generateContent(`${prompt}\n\nREVISION REQUIRED: The epithet returned a recent collision. Keep every other field fresh, but replace it with a materially different epithet rooted in this build's exact mechanics.`, systemPrompt);
+        }
+        rememberEpithet(result?.epithet);
+        return result;
     }
 
     _getBuildSummary(build) {
@@ -171,12 +217,14 @@ RULES:
         const lore = CHARACTER_LORE[build.vessel.name];
         if (!lore) return null;
 
-        return `You MUST adhere to the following canonical traits of this vessel, which override random generation:
-- OVERRIDES: ${lore.overrides}
+        return `Use this as the vessel's canonical identity, not as a replacement for the rolled build:
+- LEGACY IDENTITY: ${lore.overrides}
 - APPEARANCE: ${lore.appearance}
 - PERSONALITY: ${lore.personality}
 - ABILITIES: ${lore.abilities}
-- HAX: ${lore.hax}`;
+- HAX: ${lore.hax}
+
+RECONCILIATION: Preserve the vessel's visual identity, personality, and physical heritage. The explicit CHARACTER rolls are the active current loadout: never replace a rolled Devil Fruit, weapon, faction, eye, or technique with the vessel's native one. If a native vessel power conflicts with a roll, frame it as legacy/history or fuse it only when the mechanics are compatible.`;
     }
 
     _getHaxBreakdown(build) {
@@ -184,7 +232,7 @@ RULES:
         for (const key in build) {
             const item = build[key];
             if (!item || item.name === 'None') continue;
-            if (item.tag === 'hax' || item.val >= 100) {
+            if (item.tag?.split(/\s+/).includes('hax') || item.val >= 100) {
                 haxItems.push(`${item.name} (${key.toUpperCase()})`);
             }
         }
