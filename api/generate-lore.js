@@ -42,6 +42,6 @@ export default async function handler(req, res) {
     res.status(200).json(JSON.parse(content));
   } catch (error) {
     console.error("AI Generation error:", error);
-    res.status(500).json({ error: error.message || "Failed to generate lore" });
+    res.status(500).json({ error: error instanceof Error ? error.message : String(error) });
   }
 }
