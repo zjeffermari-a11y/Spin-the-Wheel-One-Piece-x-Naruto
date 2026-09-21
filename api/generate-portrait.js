@@ -37,7 +37,7 @@ export default async function handler(req, res) {
 
     if (!initialResponse.ok) {
       return res.status(initialResponse.status).json({
-        error: initialData?.error || "Higgsfield API generation request failed"
+        error: initialData?.detail || initialData?.error || "Higgsfield API generation request failed"
       });
     }
 
