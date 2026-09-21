@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useMemo } from 'react';
 import HalftoneBurst from "./components/HalftoneBurst";
 import PageLayout from './components/PageLayout';
 import Wheel from './components/Wheel';
@@ -13,7 +13,7 @@ import { devilFruitDB } from './data/categories';
 import { calculateSynergies } from './utils/gameLogic';
 import { OllamaService } from './utils/OllamaService';
 import { RARITY } from './data/rarity';
-import { Settings, Users, User, LogOut, ArrowUpRight, Compass, Sparkles, Zap, Layers } from 'lucide-react';
+import { Settings, Users, User, LogOut } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import AuthModal from './components/AuthModal';
 import { supabase } from './utils/supabaseClient';
@@ -105,19 +105,11 @@ function App() {
 
     const [isBuildComplete, setIsBuildComplete] = useState(false);
 
-    React.useEffect(() => {
-        if (hoverTextRef.current && !isBuildComplete) {
-            hoverTextRef.current.innerText = 'Ready for your next trait';
-            hoverTextRef.current.style.color = '#74756c';
-        }
-    }, [catIndex, isBuildComplete]);
-
     const startCreation = () => {
         const cats = initDatabases();
         setCategories(cats);
         categoriesRef.current = cats;
         setCatIndex(0);
-        setCurrentOutcome(null);
         catIndexRef.current = 0;
         setBuild({});
         buildRef.current = {};
@@ -421,19 +413,48 @@ function App() {
         await supabase.auth.signOut();
     };
 
+    const bgImage = useMemo(() => {
+        const map = {
+            landing: '/backgrounds/page_01_home_background.png',
+            spinning: '/backgrounds/page_02_spin_background.png',
+            generating: '/backgrounds/page_02_spin_background.png',
+            result: '/backgrounds/page_03_result_background.png',
+        };
+        return map[screen] || map.landing;
+    }, [screen]);
+
     return (
-        <PageLayout screen={screen}>
+        <PageLayout bgImage={bgImage}>
         <div className="min-h-screen text-black font-body">
-            <header className="site-header">
-                <a className="brand" href="#" aria-label="Summon home" onClick={e => { e.preventDefault(); if (screen === 'landing' || screen === 'result') setScreen('landing'); }}><Compass size={28} strokeWidth={1.6}/><span>SUMMON<span className="brand-dot">.</span></span></a>
-                <span className="header-edition">THE CROSSOVER CHARACTER LAB</span>
-                <nav className="header-actions" aria-label="Account and collection">
-                    <button className="nav-button crew-button" onClick={() => setIsRosterOpen(true)} title="Your crew"><Users size={18}/><span>Your crew</span></button>
-                    <button className="nav-button icon-button" onClick={() => setIsSettingsOpen(true)} aria-label="Settings"><Settings size={19}/></button>
-                    {user ? <button className="nav-button sign-in" onClick={handleLogout} title={user.email}><LogOut size={16}/><span>Sign out</span></button> : <button className="nav-button sign-in" onClick={() => setIsAuthOpen(true)}><User size={16}/><span>Sign in</span></button>}
-                </nav>
+            {/* Header */}
+            <header className="p-4 md:p-6 border-b-4 border-black bg-white/90 backdrop-blur-sm flex flex-col md:flex-row justify-between items-center sticky top-0 z-40 manga-panel mx-2 md:mx-4 mt-2 md:mt-4 gap-4 shadow-brutal">
+                <h1 className="text-2xl md:text-3xl font-display uppercase tracking-tighter text-black">
+                    SUMMON
+                </h1>
+                <div className="flex gap-4 items-center">
+                    {user ? (
+                        <div className="flex items-center gap-3 mr-2 bg-white border border-[#222] pl-3 pr-1 py-1 rounded-2xl">
+                            <span className="text-xs text-gray-600 max-w-[100px] truncate" title={user.email}>{user.email}</span>
+                            <button onClick={handleLogout} className="p-1.5 bg-gray-200 hover:bg-red-500/20 rounded-2xl transition-colors text-gray-600 hover:text-red-400" title="Log Out">
+                                <LogOut size={14} />
+                            </button>
+                        </div>
+                    ) : (
+                        <button onClick={() => setIsAuthOpen(true)} className="flex items-center gap-2 px-4 py-2 bg-black text-white border-2 border-black hover:bg-zinc-800 font-display uppercase tracking-widest text-sm mr-2 shadow-brutal-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all duration-75 focus:outline-none" title="Log In / Sign Up">
+                            <User size={16} />
+                            <span>Sign In</span>
+                        </button>
+                    )}
+                    <button onClick={() => setIsRosterOpen(true)} className="p-2 border-2 border-black bg-white hover:bg-zinc-100 text-black shadow-brutal-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all duration-75 focus:outline-none" title="Crew">
+                        <Users size={20} />
+                    </button>
+                    <button onClick={() => setIsSettingsOpen(true)} className="p-2 border-2 border-black bg-white hover:bg-zinc-100 text-black shadow-brutal-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all duration-75 focus:outline-none" title="Settings">
+                        <Settings size={20} />
+                    </button>
+                </div>
             </header>
-            <main className="app-main">
+
+            <main className="p-4 md:p-8">
                 <AnimatePresence mode="wait">
                     {screen === 'landing' && (
                         <motion.div
@@ -441,34 +462,18 @@ function App() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -20 }}
-                            className="landing"
+                            className="flex flex-col items-center justify-center min-h-[70vh] text-center bg-white/90 backdrop-blur-sm border-4 border-black rounded-sm shadow-brutal p-12 mt-8 mx-auto max-w-4xl"
                         >
-                            <div className="edition-line"><span><span className="status-dot"/> TWO WORLDS. INFINITE POSSIBILITIES.</span><span>VOL. 01 / CHARACTER LAB</span></div>
-                            <section className="hero-grid">
-                                <div className="hero-copy">
-                                    <div className="universe-label"><span>ONE PIECE</span><span className="cross">×</span><span>NARUTO</span></div>
-                                    <h2>One spin.<br/>A new <span>legend.</span></h2>
-                                    <p>A pirate’s ambition. A shinobi’s power. Spin the wheel to create a character that belongs to both worlds—and only to you.</p>
-                                    <button onClick={startCreation} className="primary-action">Forge your legend <ArrowUpRight size={22}/></button>
-                                    <div className="hero-note"><span/> No sign-up needed. Just a little fate.</div>
-                                </div>
-                                <div className="hero-art" aria-hidden="true">
-                                    <span className="art-coordinate">FIG. 001 — THE DESTINY ENGINE</span>
-                                    <div className="orbit orbit-one"/><div className="orbit orbit-two"/>
-                                    <div className="destiny-wheel"><div className="wheel-inner-ring"/><div className="wheel-spoke spoke-one"/><div className="wheel-spoke spoke-two"/><div className="wheel-spoke spoke-three"/><div className="wheel-spoke spoke-four"/><span className="wheel-word word-one">DEVIL FRUIT</span><span className="wheel-word word-two">BLOODLINE</span><span className="wheel-word word-three">HAKI</span><span className="wheel-word word-four">CHAKRA</span><div className="wheel-core"><Compass strokeWidth={1}/></div></div>
-                                    <div className="art-pointer"/>
-                                    <div className="floating-tag tag-top"><Zap size={17}/><span>BOUNDLESS POTENTIAL</span></div>
-                                    <div className="floating-tag tag-bottom"><Sparkles size={20}/><div><small>YOUR NEXT PULL?</small><strong>Something legendary.</strong></div></div>
-                                    <span className="art-star">✳</span><span className="art-caption">LET FATE TAKE THE WHEEL ↗</span>
-                                </div>
-                            </section>
-                            <div className="world-strip"><span>GRAND LINE MEETS HIDDEN LEAF</span><span>DEVIL FRUITS <i>✳</i> DŌJUTSU <i>✳</i> HAKI <i>✳</i> CHAKRA</span></div>
-                            <section className="how-section" aria-labelledby="how-heading"><div className="section-heading"><span className="eyebrow">A LEGEND IN THE MAKING</span><h3 id="how-heading">Leave your origin to chance.</h3></div><div className="step-grid">
-                                <article><span className="step-number">01</span><Compass/><h4>Spin your fate</h4><p>Discover your origin, abilities, and fighting style, one spin at a time.</p></article>
-                                <article><span className="step-number">02</span><Layers/><h4>Find your synergy</h4><p>Unexpected combinations unlock a power that’s entirely your own.</p></article>
-                                <article><span className="step-number">03</span><Sparkles/><h4>Meet your legend</h4><p>Reveal your stats and story. Save your character and build your crew.</p></article>
-                            </div></section>
-                            <footer className="site-footer"><span>SUMMON. <span>A FAN-MADE CROSSOVER EXPERIENCE</span></span><span>MADE FOR THE WHAT-IFS.</span></footer>
+                            <h2 className="text-6xl md:text-8xl font-display uppercase mb-6 text-black">Forge Your <br/><span className="text-red-600">Crew</span></h2>
+                            <p className="text-xl md:text-2xl font-bold text-gray-700 max-w-2xl mx-auto mb-12">
+                                Assemble abilities from across dimensions.
+                            </p>
+                            <button
+                                onClick={startCreation}
+                                className="px-10 py-5 bg-black text-white border-4 border-black hover:bg-zinc-900 font-display uppercase text-2xl tracking-widest shadow-brutal hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-none transition-all duration-75 focus:outline-none"
+                            >
+                                COMMENCE
+                            </button>
                         </motion.div>
                     )}
 
@@ -478,15 +483,15 @@ function App() {
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 1.1 }}
-                            className="draft-layout"
+                            className="flex flex-col lg:flex-row gap-8 max-w-7xl mx-auto"
                         >
                             {/* Left Column: Wheel */}
-                            <div className="spin-panel">
-                                <div className="draft-eyebrow"><span>THE DESTINY ENGINE</span><span>{isBuildComplete ? "COMPLETE" : "DRAFT IN PROGRESS"}</span></div>
+                            <div className="flex-1 bg-white/90 backdrop-blur-sm p-4 md:p-8 border-4 border-black rounded-sm shadow-brutal flex flex-col items-center relative overflow-hidden">
+                                <RarityLegend />
                                 <h3 className="text-3xl md:text-5xl font-display mb-2 text-black text-center uppercase tracking-wider">
                                     {categories[catIndex].name}
                                 </h3>
-                                <p className="spin-step">{isBuildComplete ? "Your build is ready. Bring your legend to life." : `TRAIT ${catIndex + 1} OF ${categories.length}`}</p><div className="draft-progress" role="progressbar" aria-label="Character draft progress" aria-valuenow={Object.keys(build).length} aria-valuemin={0} aria-valuemax={categories.length}><span style={{ width: `${Object.keys(build).length / categories.length * 100}%` }}/></div>
+                                <p className="text-xl font-bold text-gray-500 mb-8 z-10 text-center uppercase tracking-widest">{catIndex + 1} // {categories.length}</p>
 
                                 <div className="relative z-10 w-full max-w-[400px]">
                                     {/* Spin Pointer */}
@@ -576,21 +581,20 @@ function App() {
                             </div>
 
                             {/* Right Column: Build Log */}
-                            <div className="draft-sidebar">
-                                <div className="draft-log">
-                                    <h4 className="text-2xl font-display mb-4 border-b-4 border-black pb-2 text-black uppercase tracking-widest">Your character <span className="draft-count">{Object.keys(build).length}/{categories.length}</span></h4>
-                                    <div className="trait-list">
+                            <div className="w-full lg:w-96 flex flex-col gap-4">
+                                <div className="bg-white/90 backdrop-blur-sm p-6 border-4 border-black rounded-sm shadow-brutal flex-1">
+                                    <h4 className="text-2xl font-display mb-4 border-b-4 border-black pb-2 text-black uppercase tracking-widest">Active Draft</h4>
+                                    <div className="space-y-4 overflow-y-auto max-h-[60vh] pr-2 mt-4">
                                         {categories.map((c) => (
                                             <div key={c.id} className={`p-4 border-2 transition-none ${build[c.id] ? 'bg-white border-black shadow-brutal-sm' : 'bg-gray-100 border-dashed border-gray-400'}`}>
                                                 <div className="text-sm font-bold text-gray-500 uppercase tracking-widest mb-1 font-display">{c.name}</div>
                                                 <div className="text-lg font-bold truncate uppercase" style={{ color: build[c.id] ? (RARITY[build[c.id].rarity]?.color || '#111') : '#9ca3af' }}>
-                                                    {build[c.id] ? build[c.id].name : 'Undiscovered'}
+                                                    {build[c.id] ? build[c.id].name : 'PENDING'}
                                                 </div>
                                             </div>
                                         ))}
                                     </div>
                                 </div>
-                                <RarityLegend />
                             </div>
                         </motion.div>
                     )}

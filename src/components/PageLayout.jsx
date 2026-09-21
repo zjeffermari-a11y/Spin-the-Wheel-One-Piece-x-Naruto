@@ -1,19 +1,16 @@
-const backgrounds = {
-  landing: '/backgrounds/page_01_home_background.png',
-  spinning: '/backgrounds/page_02_spin_background.png',
-  generating: '/backgrounds/page_02_spin_background.png',
-  result: '/backgrounds/page_03_result_background.png',
-};
-
-export default function PageLayout({ children, screen = 'landing' }) {
+export default function PageLayout({ children, bgImage }) {
   return (
-    <div className="paper-layout">
+    <div className="relative min-h-screen w-full bg-[#f8f8f6]">
+      {/* Background with mix-blend-multiply so white parts dissolve into the base tone */}
       <div
-        className="page-artwork"
-        style={{ backgroundImage: `url('${backgrounds[screen] || backgrounds.landing}')` }}
-        aria-hidden="true"
+        className="fixed top-0 left-0 w-screen h-screen z-0 bg-cover bg-center bg-no-repeat mix-blend-multiply pointer-events-none"
+        style={{ backgroundImage: `url('${bgImage}')` }}
       />
-      <div className="page-content">{children}</div>
+
+      {/* Content overlay above the fixed background */}
+      <div className="relative z-10 flex flex-col w-full min-h-screen">
+        {children}
+      </div>
     </div>
   );
 }
