@@ -1,3 +1,5 @@
+import { resolveBuildMechanics } from '../utils/buildMechanics';
+import { CATEGORIES } from '../data/categories';
 import React, { useRef } from 'react';
 import CharacterStats from './CharacterStats';
 import { Download, Copy } from 'lucide-react';
@@ -5,6 +7,8 @@ import { RARITY } from '../data/rarity';
 
 export default function CharacterCard({ build, stats, overall, bounty, lore, synergies, tier, portraitUrl, isGeneratingPortrait }) {
     const cardRef = useRef(null);
+    const resolved = resolveBuildMechanics(build);
+    const categoryLabel = key => CATEGORIES.find(category => category.id === key)?.name || key.replace(/_/g, ' ');
 
     const handleCopyMarkdown = () => {
         const synergiesMarkdown = synergies && synergies.length > 0 
@@ -21,16 +25,13 @@ export default function CharacterCard({ build, stats, overall, bounty, lore, syn
 **Tier:** ${tier?.name || 'Unknown Tier'}
 **Bounty:** ฿ ${Number(bounty) === -1 ? '??? (Unknown)' : bounty?.toLocaleString() || '0'}
 **Overall Power:** ${overall || 0}
+**Lore source:** ${lore?.generation_source === 'local' ? 'Local templates' : lore?.generation_source === 'ai' ? 'AI generation' : 'Saved character'}
 
 ## Build Profile
-- **Race:** ${build.race?.name || 'None'}
-- **Origin:** ${build.origin?.name || 'None'}
-- **Physical Vessel:** ${build.vessel?.name || 'None'}
-- **Devil Fruit:** ${build.df?.name || 'None'}
-- **Dōjutsu:** ${build.dojutsu?.name || 'None'}
-- **Fighting Style:** ${build.style?.name || 'None'}
-- **Weapon:** ${build.weapon?.name || 'None'}
-- **Faction:** ${build.faction?.name || 'None'}
+${Object.entries(build).filter(([, item]) => item?.name && item.name !== 'None').map(([key, item]) => `- **${categoryLabel(key)}:** ${item.name}`).join('\n')}
+
+## Unlocked Abilities
+${resolved.abilities.map(a => `- **${a.name}:** ${a.desc}`).join('\n') || 'Selected base abilities only.'}
 
 ## Active Synergies
 ${synergiesMarkdown}
@@ -124,6 +125,7 @@ ${lore?.bio || ''}
             </div>
             
             <div ref={cardRef} className="bg-[#e8dcc7]/90 backdrop-blur-md overflow-hidden border-4 border-black shadow-brutal pb-8">
+                {lore?.generation_source && <p className="px-4 pt-3 text-xs text-center uppercase tracking-widest">{lore.generation_source === 'local' ? 'Local template lore' : 'AI-generated lore'}</p>}
                 {/* Poster Header */}
                 <div className="pt-8 md:pt-12 px-4 text-center">
                     <h1 className="wanted-text text-7xl md:text-[10rem] text-zinc-900 mb-2 leading-none">WANTED</h1>
@@ -202,10 +204,10 @@ ${lore?.bio || ''}
                             <h4 className="text-3xl font-display uppercase mb-4 text-black border-b-4 border-black pb-2">Build Profile</h4>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-4">
                                 {Object.entries(build).map(([key, item]) => {
-                                    if (['str', 'spd', 'dur', 'iq', 'combat', 'chakra_cap'].includes(key)) return null;
+                                    if (['str', 'spd', 'dur', 'iq'].includes(key)) return null;
                                     if (!item || item.name === 'None') return null;
                                     
-                                    const label = key.replace(/_/g, ' ').toUpperCase();
+                                    const label = categoryLabel(key).toUpperCase();
                                     return (
                                         <div key={key} className="flex flex-col border-2 border-black p-2 bg-gray-50/80">
                                             <span className="text-xs text-gray-800 font-display uppercase tracking-widest font-bold">{label}</span>
@@ -217,6 +219,18 @@ ${lore?.bio || ''}
                                 })}
                             </div>
                         </div>
+
+                        {resolved.abilities.length > 0 && (
+                            <div className="md:col-span-2 bg-white/50 border-2 border-black p-4 md:p-6 shadow-brutal-sm">
+                                <h4 className="text-3xl font-display uppercase mb-4 border-b-4 border-black pb-2">Unlocked Abilities</h4>
+                                {resolved.abilities.map(ability => (
+                                    <div key={ability.name} className="mb-4">
+                                        <h5 className="text-xl font-display">{ability.name}</h5>
+                                        <p className="text-sm font-body font-bold">{ability.desc}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
 
                         <div className="md:col-span-2 bg-white/50 border-2 border-black p-4 md:p-6 shadow-brutal-sm">
                             <h4 className="text-3xl font-display uppercase mb-4 text-black border-b-4 border-black pb-2">Active Synergies</h4>

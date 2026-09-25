@@ -21,7 +21,7 @@ export default function SettingsModal({ isOpen, onClose }) {
                     <div>
                         <label className="block text-sm font-bold text-gray-400 mb-1">AI Lore Settings</label>
                         <p className="text-xs text-gray-500 mt-2">
-                            Lore generation is currently powered by Groq on a secured backend server. You don't need to manage your key directly here.
+                            Create Offline Character uses local templates without sending a request. AI lore and portraits require internet access and a configured backend; unavailable AI lore falls back to local templates. You do not need your own API key.
                         </p>
                     </div>
                 </div>

@@ -1,3 +1,7 @@
+import InstallStatus from './components/InstallStatus';
+import { saveLocalCharacter } from './utils/localRoster';
+import { generateCharacterContent } from './utils/localLore';
+import { postApi } from './utils/apiClient';
 import React, { useState, useRef, useCallback, useMemo } from 'react';
 import HalftoneBurst from "./components/HalftoneBurst";
 import PageLayout from './components/PageLayout';
@@ -10,7 +14,8 @@ import SettingsModal from './components/SettingsModal';
 import RosterModal from './components/RosterModal';
 import { initDatabases } from './data/dbInit';
 import { devilFruitDB } from './data/categories';
-import { calculateSynergies } from './utils/gameLogic';
+import { progressionOptions } from './utils/buildMechanics';
+import { calculateBuildStats } from './utils/buildStats';
 import { OllamaService } from './utils/OllamaService';
 import { RARITY } from './data/rarity';
 import { Settings, Users, User, LogOut } from 'lucide-react';
@@ -58,6 +63,7 @@ function App() {
     const [bounty, setBounty] = useState(0);
     const [tier, setTier] = useState(null);
     const [lore, setLore] = useState(null);
+    const [generationNotice, setGenerationNotice] = useState('');
     const [synergies, setSynergies] = useState([]);
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const [isRosterOpen, setIsRosterOpen] = useState(false);
@@ -91,6 +97,7 @@ function App() {
             setUser(u);
         };
 
+        if (!supabase) return;
         supabase.auth.getSession().then(({ data: { session } }) => {
             syncUserKey(session);
         });
@@ -118,6 +125,7 @@ function App() {
         setBounty(0);
         setTier(null);
         setLore(null);
+        setGenerationNotice('');
         setSynergies([]);
         setIsSaved(false);
         setIsBuildComplete(false);
@@ -127,10 +135,10 @@ function App() {
     };
 
     const handleSaveCharacter = async () => {
+        const charData = { build, stats, overall, bounty, tier, lore, synergies, portraitUrl };
         try {
-            const charData = { build, stats, overall, bounty, tier, lore, synergies };
             
-            if (user) {
+            if (user && navigator.onLine !== false) {
                 // Save to Supabase
                 const { error } = await supabase.from('saved_characters').insert([{
                     user_id: user.id,
@@ -150,16 +158,22 @@ function App() {
                 if (error) throw error;
             } else {
                 // Fallback to localStorage for guests
-                const saved = JSON.parse(localStorage.getItem('spinYourDestiny_saves') || '[]');
-                saved.push(charData);
-                localStorage.setItem('spinYourDestiny_saves', JSON.stringify(saved));
+                saveLocalCharacter(localStorage, charData);
             }
             
             setIsSaved(true);
-            alert('Legend successfully saved to your roster!');
+            alert(user && navigator.onLine !== false ? 'Legend saved to your cloud roster!' : 'Saved on this device only.');
         } catch (e) {
             console.error('Failed to save character:', e);
-            alert('Error saving character. Please try again.');
+            if (user) {
+                try {
+                    saveLocalCharacter(localStorage, charData);
+                    setIsSaved(true);
+                    alert('Cloud save unavailable. Saved on this device only; automatic synchronization is not enabled yet.');
+                    return;
+                } catch (localError) { console.error('Local save failed:', localError); }
+            }
+            alert('Could not save. Local storage may be full or damaged. Your character is still open; copy it before leaving.');
         }
     };
 
@@ -197,6 +211,10 @@ function App() {
             const dbType = DF_TYPE_MAP[parentChoice.name] || parentChoice.name.toLowerCase();
             const pool = shuffleArray(devilFruitDB.filter(f => f.type === dbType));
             cat.options = pool.slice(0, 20);
+        }
+
+        if (['summon_bond', 'awakening'].includes(cat.id)) {
+            cat.options = progressionOptions(cat, currentBuild);
         }
 
         // Skip any category with no options (shouldn't happen, but safety)
@@ -279,53 +297,11 @@ function App() {
     };
 
     const finishBuild = async (finalBuild) => {
-        const getVal = (catId) => finalBuild[catId] ? (finalBuild[catId].val || 50) : 50;
-
-        // Calculate synergies
-        const hardcoded = calculateSynergies(finalBuild);
-        const synergyStats = { str: 0, spd: 0, dur: 0, iq: 0, haki: 0, pwr: 0, hax: 0 };
-        let overallMultiplier = 1.0;
-
-        ['str', 'spd', 'dur', 'iq', 'haki'].forEach(s => { synergyStats[s] += (hardcoded.bonuses[s] || 0); });
-        synergyStats.pwr += ((hardcoded.bonuses.chrk || 0) + (hardcoded.bonuses.abl || 0));
-        synergyStats.hax += (hardcoded.bonuses.hax || 0);
-        overallMultiplier += ((hardcoded.bonuses.overall || 0) / 100);
-
-        // Calculate final stats using the original formula
-        const chrk = ((getVal('jutsu_nin') + getVal('jutsu_gen') + getVal('jutsu_sen')) / 3);
-        const abl = Math.max(getVal('df'), getVal('dojutsu'), getVal('jutsu_kg'), getVal('jutsu_kt'));
-        let baseHax = 0;
-        for (const key in finalBuild) {
-            const item = finalBuild[key];
-            if (!item || item.name === 'None') continue;
-            
-            if (item.tag === 'hax') {
-                baseHax += 30;
-            } else if (item.val >= 100) {
-                baseHax += 20;
-            } else if (item.val >= 95) {
-                baseHax += 10;
-            }
-        }
-        const hax = baseHax;
-        const finalStats = {
-            str: getVal('str') + (finalBuild.race?.baseStats ? (finalBuild.race.baseStats.str - 50) * 0.5 : 0) + synergyStats.str,
-            spd: getVal('spd') + (finalBuild.race?.baseStats ? (finalBuild.race.baseStats.spd - 50) * 0.5 : 0) + (getVal('jutsu_tai') * 0.2) + synergyStats.spd,
-            dur: getVal('dur') + (finalBuild.race?.baseStats ? (finalBuild.race.baseStats.dur - 50) * 0.5 : 0) + (getVal('jutsu_tai') * 0.2) + synergyStats.dur,
-            iq: getVal('iq') + synergyStats.iq,
-            haki: (getVal('haki_obs') * 0.4 + getVal('haki_arm') * 0.4 + getVal('haki_conq') * 0.6) + synergyStats.haki,
-            pwr: ((chrk + abl) / 1.5) + synergyStats.pwr,
-            hax: hax + synergyStats.hax
-        };
-        for (let k in finalStats) finalStats[k] = Math.min(100, Math.max(0, finalStats[k]));
-
-        const potMult = finalBuild.potential ? finalBuild.potential.val : 1.0;
-        const avg = Object.values(finalStats).reduce((a, b) => a + b, 0) / 7;
-        const overallPower = Math.min(100, Math.max(0, (avg * potMult) * overallMultiplier));
+        const { stats: finalStats, overall: overallPower, synergies: resolvedSynergies } = calculateBuildStats(finalBuild);
 
         setStats(finalStats);
         setOverall(parseFloat(overallPower.toFixed(1)));
-        setSynergies(hardcoded.list);
+        setSynergies(resolvedSynergies);
 
         const calcTier = getTier(overallPower);
         setTier(calcTier);
@@ -339,52 +315,30 @@ function App() {
         setIsBuildComplete(true);
     };
 
-    const handleGenerateLore = async () => {
+    const handleGenerateLore = async (mode = 'ai') => {
         if (!build || Object.keys(build).length === 0) return;
+        const online = navigator.onLine !== false;
         setScreen('generating');
-        setPortraitUrl(null);
-        setIsGeneratingPortrait(true);
-        
+        setIsGeneratingPortrait(mode === 'ai' && online);
+        setIsSaved(false);
         try {
-            const ollama = new OllamaService();
-            
-            // Build visual prompt description
-            const visualTraits = Object.values(build).filter(b => b && b.name !== 'None').map(b => b.name).join(", ");
-            const visualPrompt = `A warrior possessing: ${visualTraits}. Tier: ${tier.name}. Power Level: ${overall}.`;
-
-            // Start both generation processes simultaneously
-            const lorePromise = ollama.generateBio(build, stats, tier.name, formatBountyStr(bounty, tier));
-            const portraitPromise = fetch("/api/generate-portrait", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ prompt: visualPrompt })
-            }).then(r => r.json()).catch(err => {
-                console.error("Portrait error", err);
-                return { url: null };
+            const result = await generateCharacterContent({
+                build, mode, online,
+                generateLore: () => new OllamaService().generateBio(build, stats),
+                generatePortrait: () => postApi('/api/generate-portrait', {
+                    prompt: 'A warrior possessing: ' + Object.values(build).filter(b => b && b.name !== 'None').map(b => b.name).join(', ') + '. Tier: ' + tier.name
+                })
             });
-
-            const [bioData, portraitData] = await Promise.all([lorePromise, portraitPromise]);
-
-            setLore(bioData);
-            if (portraitData?.url) {
-                setPortraitUrl(portraitData.url);
-            }
+            setLore(result.lore);
+            setPortraitUrl(result.portraitUrl);
+            setGenerationNotice(result.notice);
+            const base = calculateBuildStats(build).synergies;
+            const custom = result.lore.custom_synergy;
+            setSynergies(custom && !base.some(s => s.name === custom.name) ? [...base, custom] : base);
+        } finally {
             setIsGeneratingPortrait(false);
-
-            if (bioData && bioData.custom_synergy) {
-                setSynergies(prev => {
-                    const current = prev || [];
-                    if (current.some(s => s.name === bioData.custom_synergy.name)) return current;
-                    return [...current, bioData.custom_synergy];
-                });
-            }
-        } catch (error) {
-            console.warn("Could not generate lore:", error.message);
-            setLore({ name: "Unknown Anomaly", epithet: "The Glitched", bio: "A tear in the fabric of the universe created this entity." });
-            setIsGeneratingPortrait(false);
+            setScreen('result');
         }
-        
-        setScreen('result');
         playEpic();
     };
 
@@ -401,16 +355,11 @@ function App() {
         if (power <= 45) return 50000000 + Math.floor(((power - 25) / 20) * 450000000); // 50M to 500M
         if (power <= 65) return 500000000 + Math.floor(((power - 45) / 20) * 2500000000); // 500M to 3B
         if (power <= 85) return 3000000000 + Math.floor(((power - 65) / 20) * 7000000000); // 3B to 10B
-        return -1; // Broken handles formatBountyStr independently
-    };
-
-    const formatBountyStr = (num, tierObj) => {
-        if (tierObj && tierObj.name === 'Broken') return '₿ ??? (Unknown)';
-        return '₿ ' + num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return -1; // CharacterCard renders the unknown bounty.
     };
 
     const handleLogout = async () => {
-        await supabase.auth.signOut();
+        await supabase?.auth.signOut();
     };
 
     const bgImage = useMemo(() => {
@@ -440,9 +389,9 @@ function App() {
                             </button>
                         </div>
                     ) : (
-                        <button onClick={() => setIsAuthOpen(true)} className="flex items-center gap-2 px-4 py-2 bg-black text-white border-2 border-black hover:bg-zinc-800 font-display uppercase tracking-widest text-sm mr-2 shadow-brutal-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all duration-75 focus:outline-none" title="Log In / Sign Up">
+                        <button disabled={!supabase} onClick={() => setIsAuthOpen(true)} className="flex items-center gap-2 px-4 py-2 bg-black text-white border-2 border-black hover:bg-zinc-800 font-display uppercase tracking-widest text-sm mr-2 shadow-brutal-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all duration-75 focus:outline-none" title="Log In / Sign Up">
                             <User size={16} />
-                            <span>Sign In</span>
+                            <span>{supabase ? 'Sign In' : 'Local Mode'}</span>
                         </button>
                     )}
                     <button onClick={() => setIsRosterOpen(true)} className="p-2 border-2 border-black bg-white hover:bg-zinc-100 text-black shadow-brutal-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all duration-75 focus:outline-none" title="Crew">
@@ -454,6 +403,7 @@ function App() {
                 </div>
             </header>
 
+            <InstallStatus />
             <main className="p-4 md:p-8">
                 <AnimatePresence mode="wait">
                     {screen === 'landing' && (
@@ -539,11 +489,14 @@ function App() {
 
                                 {isBuildComplete && (
                                     <div className="flex flex-col gap-4 mt-8 z-10 w-full max-w-sm">
+                                        <button onClick={() => handleGenerateLore('local')} className="px-6 py-4 bg-white text-black border-4 border-black font-display uppercase tracking-widest shadow-brutal">
+                                            Create Offline Character
+                                        </button>
                                         <button
-                                            onClick={handleGenerateLore}
+                                            onClick={() => handleGenerateLore('ai')}
                                             className="w-full py-4 bg-red-600 text-white border-4 border-black font-display text-xl uppercase tracking-widest shadow-brutal hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-none transition-all duration-75 focus:outline-none"
                                         >
-                                            GENERATE LORE & VIEW
+                                            GENERATE WITH AI (ONLINE)
                                         </button>
                                     </div>
                                 )}
@@ -638,6 +591,10 @@ function App() {
                                 <HalftoneBurst color={RARITY[currentOutcome.rarity]?.color} />
                             )}
                             <div className="relative z-10">
+                                <div className="mb-4 p-4 border-2 border-black bg-white">
+                                    <p role="status">{generationNotice}</p>
+                                    {lore?.generation_source === 'local' && <button onClick={() => handleGenerateLore('ai')} className="mt-3 px-4 py-2 bg-black text-white font-display">Generate AI Version (Internet Required)</button>}
+                                </div>
                                 <CharacterCard
                                     build={build}
                                     stats={stats}

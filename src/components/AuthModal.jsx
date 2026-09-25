@@ -18,6 +18,7 @@ export default function AuthModal({ isOpen, onClose }) {
         setSuccess('');
 
         try {
+            if (!supabase) throw new Error('Cloud accounts are not configured. You can create and save characters locally.');
             if (mode === 'signup') {
                 const { error } = await supabase.auth.signUp({ email, password });
                 if (error) throw error;

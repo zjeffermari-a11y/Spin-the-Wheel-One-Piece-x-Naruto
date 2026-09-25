@@ -1,3 +1,4 @@
+import { exportRoster, importRoster } from '../utils/localRoster';
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '../utils/supabaseClient';
@@ -5,9 +6,11 @@ import { supabase } from '../utils/supabaseClient';
 export default function RosterModal({ isOpen, onClose, onLoad }) {
     const [savedCharacters, setSavedCharacters] = useState([]);
     const [user, setUser] = useState(null);
+    const [backupStatus, setBackupStatus] = useState('');
 
     useEffect(() => {
         // Get initial session
+        if (!supabase) return;
         supabase.auth.getSession().then(({ data: { session } }) => {
             setUser(session?.user || null);
         });
@@ -57,8 +60,9 @@ export default function RosterModal({ isOpen, onClose, onLoad }) {
                     stats: char.stats,
                     overall: char.overall,
                     bounty: char.bounty,
-                    tier: { name: char.tier },
+                    tier: typeof char.tier === 'object' ? char.tier : { name: char.tier, rarity: { Weak: 'C', Average: 'U', Strong: 'R', Overpowered: 'E', Broken: 'L' }[char.tier] || 'C' },
                     lore: char.lore,
+                    portraitUrl: char.portraitUrl,
                     synergies: char.synergies,
                     isLocal: false
                 })) : [];
@@ -138,6 +142,33 @@ export default function RosterModal({ isOpen, onClose, onLoad }) {
                             </button>
                         </div>
                         
+                        <div className="px-6 py-3 border-b border-black flex flex-wrap gap-3 items-center">
+                            <button className="px-3 py-2 border-2 border-black" onClick={() => {
+                                const blob = new Blob([exportRoster(savedCharacters)], { type: 'application/json' });
+                                const url = URL.createObjectURL(blob);
+                                const link = document.createElement('a');
+                                link.href = url;
+                                link.download = 'summon-roster.json';
+                                link.click();
+                                setTimeout(() => URL.revokeObjectURL(url), 1000);
+                                setBackupStatus('Backup exported. Remote portraits are links, not offline image copies.');
+                            }}>Export Backup</button>
+                            <label className="px-3 py-2 border-2 border-black cursor-pointer">
+                                Import Backup
+                                <input aria-label="Import roster backup" type="file" accept="application/json,.json" className="sr-only" onChange={async event => {
+                                    const file = event.target.files?.[0];
+                                    event.target.value = '';
+                                    if (!file) return;
+                                    try {
+                                        if (file.size > 10_000_000) throw new Error('Backup is too large (maximum 10 MB).');
+                                        const count = importRoster(localStorage, await file.text());
+                                        setBackupStatus(count + ' characters imported on this device.');
+                                        await loadCharacters();
+                                    } catch (error) { setBackupStatus('Import failed: ' + error.message); }
+                                }} />
+                            </label>
+                            <p role="status" className="text-sm">{backupStatus}</p>
+                        </div>
                         <div className="p-6 overflow-y-auto flex-1 custom-scrollbar">
                             {savedCharacters.length === 0 ? (
                                 <div className="flex flex-col items-center justify-center py-16 text-gray-500">
@@ -154,7 +185,7 @@ export default function RosterModal({ isOpen, onClose, onLoad }) {
                                             className="bg-white border border-gray-200 p-4 cursor-pointer shadow-sm hover:shadow-md hover:shadow-sm hover:shadow-md hover:-translate-y-1 hover:-translate-x-1 transition-all duration-150 group relative focus:outline-none focus:ring-4 focus:ring-black focus:ring-offset-2"
                                         >
                                             <div className="flex justify-between items-start mb-2">
-                                                <h3 className="text-lg font-bold text-black uppercase tracking-wider">{char.build?.vessel?.name || 'Unknown'}</h3>
+                                                <h3 className="text-lg font-bold text-black uppercase tracking-wider">{char.lore?.name || char.build?.vessel?.name || 'Unknown'}</h3>
                                                 <div className="flex items-center gap-2">
                                                     <span className="text-xs font-bold px-2 py-1 rounded bg-black/50 text-gray-700 border border-indigo-900">
                                                         {char.tier?.name || 'Unknown'} Tier

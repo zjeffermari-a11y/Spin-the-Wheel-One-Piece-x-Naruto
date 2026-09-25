@@ -1,3 +1,5 @@
+import { hasSelection, progressionBonuses, resolveBuildMechanics } from './buildMechanics.js';
+
 export function calculateSynergies(build) {
     const syns = [];
     let bonuses = { str: 0, spd: 0, dur: 0, iq: 0, haki: 0, chrk: 0, abl: 0, hax: 0, overall: 0 };
@@ -46,5 +48,28 @@ export function calculateSynergies(build) {
     if (vessel === 'Stussy' && faction === 'CP0') { syns.push({ name: '💄 FATAL ESPIONAGE', desc: 'Deadly covert spy weaving seductive deception and pinpoint strikes.' }); bonuses.iq += 15; bonuses.spd += 10; bonuses.hax += 8; }
     if (df === 'Doa Doa' && (faction === 'CP9' || faction === 'CP0' || faction === 'Anbu')) { syns.push({ name: '🚪 DIMENSIONAL INFILTRATOR', desc: 'Stealth operative stepping through door-dimensions unseen.' }); bonuses.iq += 12; bonuses.spd += 10; bonuses.hax += 12; }
 
+    const progression = progressionBonuses(build);
+    for (const key of Object.keys(bonuses)) bonuses[key] += progression[key] || 0;
+    if (build.weapon_mastery?.val >= 60 && build.haki_arm?.val >= 60 && hasSelection(build.weapon) && build.weapon.name !== 'Bare Fists') {
+        syns.push({ name: 'Coated Precision', desc: 'Weapon mastery places selected Armament Haki on deliberate strikes; coating still consumes effort.' });
+        bonuses.abl += 3;
+    }
+    if (build.chakra_control?.val >= 60 && build.ability_mastery?.val >= 60 && hasSelection(build.jutsu_nin)) {
+        syns.push({ name: 'Measured Release', desc: 'Precise chakra control and ability mastery shape the selected ninjutsu with less wasted energy; reserves remain finite.' });
+        bonuses.chrk += 3;
+    }
+    if (hasSelection(build.summon) && build.summon_bond?.val >= 60) {
+        syns.push({ name: 'Trusted Partnership', desc: build.summon.name + ' coordinates openings and defensive handoffs with its summoner using selected abilities.' });
+        bonuses.abl += 3;
+    }
+    const resolved = resolveBuildMechanics(build);
+    if (build.summon?.name === 'Monkey King Enma' && build.weapon_mastery?.val >= 60 && build.summon_bond?.val >= 60) {
+        syns.push({ name: 'One Staff, Two Minds', desc: 'Enma times ally-to-staff transitions with mastered strikes. Switching forms creates openings without duplicating Enma.' });
+        bonuses.abl += 4;
+    }
+    if (resolved.stage >= 3 && build.ability_mastery?.val >= 60) {
+        syns.push({ name: 'Awakened Expression', desc: resolved.target.name + ' combines its explicit awakening with practiced control; stamina and source conditions still apply.' });
+        bonuses.hax += 3;
+    }
     return { list: syns, bonuses };
 }

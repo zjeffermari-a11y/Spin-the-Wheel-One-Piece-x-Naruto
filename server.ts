@@ -9,7 +9,7 @@ const GROQ_API_KEY = process.env.GROQ_API_KEY;
 
 async function startServer() {
   const app = express();
-  const PORT = 3000;
+  const PORT = Number(process.env.PORT || 3000);
 
   app.use(express.json({ limit: "10mb" }));
 
@@ -26,7 +26,7 @@ async function startServer() {
     app.use(vite.middlewares);
   } else {
     const distPath = path.join(process.cwd(), 'dist');
-    app.use(express.static(distPath));
+    app.use(express.static(distPath, { setHeaders(res, filePath) { if (filePath.endsWith('sw.js')) res.setHeader('Cache-Control', 'no-cache'); } }));
     app.get('*all', (req, res) => {
       res.sendFile(path.join(distPath, 'index.html'));
     });

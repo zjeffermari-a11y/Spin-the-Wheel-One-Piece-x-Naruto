@@ -27,3 +27,10 @@ dist-ssr
 .env
 .env*.local
 .vercel
+
+dist-server
+playwright-report
+test-results
+
+dist-native
+android-build-admin.exit

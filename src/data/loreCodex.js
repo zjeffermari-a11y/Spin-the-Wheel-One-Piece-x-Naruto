@@ -286,6 +286,7 @@ const LORE = {
         Snakes: 'Constricting, venomous, burrowing, or scouting allies that naturally pair with stealth and ambush.',
         Slugs: 'Healing, communication through division, and acid defense; their support value matters as much as offense.',
         Baku: 'A vacuum beast whose inhale pulls in terrain and attacks; give it a direction and avoid friendly-fire blind spots.',
+        'Monkey King Enma': 'Mythic crossover evolution of Monkey Enma. Base form is an intelligent ally or adamantine extending staff. Sun Wukong-inspired Ruyi Jingu Bang and inheritance powers exist only when explicitly unlocked by RESOLVED BUILD RULES; never infer immortality or extra powers from the name.',
         'Monkey Enma': 'The Monkey King can transform into an adamantine staff and fight as an intelligent partner.',
         'Gedo Statue': 'A colossal, dangerous husk tied to the Rinnegan and tailed-beast chakra. Summoning it has immense cost and consequence.',
         'Sea Kings': 'Colossal sea creatures that dominate ocean battles but are impractical far from a navigable body of water.',
@@ -295,6 +296,10 @@ const LORE = {
         'Kamatari (Weasel)': 'A wind-scythe weasel whose fan-driven gusts carve wide lanes through obstacles.'
     }
 };
+
+export function getLoreCapsule(category, name) {
+    return LORE[category]?.[name] || null;
+}
 
 export const CROSSVERSE_LORE_RULES = `
 CANON & CROSSVERSE RULES:

@@ -1,0 +1,15 @@
+{
+  "id": "/",
+  "name": "Summon — Character Builder",
+  "short_name": "Summon",
+  "description": "Spin your character, discover abilities, and keep your legends on this device.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f8f8f6",
+  "theme_color": "#111111",
+  "icons": [
+    { "src": "/app-icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/app-icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

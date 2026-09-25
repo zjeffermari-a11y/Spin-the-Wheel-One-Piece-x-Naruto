@@ -1,3 +1,8 @@
+import { postApi } from './apiClient.js';
+import { calculateBuildStats } from './buildStats.js';
+import { mechanicsBrief } from './buildMechanics.js';
+import { characterIdentityDirective, resolveCharacterIdentity } from './characterIdentity.js';
+import { PROGRESSION_IDS } from '../data/progression.js';
 import { CHARACTER_LORE } from '../data/characters';
 import { CROSSVERSE_LORE_RULES, getCanonicalLoreBrief } from '../data/loreCodex';
 
@@ -39,21 +44,7 @@ export class OllamaService {
 
     async generateContent(prompt, systemPrompt) {
         try {
-            const response = await fetch('/api/generate-lore', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ prompt, systemInstruction: systemPrompt })
-            });
-
-            if (!response.ok) {
-                const errText = await response.text();
-                throw new Error(`AI API failed (${response.status}): ${errText}`);
-            }
-            
-            const data = await response.json();
-            return data;
+            return await postApi('/api/generate-lore', { prompt, systemInstruction: systemPrompt });
         } catch (error) {
             console.error("AI fetch error:", error);
             throw error;
@@ -76,28 +67,20 @@ TASK: Invent 1 unique, tactical synergy (under 3 sentences). It must fuse at lea
 SCHEMA:
 {
   "name": "⚡ SYNERGY NAME",
-  "desc": "How their abilities merge",
+  "desc": "How the selected abilities merge",
   "bonuses": { "str":0, "spd":0, "dur":0, "iq":0, "haki":0, "pwr":0, "hax":0 }
 }`;
-        return await this.generateContent(prompt, `${CROSSVERSE_LORE_RULES}\n\nRole: Canon-first One Piece x Naruto combat designer. Create 1 balanced, creative power synergy in pure JSON.`);
+        return await this.generateContent(prompt, `${CROSSVERSE_LORE_RULES}\n\n${characterIdentityDirective(build)}\n\nRole: Canon-first One Piece x Naruto combat designer. Create 1 balanced, creative power synergy in pure JSON.`);
     }
 
-    async generateBio(build) {
+    async generateBio(build, resolvedStats) {
         const buildSummary = this._getBuildSummary(build);
         const haxBreakdown = this._getHaxBreakdown(build);
         
-        let stats = { str: 0, spd: 0, dur: 0, iq: 0, haki: 0, pwr: 0, hax: 0 };
-        const getVal = (catId) => build[catId] ? (build[catId].val || 50) : 50;
-        ['str', 'spd', 'dur', 'iq', 'haki'].forEach(s => { stats[s] += getVal(s); });
-        stats.pwr = (getVal('jutsu_nin') + getVal('jutsu_gen') + getVal('jutsu_sen')) / 3 + Math.max(getVal('df'), getVal('dojutsu'), getVal('jutsu_kg'), getVal('jutsu_kt'));
-        stats.hax = 0;
-        for (const key in build) {
-            const item = build[key];
-            if (!item || item.name === 'None') continue;
-            if (item.tag && item.tag.includes('hax')) stats.hax += (item.val * 0.15);
-        }
+        const stats = resolvedStats || calculateBuildStats(build).stats;
 
-        const pronouns = build.vessel?.gender === 'F' ? 'she/her' : 'they/them';
+        const { pronouns } = resolveCharacterIdentity(build);
+        const referenceStyle = pronouns || 'the generated character name; gender unspecified';
         const vesselLore = this._getVesselLoreDirective(build);
         const canonicalLore = getCanonicalLoreBrief(build);
         const creativeMotif = CREATIVE_MOTIFS[Math.floor(Math.random() * CREATIVE_MOTIFS.length)];
@@ -118,27 +101,30 @@ ${recentEpithetBlock}
 OUTPUT CONTRACT:
 1. NAME: Create a new, pronounceable 1–2 word name. Never reuse a canon vessel's full name and never force an arbitrary starting letter.
 2. EPITHET: Create a fresh 3–7 word epithet whose imagery comes from this exact build’s mechanics, origin, faction, or combat doctrine. It must be memorable even without the character name. Do NOT use generic template titles such as "The Shadow", "The Crimson", "The Silent", "The Azure", "Emperor", "Wraith", "Dragon", "Fang", "Sage", "Demon", "Saint", "God", "Destroyer", or "of Destiny".
-3. BIO: Write exactly 4 cinematic sentences about ${pronouns}.
+3. BIO: Write exactly 4 cinematic sentences about the protagonist, using ${referenceStyle}.
    - Sentence 1: origin, selected lineage/vessel, and faction (${build.faction?.name || 'Unaffiliated'}).
    - Sentence 2: the moment the selected powers fused; describe a Zoan hybrid/full-beast visual if one was selected.
    - Sentence 3: a concrete combat doctrine that exploits APEX and protects VULNERABLE through selected tools.
-   - Sentence 4: reputation and the specific fear, promise, or rumor attached to this character.
+   - Sentence 4: selected Ambition and the promise, fear, or reputation it creates. If Ambition is absent, use reputation only.
 4. CUSTOM SYNERGY: Fuse at least two selected sources in a causal sequence—not a list. State a setup/trigger, payoff, and one real limit, cost, or counterplay. If weapon and style clash, turn the clash into a deliberate tactic.
-5. SIGNATURE ABILITIES: Return exactly 3 distinct original moves: (a) pressure/setup, (b) mobility, defense, or control, (c) finisher. Every description must name the selected source mechanics it uses, explain the tactical effect, and avoid granting an unselected canon technique. If a Zoan is selected, include one hybrid or full-beast move among the three. If a hax is selected, at most one move may hinge on it and its condition must be explicit.
+5. SIGNATURE ABILITIES: Return exactly 3 distinct original moves: (a) pressure/setup, (b) mobility, defense, or control, (c) finisher. Every description must name its selected source mechanics, tactical effect, trigger and natural energy cost, reflect mastery, chakra control, stamina and summon bond when present, and avoid granting an unselected canon technique. If a Zoan is selected, include one hybrid or full-beast move among the three. If a hax is selected, at most one move may hinge on it and its condition must be explicit.
 6. Keep the character powerful at the rolled tier, but do not treat an unselected power, a vague bloodline, or a high stat as permission for omnipotence.
 
 JSON SCHEMA:
 {
   "name": "Name",
   "epithet": "Epithet",
-  "bio": "Backstory (${pronouns})",
+  "bio": "Backstory (${referenceStyle})",
   "custom_synergy": { "name": "", "desc": "", "bonuses": {"str":0,"spd":0,"dur":0,"iq":0,"haki":0,"pwr":0,"hax":0} },
   "signature_abilities": [ { "name": "", "desc": "" } ]
 }`;
         const systemPrompt = `Role: You are the canon-first lorekeeper and combat choreographer for a One Piece x Naruto crossover.
 ${CROSSVERSE_LORE_RULES}
 
+${characterIdentityDirective(build)}
+
 QUALITY BAR:
+- RESOLVED BUILD RULES are authoritative for progression and crossover unlocks. Only explicit additional abilities and selected base abilities are usable. Awakening applies only to its named target. Enma is an ally OR staff, never duplicated. Ambition is motivation, not a power.
 - Silently audit every claim against the selected canon capsules before writing. When a vessel note and a selected power conflict, keep the vessel's visual/personality identity but only use a combat mechanic if it is selected or explicitly present in the vessel note.
 - A good fusion has an action chain: source A creates an opening, source B converts it, and a condition keeps it fair. Do not merely rename two powers placed side by side.
 - Give every ability a different job and sensory identity. Avoid filler such as "unleashes immense energy", "ultimate attack", "reality-breaking", or "unmatched power" unless the selected mechanic explains exactly how it works.
@@ -156,7 +142,7 @@ QUALITY BAR:
 
     _getBuildSummary(build) {
         let items = [];
-        const vesselGender = build.vessel?.gender === 'F' ? 'female' : 'male';
+        const { gender: vesselGender } = resolveCharacterIdentity(build);
         
         if (build.race) items.push(`Race: ${build.race.name}`);
         if (build.origin) items.push(`Origin / Birthplace: ${build.origin.name}`);
@@ -209,6 +195,7 @@ QUALITY BAR:
         if (build.summon && build.summon.name !== 'None') items.push(`Summoning Contract: ${build.summon.name}`);
         if (build.potential && build.potential.name !== 'None') items.push(`Growth Potential: ${build.potential.name}`);
 
+        items.push(mechanicsBrief(build));
         return items.join('\n');
     }
 
@@ -231,7 +218,7 @@ RECONCILIATION: Preserve the vessel's visual identity, personality, and physical
         const haxItems = [];
         for (const key in build) {
             const item = build[key];
-            if (!item || item.name === 'None') continue;
+            if (!item || item.name === 'None' || PROGRESSION_IDS.includes(key) || item.name === 'Monkey King Enma') continue;
             if (item.tag?.split(/\s+/).includes('hax') || item.val >= 100) {
                 haxItems.push(`${item.name} (${key.toUpperCase()})`);
             }
