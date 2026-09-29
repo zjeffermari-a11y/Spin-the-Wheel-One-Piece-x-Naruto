@@ -27,7 +27,7 @@ Commands:
 
 Restart your terminal after toolchain installation so the new Cargo PATH and user-level `JAVA_HOME`, `ANDROID_HOME` and `NDK_HOME` variables are loaded. This setup uses Microsoft OpenJDK 21, the Android command-line SDK and stable NDK r29; Android Studio is optional for this command-line workflow.
 
-The installed app requires a deployed HTTPS `VITE_API_BASE_URL` for online AI requests. A blank base URL is appropriate for same-origin web deployment, not native AI generation. Public Supabase settings can be shared; provider secrets must remain on the server. See `.env.example`.
+Native production builds default to `https://spin-the-wheel-one-piece-x-naruto.vercel.app` for AI requests. An HTTPS `VITE_API_BASE_URL` from the build environment or production env files overrides it. Web builds retain same-origin requests by default. Rebuild and reinstall native apps after changing the endpoint. Public Supabase settings can be shared; provider secrets must remain on the server. See `.env.example`.
 
 Native shell compilation does not establish readiness for public distribution. Native file/share adapters, authentication return paths, lifecycle persistence, signing and real-device checks remain release gates. The CSP allows HTTPS API and portrait connections for this development shell; narrow these to actual deployed domains before release. Remote pages receive no native capability grants.
 
@@ -50,7 +50,15 @@ The ARM64 APK passed a smoke test in LDPlayer 9.2.6.1 using its ARM translation:
 
 For repeat testing, enable LDPlayer's local ADB connection, forward port 9224 to this app's `webview_devtools_remote_<pid>` socket, and run `node scripts/test-android-webview.mjs`. After restarting the app, update the forward to its new PID and run the script with `--reopen`. This test adds a local character and preserves existing saves. The direct CDP harness supports LDPlayer's older WebView, which rejects Playwright's browser-context setup.
 
-A physical ARM64 phone check remains pending. Also check system Back, keyboard, screen insets, background/resume, and export/import behavior before release. Online AI is not validated by this smoke test; the current native build has no deployed API base URL and uses the local fallback when an AI request fails.
+A physical ARM64 phone check remains pending. Also check system Back, keyboard, screen insets, background/resume, and export/import behavior before release. Offline smoke tests do not establish online AI availability.
+
+## Online AI deployment
+
+The Vercel production backend was updated on 2026-09-26 with explicit CORS allowlisting for the native Tauri origins and OPTIONS handling for both generation endpoints. Preflight returns 204; actual provider calls remain POST requests. CORS is not authentication or a usage quota. Production already has `GROQ_API_KEY`; Higgsfield credentials were absent, so portrait generation remains unavailable independently of lore.
+
+The rebuilt Windows app passed a live UI generation check: the production lore endpoint returned 200 and the result displayed `AI-generated lore`. Screenshot: `test-results/windows-online-character.png`. Run `node scripts/test-android-webview.mjs --online --desktop` against a dedicated WebView2 debug instance on port 9223, or omit `--desktop` for Android with its ADB forward on port 9224. Each online test makes a real lore request and attempts portrait generation. The current test uses a random wheel build, so lore content varies.
+
+The rebuilt Android APK also generated live AI lore in LDPlayer: the UI displayed `AI lore generated.` and `AI-generated lore`, with resource timing confirming calls to the production lore URL (about 5–6 seconds). Screenshot: `test-results/android-online-character.png`. Keep LDPlayer visible during testing; its hidden WebView paused UI rendering and caused the initial automated assertion to time out even though requests completed. After bringing it to the foreground, the rendered result and request provenance were verified. Both platforms correctly reported the separately unavailable portrait.
 
 The npm native commands use a shared environment resolver so this installation's Java, SDK, NDK and Cargo tools can be located even before a terminal restart. Other machines can provide their own environment variables normally.
 

@@ -1,0 +1,8 @@
+src-tauri/
+dist-native/
+dist-server/
+test-results/
+playwright-report/
+.env*
+*.log
+android-build-admin.exit

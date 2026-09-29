@@ -2,7 +2,7 @@ import { calculateSynergies } from './gameLogic.js';
 import { PROGRESSION_IDS } from '../data/progression.js';
 
 export function calculateBuildStats(finalBuild) {
-    const getVal = (catId) => finalBuild[catId] ? (finalBuild[catId].val || 50) : 50;
+    const getVal = (catId) => finalBuild[catId]?.val ?? 50;
 
     // Calculate synergies
     const hardcoded = calculateSynergies(finalBuild);

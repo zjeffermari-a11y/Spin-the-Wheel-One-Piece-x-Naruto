@@ -35,6 +35,9 @@ export function generateLocalLore(build) {
 }
 
 export function isUsableLore(value) {
+    if (value?.epithet !== undefined && typeof value.epithet !== 'string') return false;
+    const synergy = value?.custom_synergy;
+    if (synergy != null && (typeof synergy !== 'object' || typeof synergy.name !== 'string' || typeof (synergy.desc ?? synergy.synergy_desc) !== 'string' || (synergy.bonuses != null && (typeof synergy.bonuses !== 'object' || Array.isArray(synergy.bonuses) || Object.values(synergy.bonuses).some(v => typeof v !== 'number' || !Number.isFinite(v)))))) return false;
     return Boolean(value && typeof value.name === 'string' && value.name.trim() && typeof value.bio === 'string' && value.bio.trim() && Array.isArray(value.signature_abilities) && value.signature_abilities.length === 3 && value.signature_abilities.every(a => typeof a?.name === 'string' && typeof a?.desc === 'string' && a.name.trim() && a.desc.trim()));
 }
 

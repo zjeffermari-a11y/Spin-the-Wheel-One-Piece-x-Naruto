@@ -19,7 +19,7 @@ export function calculateSynergies(build) {
     const faction = getVal('faction');
 
     if (df !== 'None' && race === 'Fish-Man') { syns.push({ name: '🚫 CURSED FISH-MAN', desc: 'A Fish-Man that cannot swim. Tragic.' }); bonuses.dur -= 10; bonuses.overall -= 2; }
-    if (dojutsu === 'Rinnegan' && getVal('jutsu_sen')) { syns.push({ name: '🌟 SIX PATHS', desc: 'Approaching godhood.' }); bonuses.overall += 15; }
+    if (dojutsu === 'Rinnegan' && hasSelection(build.jutsu_sen)) { syns.push({ name: '🌟 SIX PATHS', desc: 'Approaching godhood.' }); bonuses.overall += 15; }
     if (style === 'Swordsmanship' && build.weapon?.name === 'Bare Fists') { syns.push({ name: '❓ CONFUSED SWORDSMAN', desc: 'A swordsman without a sword.' }); bonuses.iq -= 10; bonuses.str -= 5; }
     if (dfType === 'Logia' && build.dur?.val >= 80) { syns.push({ name: '👻 INTANGIBLE BODY', desc: 'Logia intangibility with natural toughness.' }); bonuses.dur += 12; bonuses.hax += 8; }
     if (dfType === 'Mythical Zoan' && build.haki_conq?.val >= 70) { syns.push({ name: '👑 DIVINE BEAST', desc: 'A mythical creature backed by the will of a king.' }); bonuses.str += 10; bonuses.overall += 10; }

@@ -1,10 +1,17 @@
+import { handleCors } from '../server-utils/cors.js';
+import { validText, generationDeadline, generationError } from '../server-utils/generation.js';
+
 export default async function handler(req, res) {
+  if (handleCors(req, res)) return;
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
   try {
-    const { prompt, systemInstruction } = req.body;
+    const { prompt, systemInstruction } = req.body || {};
+    if (!validText(prompt) || !validText(systemInstruction)) {
+      return res.status(400).json({ error: 'prompt and systemInstruction must be nonempty strings of at most 32000 characters' });
+    }
     const GROQ_API_KEY = process.env.GROQ_API_KEY;
 
     if (!GROQ_API_KEY) {
@@ -23,6 +30,7 @@ export default async function handler(req, res) {
 
     const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: "POST",
+      signal: generationDeadline(),
       headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${GROQ_API_KEY}`
@@ -31,8 +39,7 @@ export default async function handler(req, res) {
     });
 
     if (!response.ok) {
-        const err = await response.text();
-        throw new Error(`Groq API error: ${response.status} ${err}`);
+        throw new Error('Provider rejected generation');
     }
 
     const data = await response.json();
@@ -41,7 +48,6 @@ export default async function handler(req, res) {
     
     res.status(200).json(JSON.parse(content));
   } catch (error) {
-    console.error("AI Generation error:", error);
-    res.status(500).json({ error: error instanceof Error ? error.message : String(error) });
+    return generationError(res, error);
   }
 }

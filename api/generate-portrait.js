@@ -1,10 +1,18 @@
+import { handleCors } from '../server-utils/cors.js';
+import { setTimeout as delay } from 'node:timers/promises';
+import { validText, generationDeadline, generationError } from '../server-utils/generation.js';
+
 export default async function handler(req, res) {
+  if (handleCors(req, res)) return;
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
   try {
     const { prompt } = req.body || {};
+    if (!validText(prompt, 8000)) {
+      return res.status(400).json({ error: 'prompt must be a nonempty string of at most 8000 characters' });
+    }
     const HIGGSFIELD_API_KEY_ID = process.env.HIGGSFIELD_API_KEY_ID;
     const HIGGSFIELD_API_KEY_SECRET = process.env.HIGGSFIELD_API_KEY_SECRET;
 
@@ -14,11 +22,7 @@ export default async function handler(req, res) {
       });
     }
 
-    if (!prompt || typeof prompt !== 'string') {
-      return res.status(400).json({
-        error: 'Missing prompt'
-      });
-    }
+    const signal = generationDeadline();
 
     const payload = {
       prompt: `Generate a One Piece-inspired anime Wanted Poster character portrait. The image itself must contain ONLY the character artwork. Do not add poster text, bounty numbers, UI, borders, logos, watermarks, or typography. Character Description: ${prompt}`
@@ -26,6 +30,7 @@ export default async function handler(req, res) {
 
     const initialResponse = await fetch('https://api.higgsfield.ai/higgsfield-ai/soul/v2/standard', {
       method: 'POST',
+      signal,
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Key ${HIGGSFIELD_API_KEY_ID}:${HIGGSFIELD_API_KEY_SECRET}`
@@ -36,9 +41,7 @@ export default async function handler(req, res) {
     const initialData = await initialResponse.json();
 
     if (!initialResponse.ok) {
-      return res.status(initialResponse.status).json({
-        error: initialData?.detail || initialData?.error || "Higgsfield API generation request failed"
-      });
+      throw new Error('Provider rejected generation');
     }
 
     const { status_url } = initialData;
@@ -54,9 +57,10 @@ export default async function handler(req, res) {
     let retries = 0;
     
     while (retries < maxRetries) {
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      await delay(2000, undefined, { signal });
       
       const statusResponse = await fetch(status_url, {
+        signal,
         headers: {
           'Authorization': `Key ${HIGGSFIELD_API_KEY_ID}:${HIGGSFIELD_API_KEY_SECRET}`
         }
@@ -65,9 +69,7 @@ export default async function handler(req, res) {
       const statusData = await statusResponse.json();
       
       if (!statusResponse.ok) {
-        return res.status(statusResponse.status).json({
-          error: statusData?.error || "Higgsfield status check failed"
-        });
+        throw new Error('Provider status check failed');
       }
 
       if (statusData.status === 'completed') {
@@ -92,12 +94,6 @@ export default async function handler(req, res) {
     return res.status(504).json({ error: 'Higgsfield image generation timed out after 50 seconds' });
 
   } catch (error) {
-    console.error("Portrait Generation error:", error);
-
-    return res.status(500).json({
-      error: error instanceof Error
-        ? error.message
-        : String(error)
-    });
+    return generationError(res, error);
   }
 }
