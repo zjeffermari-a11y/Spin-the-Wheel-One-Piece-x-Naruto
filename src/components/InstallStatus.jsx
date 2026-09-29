@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { X } from 'lucide-react';
 
 export default function InstallStatus() {
     const [offline, setOffline] = useState(() => !navigator.onLine);
@@ -6,6 +7,7 @@ export default function InstallStatus() {
     const [waiting, setWaiting] = useState(false);
     const [installEvent, setInstallEvent] = useState(null);
     const [failure, setFailure] = useState(false);
+    const [isVisible, setIsVisible] = useState(true);
 
     useEffect(() => {
         let disposed = false;
@@ -39,7 +41,12 @@ export default function InstallStatus() {
         };
     }, []);
 
-    return <aside className="mx-4 mt-3 p-3 border-2 border-black bg-white flex flex-wrap items-center gap-3 text-sm" aria-label="App availability">
+    if (!isVisible) return null;
+
+    return <aside className="mx-4 mt-3 p-3 border-2 border-black bg-white flex flex-wrap items-center gap-3 text-sm relative pr-10" aria-label="App availability">
+        <button onClick={() => setIsVisible(false)} className="absolute top-2 right-2 p-1 text-gray-500 hover:text-black hover:bg-gray-100 rounded" aria-label="Close notification">
+            <X size={16} />
+        </button>
         <p role="status">{offline ? 'Offline — local character creation and saves are available.' : ready ? 'Ready to reopen offline on this device.' : failure ? 'Offline setup failed. Reopen online to try again.' : 'Local character creation is always available once loaded.'}</p>
         {waiting && <p>Update ready. Save your character, then close all app tabs and windows and reopen to update.</p>}
         {installEvent && <button className="px-4 py-2 bg-black text-white" onClick={async () => {

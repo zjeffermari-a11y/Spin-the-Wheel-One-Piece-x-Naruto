@@ -18,7 +18,7 @@ import { progressionOptions } from './utils/buildMechanics';
 import { calculateBuildStats } from './utils/buildStats';
 import { OllamaService } from './utils/OllamaService';
 import { RARITY } from './data/rarity';
-import { Settings, Users, User, LogOut } from 'lucide-react';
+import { Settings, Users, User, LogOut, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import AuthModal from './components/AuthModal';
 import { supabase } from './utils/supabaseClient';
@@ -64,6 +64,7 @@ function App() {
     const [tier, setTier] = useState(null);
     const [lore, setLore] = useState(null);
     const [generationNotice, setGenerationNotice] = useState('');
+    const [isNoticeVisible, setIsNoticeVisible] = useState(true);
     const [synergies, setSynergies] = useState([]);
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const [isRosterOpen, setIsRosterOpen] = useState(false);
@@ -126,6 +127,7 @@ function App() {
         setTier(null);
         setLore(null);
         setGenerationNotice('');
+        setIsNoticeVisible(true);
         setSynergies([]);
         setIsSaved(false);
         setIsBuildComplete(false);
@@ -332,6 +334,7 @@ function App() {
             setLore(result.lore);
             setPortraitUrl(result.portraitUrl);
             setGenerationNotice(result.notice);
+            setIsNoticeVisible(true);
             const base = calculateBuildStats(build).synergies;
             const custom = result.lore.custom_synergy;
             setSynergies(custom && !base.some(s => s.name === custom.name) ? [...base, custom] : base);
@@ -591,10 +594,15 @@ function App() {
                                 <HalftoneBurst color={RARITY[currentOutcome.rarity]?.color} />
                             )}
                             <div className="relative z-10">
-                                <div className="mb-4 p-4 border-2 border-black bg-white">
-                                    <p role="status">{generationNotice}</p>
-                                    {lore?.generation_source === 'local' && <button onClick={() => handleGenerateLore('ai')} className="mt-3 px-4 py-2 bg-black text-white font-display">Generate AI Version (Internet Required)</button>}
-                                </div>
+                                {isNoticeVisible && (generationNotice || lore?.generation_source === 'local') && (
+                                    <div className="mb-4 p-4 border-2 border-black bg-white relative pr-10">
+                                        <button onClick={() => setIsNoticeVisible(false)} className="absolute top-2 right-2 p-1 text-gray-500 hover:text-black hover:bg-gray-100 rounded transition-colors" aria-label="Close notification">
+                                            <X size={16} />
+                                        </button>
+                                        <p role="status">{generationNotice}</p>
+                                        {lore?.generation_source === 'local' && <button onClick={() => handleGenerateLore('ai')} className="mt-3 px-4 py-2 bg-black text-white font-display">Generate AI Version (Internet Required)</button>}
+                                    </div>
+                                )}
                                 <CharacterCard
                                     build={build}
                                     stats={stats}
